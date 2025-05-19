@@ -1,0 +1,13 @@
+** Em funcoes de execucao de comandos externos (ls, cat) **
+
+- Fora do fork chamar ft_ignore_some_signals();
+
+- Dentro do processo filho:
+no inicio chamar ft_redefine_child_signals(); para configurar os sinais para o modo padrao
+no fim chamar ft_config_signals(0); para reiniciar os sinais
+
+
+* ft_ignore_some_signals() sempre chamar no principal, caso for criar um fork()
+
+* ft_config_signals(0) chamar no main
+* ft_config_signals(1); chamar no filho do heredoc 
