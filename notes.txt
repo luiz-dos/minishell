@@ -11,3 +11,11 @@ no fim chamar ft_config_signals(0); para reiniciar os sinais
 
 * ft_config_signals(0) chamar no main
 * ft_config_signals(1); chamar no filho do heredoc 
+
+cat notes.txt -> CONTROL C -> cat notes.txt -> deu segfault
+
+cat notes.txt -> mais algum comando -> segfault
+
+cat Makefile > tester.txt -> clear -> segfault
+
+

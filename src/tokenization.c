@@ -38,6 +38,7 @@ char *ft_gettoken(char *input, int delim, bool fst)
 	}
 	else
 		static_str = NULL;
+	printf("token para guardar: %s\t%p\n", token, &token);
 	return (ft_strdup(token));
 }
 

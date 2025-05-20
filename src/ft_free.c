@@ -70,6 +70,12 @@ void	clean_cmd_list(t_command *lst)
 	}
 }
 
+// void	ft_close(int fd)
+// {
+// 	if (fd > 2)
+// 		close(fd);
+// }
+
 void	close_remaining_fds()
 {
 	int	fd;
@@ -77,7 +83,7 @@ void	close_remaining_fds()
 	fd = 3;
 	while (fd < 1024)
 	{
-		if (fcntl(fd, F_GETFD) != -1)
+		if (fcntl(fd, F_GETFD) != -1) //forbidden function!!!
 		{
 			close(fd);
 			printf("Closed FD: %d\n", fd);
