@@ -6,11 +6,11 @@
 /*   By: gufreire <gufreire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 18:16:02 by gufreire          #+#    #+#             */
-/*   Updated: 2025/05/22 18:53:52 by gufreire         ###   ########.fr       */
+/*   Updated: 2025/05/22 20:38:45 by gufreire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/libs.h"
+#include "libs.h"
 
 
 t_shell *shell(void)

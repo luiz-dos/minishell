@@ -1,4 +1,4 @@
-#include "../inc/libs.h"
+#include "libs.h"
 
 char	**envvar_array(t_var *lst)
 {

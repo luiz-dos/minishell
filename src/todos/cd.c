@@ -1,4 +1,4 @@
-#include "../inc/libs.h"
+#include "../../inc/libs.h"
 
 char	*get_dir(char *arg, int *flag_free, t_shell *data)
 {

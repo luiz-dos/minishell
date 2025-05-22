@@ -6,11 +6,11 @@
 /*   By: gufreire <gufreire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 19:06:22 by gufreire          #+#    #+#             */
-/*   Updated: 2025/05/22 19:42:00 by gufreire         ###   ########.fr       */
+/*   Updated: 2025/05/22 20:40:15 by gufreire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/libs.h"
+#include "libs.h"
 
 int		redirects(char *str, char **input, int *i)
 {
@@ -69,8 +69,8 @@ void	pars(char *input)
 	
 	
 	str = (char *)ft_calloc(ft_strlen(input), 3);
-	if (!str)
-		return (str);
+	// if (!str)
+	// 	return (NULL);
 	str = tokenization(str, input);
 	pipes = ft_split(str, '\3');
 	i = 0;
