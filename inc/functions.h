@@ -4,6 +4,19 @@
 #include "structs.h"
 #include "libs.h"
 
+	//pasta structs
+//funcoes struct
+t_shell 	*shell(void);
+t_var		*env_struct(void);
+t_command	*command_struct(void);
+t_tokens	*input_struct(void);
+
+	//pasta parsing
+//funcoes token
+int		redirects(char *str, char **input, int *i);
+char	*tokenization(char *str, char *input);
+void	pars(char *input);
+
 /* execucao */
 void	execute_commands(t_shell *data);
 int		is_builtin(char *cmd);
@@ -30,8 +43,6 @@ void	write_line_to_pipe(t_shell *data, char *line, int fd[2]);
 void	loop_heredoc(t_shell *data, t_command *current, int fd[2]);
 void	close_fds(int fd[2]);
 
-/* singleton */
-t_shell	*ft_start_shell(void);
 
 /* tokens */
 void	ft_input_analizes(t_shell *data);

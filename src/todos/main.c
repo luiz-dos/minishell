@@ -2,12 +2,6 @@
 
 int	global_sig;
 
-t_shell *ft_start_shell(void)
-{
-	static t_shell shell;
-	return (&shell);
-}
-
 bool    ft_get_input(t_shell *data)
 {
 	char	*input;
@@ -81,31 +75,29 @@ static void loop_those_shells(t_shell *data)
 		}
 	}
 }
-
+//deviamos fazer o nosso env para proteger de env -i
 int main(int ac, char **av, char **envp)
 {
-	t_shell	*data;
-
 	if (ac != 1)
 	{
 		printf("Usage: ./minishell\n");
 		return (1);
 	}
 	(void)av;
+	if (!*envp)
+		min_env();//falta fazer
+	else
+	{
+		shell()->envvar = envp;
+		shell()->envvar_export = create_lst_export(shell());
+	}
 	global_sig = 0;
-	data = ft_start_shell();
 	ft_config_signals(0);
-	data->envvar = create_lst_envvar(envp);
-	data->envvar_export = create_lst_export(data);
-	sort_var(data->envvar_export);
-	set_shlvl(data);
-	set_questionvar(data);
-	data->std_fileno[0] = -1;
-	data->std_fileno[1] = -1;
-	loop_those_shells(data);
+	sort_var(shell()->envvar_export);
+	set_shlvl(shell());
+	set_questionvar(shell());
+	shell()->std_fileno[0] = -1;
+	shell()->std_fileno[1] = -1;
+	loop_those_shells(shell());
 	return (0);
 }
-/*
- * 
- *
-*/

@@ -1,74 +1,79 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: gufreire <gufreire@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/05/22 19:44:06 by gufreire          #+#    #+#              #
+#    Updated: 2025/05/22 20:24:21 by gufreire         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+
 NAME	= minishell
 CC		= cc
 CFLAGS 	=  -Wall -Wextra -Werror -g
 RM		= rm -f
 
+
 # Directories
-SRC_DIR = src/
-OBJ_DIR = obj/
+SRC_DIR = src
+OBJ_DIR = obj
 
 # Libraries
 LIBFT_DIR	= libft/
 LIBFT		= $(LIBFT_DIR)libft.a
-LIBS		= -lreadline
+LIBS		= -lreadline -lncurses -ltermcap
 
-# Source files
-SRCS	=	$(SRC_DIR)cd.c \
-			$(SRC_DIR)check_envp.c \
-			$(SRC_DIR)check_tokens.c \
-			$(SRC_DIR)copy_envp.c \
-			$(SRC_DIR)create_cmd_list.c \
-			$(SRC_DIR)dolar.c \
-			$(SRC_DIR)echo.c \
-			$(SRC_DIR)env.c \
-			$(SRC_DIR)exe.c \
-			$(SRC_DIR)execute_builtin.c \
-			$(SRC_DIR)execute_commands.c \
-			$(SRC_DIR)export.c \
-			$(SRC_DIR)external_commands.c \
-			$(SRC_DIR)finders.c \
-			$(SRC_DIR)ft_free.c \
-			$(SRC_DIR)ft_isspace.c \
-			$(SRC_DIR)ft_strcat.c \
-			$(SRC_DIR)ft_strcmp.c \
-			$(SRC_DIR)ft_strcpy.c \
-			$(SRC_DIR)ft_strdup_two.c \
-			$(SRC_DIR)ft_strjoin_free.c \
-			$(SRC_DIR)ft_strndup.c \
-			$(SRC_DIR)handle_heredoc.c \
-			$(SRC_DIR)input_analizes.c \
-			$(SRC_DIR)main.c \
-			$(SRC_DIR)pipeline.c \
-			$(SRC_DIR)print_lst.c \
-			$(SRC_DIR)prompt.c \
-			$(SRC_DIR)pwd.c \
-			$(SRC_DIR)quote_checker.c \
-			$(SRC_DIR)quote_handle.c \
-			$(SRC_DIR)redirection.c \
-			$(SRC_DIR)set_envvar.c \
-			$(SRC_DIR)set_envvar2.c \
-			$(SRC_DIR)signal.c \
-			$(SRC_DIR)tokenization.c \
-			$(SRC_DIR)type_tokens.c \
-			$(SRC_DIR)unset.c \
-			$(SRC_DIR)utils.c \
+# struct functions directory
+STRC_DIR = src/strc
+STRC_FILES = structs.c
+SRC_STRC = $(addprefix $(STRC_DIR)\, $(STRC_FILES))
+
+# parsing functions directory
+PARS_DIR = src/pars
+PARS_FILES = token.c
+SRC_PARS = $(addprefix $(PARS_DIR)\, $(PARS_FILES))
+
+# todos por agora
+TODOS_DIR = src/todos
+TODOS_FILES = cd.c check_envp.c check_tokens.c copy_envp.c create_cmd_list.c dolar.c \
+			echo.c env.c exe.c execute_builtin.c execute_commands.c export.c external_commands.c \
+			finders.c ft_free.c ft_isspace.c ft_strcat.c ft_strcmp.c ft_strcpy.c ft_strdup_two.c \ 
+			ft_strjoin_free.c ft_strndup.c handle_heredoc.c input_analizes.c main.c pipeline.c \
+			print_lst.c prompt.c pwd.c quote_checker.c quote_handle.c redirection.c set_envvar.c \
+			set_envvar2.c signal.c tokenization.c type_tokens.c unset.c utils.c
 			
-OBJS	= $(SRCS:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
+SRC_TODOS = $(addprefix $(OBJ_DIR)\, $(TODOS_FILES))
+
+SRC = $(STRC_FILES) $(PARS_FILES) $(TODOS_FILES)
+
+OBJ = $(addprefix $(OBJ_DIR)/, $(notdir $(SRC:.c=.o)))
+	
 
 all: $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT)
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) $(LIBS)
+	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(LIBFT) $(LIBS)
 
 $(LIBFT):
 	@$(MAKE) --no-print-directory -C $(LIBFT_DIR)
 
-$(OBJ_DIR)%.o: $(SRC_DIR)%.c
+$(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
-	@$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJ_DIR)/%.o: $(STRC_DIR)/%.c | $(OBJ_DIR)
+	$(CC) $(FLAGS) -c $< -o $@
+
+$(OBJ_DIR)/%.o: $(PARS_DIR)/%.c | $(OBJ_DIR)
+	$(CC) $(FLAGS) -c $< -o $@
+
+$(OBJ_DIR)/%.o: $(TODOS_DIR)/%.c | $(OBJ_DIR)
+	$(CC) $(FLAGS) -c $< -o $@
 
 clean:
-	@$(RM) -r $(OBJ_DIR)
+	@$(RM) -rf $(OBJ_DIR)
 	@$(MAKE) --no-print-directory clean -C $(LIBFT_DIR)
 
 fclean: clean

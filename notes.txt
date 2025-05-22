@@ -18,4 +18,4 @@ cat notes.txt -> mais algum comando -> segfault
 
 cat Makefile > tester.txt -> clear -> segfault
 
-
+no ficheiro ft_free a funcao fcntl nao e permitida
