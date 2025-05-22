@@ -13,8 +13,8 @@ bool    ft_get_input(t_shell *data)
 	char	*input;
 	char	*pwd;
 	
-	pwd = color_to_prompt(get_pathname());
-	input = readline("minishell$ ");
+	pwd = get_pathname();
+	input = readline(pwd);
 	free(pwd);
 	if (input == NULL) // crtl+D faz o readline retonar NULL, entao fecha o minishell
 	{
@@ -35,49 +35,19 @@ bool    ft_get_input(t_shell *data)
 	return (true);
 }
 
-int	ainput(t_shell *data)
-{
-	char	**input;
-
-	input = ft_split(data->input, ' ');
-	if (!input)
-		return (1);
-	if (ft_strcmp(input[0], "env") == 0)
-		mini_env(data->envvar);
-	else if (ft_strcmp(input[0], "export") == 0)
-		print_export(data);
-	else if (ft_strcmp(input[0], "exit") == 0)
-	{
-		free_array(input);
-		free_exit(data);
-		return (1);
-	}
-	else if (ft_strcmp(input[0], "cd") == 0)
-		cd(data, input);
-	else if (ft_strcmp(input[0], "unset") == 0)
-		unset(data, input);
-	else if (ft_strcmp(input[0], "pwd") == 0)
-		mini_pwd(data);
-	else if (ft_strcmp(input[0], "echo") == 0)
-		mini_echo(input, 1);
-	// else
-	// 	commands(data, input);
-	free_array(input);
-	return (0);
-}
-
-static void loop_those_shells(t_shell *data)
+void	loop_those_shells(t_shell *data)
 {
 	while (1)
 	{
 		if(ft_get_input(data))
 		{
 			ft_input_analizes(data);
-			// if (ainput(data))
-			// 	break ;
 			ft_tokenclear(data->tokens);
 			clean_cmd_list(data->commands);
 			free(data->input);
+			data->tokens = NULL;
+			data->commands = NULL;
+			data->input = NULL;
 		}
 	}
 }
@@ -106,6 +76,8 @@ int main(int ac, char **av, char **envp)
 	return (0);
 }
 /*
+ * TODO (expand_envvar): Alocar "expanded" aos poucos, de acordo com o tamanho das expansoes para evitar overflow
+ * TODO: quotes ainda nao esta 100% indentico ao bash
+ * TODO: criar funcoes para lidar com escapes \
  * 
- *
 */

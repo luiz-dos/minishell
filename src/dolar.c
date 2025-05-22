@@ -37,14 +37,15 @@ char	*expand_envvar(t_shell *data, char *input)
 	int		i;
 	int		j;
 
-	expanded = (char *)malloc(1024);
+	expanded = malloc(1024);
 	if (!expanded)
 		return (NULL);
 	i = 0;
 	j = 0;
 	while (input[i])
 	{
-		if (input[i] == '$' && ft_inside_quotes(input, i) != 1)
+		if (input[i] == '$' && input[i + 1] && (ft_isalnum(input[i + 1]) 
+			|| input[i + 1] == '_' || input[i + 1] == '?'))
 		{
 			var_name = extract_var_name(input, &i);
 			var_value = get_value(data, var_name);
@@ -54,6 +55,26 @@ char	*expand_envvar(t_shell *data, char *input)
 			expanded[j++] = input[i++];
 	}
 	expanded[j] = '\0';
-	free(input);
-	return (expanded); 
+	return (ft_strdup(expanded));
+}
+
+void	expand_envvar_all(t_shell *data)
+{
+	t_tokens	*curr;
+	char		*expanded;
+
+	curr = data->tokens;
+	while (curr)
+	{
+		if (!curr->single_quotes && ft_strchr(curr->content, '$'))
+		{
+			expanded = expand_envvar(data, curr->content);
+			if (expanded)
+			{
+				free(curr->content);
+				curr->content = expanded;
+			}
+		}
+		curr = curr->next;
+	}
 }

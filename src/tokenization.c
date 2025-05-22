@@ -1,46 +1,5 @@
 #include "../inc/libs.h"
 
-/* 
- * essa funcao esta modificando o input
- * o input sendo "ls -l" 
- * quando passa por ela passa a ser "ls"
-*/
-char *ft_gettoken(char *input, int delim, bool fst)
-{
-	static char *static_str = NULL;
-	char *token;
-	char quote = '\0';
-
-	if (static_str == NULL && fst)
-		static_str = input;
-	if (static_str == NULL)
-		return (NULL);
-	while (*static_str && *static_str == delim)
-		static_str++;
-	if (*static_str == '\0')
-		return (NULL);
-	token = static_str;
-	while (*static_str && (*static_str != delim || quote != '\0'))
-	{
-		if (*static_str == '\'' || *static_str == '\"')
-		{
-			if (quote == '\0')
-				quote = *static_str;
-			else if (quote == *static_str)
-				quote = '\0';
-		}
-		static_str++;
-	}
-	if (*static_str)
-	{
-		*static_str = '\0';
-		static_str++;
-	}
-	else
-		static_str = NULL;
-	return (ft_strdup(token));
-}
-
 t_tokens	*ft_tokenlast(t_tokens *lst)
 {
 	while (lst)
@@ -68,28 +27,64 @@ void	ft_tokenadd_back(t_tokens **lst, t_tokens *new)
 	new->prev = curr;
 }
 
-/* nessa versao nao precisa da funcao ft_addtoken */
+char	*ft_gettoken(char **input)
+{
+	char	*start;
+	char	*token;
+	char	quote;
+	int		len;
+
+	while (**input && **input == ' ')
+		(*input)++;
+	if (**input == '\0')
+		return (NULL);
+	start = *input;
+	quote = '\0';
+	len = 0;
+	while ((*input)[len])
+	{
+		if ((*input)[len] == '\'' || (*input)[len] == '\"')
+		{
+			if (quote == '\0')
+				quote = (*input)[len];
+			else if (quote == (*input)[len])
+				quote = '\0';
+		}
+		else if ((*input)[len] == ' ' && quote == '\0')
+			break ;
+		len++;
+	}
+	token = ft_strndup(start, len);
+	*input += len;
+	return (token);
+}
+
 void	ft_tokenization(t_shell *data)
 {
-    char *input;
-    char *token;
-    t_tokens *node; // temp para armazenar o token atual
-    t_tokens *head; // cabeca da lista
+	t_tokens	*node;
+	t_tokens	*head;
+	char		*token;
+	char		*cursor;
 
-    input = data->input;
-    token = ft_gettoken(input, ' ', true);
-    head = NULL;
-    node = NULL;
-	while (token != NULL)
-    {
-        node = ft_calloc(1, sizeof(t_tokens));
-        node->content = token;
-        /* abaixo so inicializo os valores */
-        node->type = -1;
-        node->single_qoutes = false;
-        node->double_quotes = false;
-        ft_tokenadd_back(&head, node); // adiciona o token atual ao fim da lista
-        token = ft_gettoken(input, ' ', false);
-    }
-    data->tokens = head; // ponteiro tokens recebe a cabeca da lista
+	cursor = data->input;
+	head = NULL;
+	while ((token = ft_gettoken(&cursor)) != NULL)
+	{
+		node = ft_calloc(1, sizeof(t_tokens));
+		node->content = token;
+		node->type = -1;
+
+		if (token[0] == '\'' && token[ft_strlen(token) - 1] == '\'')
+			node->single_quotes = true;
+		else
+			node->single_quotes = false;
+		if (token[0] == '\"' && token[ft_strlen(token) - 1] == '\"')
+			node->double_quotes = true;
+		else
+			node->double_quotes = false;
+
+		ft_tokenadd_back(&head, node);
+	}
+	data->tokens = head;
 }
+

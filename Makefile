@@ -13,7 +13,7 @@ LIBFT		= $(LIBFT_DIR)libft.a
 LIBS		= -lreadline
 
 # Source files
-SRCS	=	$(SRC_DIR)cd.c \
+SRCS	= $(SRC_DIR)cd.c \
 			$(SRC_DIR)check_envp.c \
 			$(SRC_DIR)check_tokens.c \
 			$(SRC_DIR)copy_envp.c \
@@ -48,6 +48,7 @@ SRCS	=	$(SRC_DIR)cd.c \
 			$(SRC_DIR)set_envvar.c \
 			$(SRC_DIR)set_envvar2.c \
 			$(SRC_DIR)signal.c \
+			$(SRC_DIR)strip_quotes.c \
 			$(SRC_DIR)tokenization.c \
 			$(SRC_DIR)type_tokens.c \
 			$(SRC_DIR)unset.c \
