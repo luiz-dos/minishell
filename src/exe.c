@@ -1,7 +1,10 @@
 #include "../inc/libs.h"
 
-void save_std_fileno(t_shell *data, int code)
+void save_std_fileno(int code)
 {
+	t_shell *data;
+
+	data = ft_start_shell();
 	if (code == 0)
 	{
 		if (data->std_fileno[0] != -1) // Fecha antigos descritores
@@ -42,10 +45,10 @@ void	exe(t_shell *data)
 		handle_pipeline(data, cmd);
 	else
 	{
-		save_std_fileno(data, 0);
+		save_std_fileno(0);
 		if (handle_redirects(cmd) == -1)
 		{
-			save_std_fileno(data, 1);
+			save_std_fileno(1);
 			return ;
 		}
 		if (is_builtin(cmd->cmd))
@@ -63,7 +66,7 @@ void	exe(t_shell *data)
 			}
 		}
 	}
-	save_std_fileno(data, 1);
+	save_std_fileno(1);
 }
 
 /* TODO: lidar com os redirects quando nao tiver pipes (else) ✅
