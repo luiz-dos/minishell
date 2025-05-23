@@ -77,7 +77,7 @@ int main(int ac, char **av, char **envp)
 }
 /*
  * TODO (expand_envvar): Alocar "expanded" aos poucos, de acordo com o tamanho das expansoes para evitar overflow
- * TODO: quotes ainda nao esta 100% indentico ao bash
+ * TODO: quotes ainda nao esta 100% indentico ao bash (add whitespace no input \2 \3 )
  * TODO: criar funcoes para lidar com escapes \
  * 
 */
