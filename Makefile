@@ -1,11 +1,25 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: gufreire <gufreire@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/05/22 19:44:06 by gufreire          #+#    #+#              #
+#    Updated: 2025/05/24 19:38:57 by gufreire         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+
 NAME	= minishell
 CC		= cc
-CFLAGS 	=  -Wall -Wextra -Werror -g
+CFLAGS 	=  -Wall -Wextra -Werror -g -Iinc
 RM		= rm -f
 
+
 # Directories
-SRC_DIR = src/
-OBJ_DIR = obj/
+SRC_DIR = src
+OBJ_DIR = obj
 
 # Libraries
 LIBFT_DIR	= libft/
@@ -13,7 +27,7 @@ LIBFT		= $(LIBFT_DIR)libft.a
 LIBS		= -lreadline
 
 # Source files
-SRCS	= $(SRC_DIR)cd.c \
+SRCS	=	$(SRC_DIR)cd.c \
 			$(SRC_DIR)check_envp.c \
 			$(SRC_DIR)check_tokens.c \
 			$(SRC_DIR)copy_envp.c \
@@ -48,7 +62,6 @@ SRCS	= $(SRC_DIR)cd.c \
 			$(SRC_DIR)set_envvar.c \
 			$(SRC_DIR)set_envvar2.c \
 			$(SRC_DIR)signal.c \
-			$(SRC_DIR)strip_quotes.c \
 			$(SRC_DIR)tokenization.c \
 			$(SRC_DIR)type_tokens.c \
 			$(SRC_DIR)unset.c \
@@ -58,18 +71,41 @@ OBJS	= $(SRCS:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
 
 all: $(NAME)
 
-$(NAME): $(OBJS) $(LIBFT)
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) $(LIBS)
+$(NAME): $(OBJ) $(LIBFT)
+	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(LIBFT) $(LIBS)
 
 $(LIBFT):
 	@$(MAKE) --no-print-directory -C $(LIBFT_DIR)
 
-$(OBJ_DIR)%.o: $(SRC_DIR)%.c
+$(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
-	@$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJ_DIR)/%.o: $(CMD_DIR)/%.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJ_DIR)/%.o: $(ENV_DIR)/%.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJ_DIR)/%.o: $(EXC_DIR)/%.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJ_DIR)/%.o: $(HDL_DIR)/%.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJ_DIR)/%.o: $(MAIN_DIR)/%.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJ_DIR)/%.o: $(PARS_DIR)/%.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJ_DIR)/%.o: $(STRC_DIR)/%.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJ_DIR)/%.o: $(UTILS_DIR)/%.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	@$(RM) -r $(OBJ_DIR)
+	@$(RM) -rf $(OBJ_DIR)
 	@$(MAKE) --no-print-directory clean -C $(LIBFT_DIR)
 
 fclean: clean

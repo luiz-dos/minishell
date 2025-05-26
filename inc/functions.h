@@ -4,6 +4,13 @@
 #include "structs.h"
 #include "libs.h"
 
+	//pasta structs
+//funcoes struct
+t_shell 	*shell(void);
+t_var		*env_struct(void);
+t_command	*command_struct(void);
+t_tokens	*input_struct(void);
+
 /* execucao */
 void	execute_commands(t_shell *data);
 int		is_builtin(char *cmd);
@@ -35,9 +42,6 @@ pid_t	create_fork(void);
 void	write_line_to_pipe(t_shell *data, char *line, int fd[2]);
 void	loop_heredoc(t_shell *data, t_command *current, int fd[2]);
 void	close_fds(int fd[2]);
-
-/* singleton */
-t_shell	*ft_start_shell(void);
 
 /* tokens */
 void	ft_input_analizes(t_shell *data);
@@ -94,7 +98,7 @@ void	mini_env(t_var *lst);
 void	print_export(t_shell *data);
 void	sort_var(t_var *lst);
 void	swap_nodes(t_var *current, t_var *next);
-t_var	*create_lst_export(t_shell *data);
+t_var	*create_lst_export(void);
 t_var   *copy_var_node(t_var *envvar);
 
 /* dolar */
