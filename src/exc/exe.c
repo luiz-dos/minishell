@@ -4,11 +4,7 @@ void save_std_fileno(int code)
 {
 	t_shell *data;
 
-<<<<<<< HEAD:src/exe.c
-	data = ft_start_shell();
-=======
 	data = shell();
->>>>>>> guilherme:src/exc/exe.c
 	if (code == 0)
 	{
 		if (data->std_fileno[0] != -1) // Fecha antigos descritores

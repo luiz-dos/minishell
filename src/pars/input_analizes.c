@@ -13,5 +13,8 @@ void	ft_input_analizes(t_shell *data)
 			data->commands = create_cmd_list(data->tokens);
 			exe(data);
 		}
+		/* somente para testes */
+		print_token_lst(data->tokens);
+		print_cmd_lst(data->commands);
 	}
 }
