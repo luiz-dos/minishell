@@ -11,6 +11,8 @@ void	print_token_lst(t_tokens *lst)
 	i = 1;
 	while(current)
 	{
+		if (i == 1)
+			printf("=================================\n");
 		printf("Token %d (type: %d): %s\n", i, current->type, current->content);
 		i++;
 		current = current->next;
