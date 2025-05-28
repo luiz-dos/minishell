@@ -2,6 +2,13 @@
 
 void	ft_input_analizes(t_shell *data)
 {
+	char	*normalized;
+
+	normalized = normalize_input(data->input);
+	if (!normalized)
+		return ;
+	free(data->input);
+	data->input = normalized;
 	if (ft_quote_checker(data->input))  
 	{
 		ft_tokenization(data);

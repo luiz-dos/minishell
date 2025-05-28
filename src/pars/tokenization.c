@@ -44,12 +44,7 @@ char	*ft_gettoken(char **input)
 	while ((*input)[len])
 	{
 		if ((*input)[len] == '\'' || (*input)[len] == '\"')
-		{
-			if (quote == '\0')
-				quote = (*input)[len];
-			else if (quote == (*input)[len])
-				quote = '\0';
-		}
+			update_quote((*input)[len], &quote);
 		else if ((*input)[len] == ' ' && quote == '\0')
 			break ;
 		len++;

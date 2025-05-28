@@ -7,7 +7,7 @@ bool    ft_get_input(t_shell *data)
 	char	*input;
 	char	*pwd;
 	
-	pwd = get_pathname();
+	pwd = color_to_prompt(get_pathname());
 	input = readline(pwd);
 	free(pwd);
 	if (input == NULL) // crtl+D faz o readline retonar NULL, entao fecha o minishell
