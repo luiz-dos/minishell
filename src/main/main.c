@@ -55,9 +55,9 @@ int main(int ac, char **av, char **envp)
 	}
 	(void)av;
 	global_sig = 0;
-	if (!envp)
+	if (!*envp)
 	{
-		//shell()->envvar = min_env(envp);
+		shell()->envvar = min_env();
 		shell()->envvar_export = create_lst_export();
 	}
 	else

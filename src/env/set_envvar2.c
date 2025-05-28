@@ -43,3 +43,19 @@ void	set_questionvar(t_shell *data)
 		free(str_value);
 	}
 }
+
+t_var	*min_env(void)
+{
+	char **data;
+	t_var *ret;
+	
+	data = (char **)(malloc)( 5 * sizeof(char *));
+	data[0] = ft_strdup("PWD=/home/user/common_git/minishell");
+	data[1] = ft_strdup("SHLVL=1");
+	data[2] = ft_strdup("PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin");
+	data[3] = ft_strdup("_=/usr/bin/env");
+	data[4] = NULL;
+	ret = create_lst_envvar(data);
+	free(data);
+	return (ret);
+}
