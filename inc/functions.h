@@ -129,6 +129,7 @@ void	update_envvar(t_var *envvar, char *name, char *value);
 char	*create_envvar_content(char *name, char *value);
 void	set_shlvl(t_shell *data);
 void	set_questionvar(t_shell *data);
+t_var	*min_env(void);
 
 /* free*/
 void	free_array(char **array);

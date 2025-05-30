@@ -3,3 +3,11 @@
 [90m[main 2025-05-24T18:27:39.335Z][0m Extension host with pid 65733 exited with code: 134, signal: unknown.
 [90m[main 2025-05-24T18:28:04.159Z][0m update#setState checking for updates
 [90m[main 2025-05-24T18:28:04.293Z][0m update#setState ready
+[90m[main 2025-05-26T15:16:15.720Z][0m updateURL https://api2.cursor.sh/updates/api/update/linux-x64/cursor/0.50.5/732d35b227762e80f8dc9d8b08f7d7bbd661b8e286ff72006212a84b63a89096/stable
+[90m[main 2025-05-26T15:16:15.720Z][0m update#setState idle
+[90m[main 2025-05-26T15:16:45.722Z][0m update#setState checking for updates
+[90m[main 2025-05-26T15:16:45.840Z][0m update#setState ready
+[90m[main 2025-05-28T14:53:45.736Z][0m updateURL https://api2.cursor.sh/updates/api/update/linux-x64/cursor/0.50.5/732d35b227762e80f8dc9d8b08f7d7bbd661b8e286ff72006212a84b63a89096/stable
+[90m[main 2025-05-28T14:53:45.737Z][0m update#setState idle
+[90m[main 2025-05-28T14:54:15.738Z][0m update#setState checking for updates
+[90m[main 2025-05-28T14:54:15.862Z][0m update#setState ready
