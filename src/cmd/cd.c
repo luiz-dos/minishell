@@ -74,11 +74,12 @@ void    cd(t_shell *data, char **args)
 
 	dir = NULL;
 	flag_free = 0;
-	if (args[2])
+	if (args[1] && args[2])
 	{
 		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
 		data->return_status = 1;
 		set_questionvar(data);
+		return ;
 	}
 	if (!args[1] || ft_strcmp(args[1], "--") == 0)
 	{
