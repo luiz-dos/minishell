@@ -80,4 +80,5 @@ int main(int ac, char **av, char **envp)
  * TODO: criar funcoes para lidar com escapes \
  * cd sem nada diz que tem demasiados argumentos mas move para o HOME na mesma
  * nao da para entrar no minishell quando ja dentro do minishell
+ * no set_envvar da leaks quando usa o update_envvar por causa do ft_strdup
 */

@@ -56,17 +56,12 @@ char	*expand_envvar(t_shell *data, char *input)
 			expanded[j++] = input[i++];
 	}
 	expanded[j] = '\0';
-<<<<<<< HEAD:src/hdl/dolar.c
 	result = ft_strdup(expanded);
 	free(expanded);
 	return (result);
 }
 //precisa se de dar free ao expanded, porque da leaks
 //esta funcao nao funciona em expanded fora de quotes
-=======
-	return (ft_strdup(expanded));
-}
->>>>>>> luiz:src/dolar.c
 
 void	expand_envvar_all(t_shell *data)
 {

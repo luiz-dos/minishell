@@ -63,5 +63,5 @@ t_var	*min_env(void)
 }
 
 /*se nao tiver env, e suposto so funcionar os builtins se usar o caminho absoluto, por exemplo,
- ' /bin/ls ', e quandop se chama o cmd ' env ' nao mostra nada
+ ' /bin/ls ', e quando se chama o cmd ' env ' nao mostra nada
  */

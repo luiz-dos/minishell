@@ -4,6 +4,8 @@ t_var   *copy_var_node(t_var *envvar)
 {
     t_var   *copy;
 
+    if (!envvar)
+        return (NULL);
     copy = ft_calloc(1, sizeof(t_var));
     if (!copy)
         return (NULL);

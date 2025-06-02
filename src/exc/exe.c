@@ -4,16 +4,12 @@ void save_std_fileno(int code)
 {
 	t_shell *data;
 
-<<<<<<< HEAD:src/exc/exe.c
 	data = shell();
-=======
-	data = ft_start_shell();
->>>>>>> luiz:src/exe.c
 	if (code == 0)
 	{
-		if (data->std_fileno[0] != -1) // Fecha antigos descritores
+		if (data->std_fileno[0] > 2) // Fecha antigos descritores
 			close(data->std_fileno[0]);
-		if (data->std_fileno[1] != -1)
+		if (data->std_fileno[1] > 2)
 			close(data->std_fileno[1]);
 
 		data->std_fileno[0] = dup(STDIN_FILENO);

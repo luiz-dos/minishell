@@ -3,16 +3,20 @@
 char	*get_dir(char *arg, int *flag_free, t_shell *data)
 {
 	char	*dir;
+	char	*tmp;
 
 	dir = NULL;
 	if (ft_strcmp(arg, "-") == 0)
 	{
-		dir = get_value(data, "OLDPWD");
-		if (only_space(dir))
+		tmp = get_value(data, "OLDPWD");
+		if (only_space(tmp))
 		{
 			printf("NO OLDPWD\n");
 			return (NULL);
 		}
+		dir = ft_strdup(tmp);
+		*flag_free = 1;
+		free(tmp);
 	}
 	else
 	{
@@ -40,8 +44,11 @@ void	update_pwd(t_shell *data, char *dir)
 		return ;
 	}
 	oldpwd = get_value(data, "PWD");
-	if (only_space(oldpwd))
+	if (oldpwd)
+	{
 		set_envvar(data, "OLDPWD", oldpwd, 1);
+		free(oldpwd);
+	}
 	set_envvar(data, "PWD", pwd, 0);
 	free(pwd);
 }
@@ -49,7 +56,9 @@ void	update_pwd(t_shell *data, char *dir)
 void	change_dir(char *dir, int flag_free, t_shell *data)
 {
 	struct stat buf;
-	if (dir && dir[0] != 0 && chdir(dir) == -1)
+	if (!dir)
+		return ;
+	if (dir[0] != 0 && chdir(dir) == -1)
 	{
 		if (stat(dir, &buf) == 0)
 		{
@@ -79,15 +88,23 @@ void    cd(t_shell *data, char **args)
 		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
 		data->return_status = 1;
 		set_questionvar(data);
+		return ;
 	}
 	if (!args[1] || ft_strcmp(args[1], "--") == 0)
 	{
 		dir = get_value(data, "HOME");
 		if (only_space(dir))
-			printf("HOME not set\n");
+		{
+			ft_putstr_fd("minishell: cd: HOME not set\n", 2);
+			data->return_status = 1;
+			set_questionvar(data);
+			return ;
+		}
+		flag_free = 1;
 	}
 	else if (args[1])
 		dir = get_dir(args[1], &flag_free, data);
 	if (dir)
 		change_dir(dir, flag_free, data);
 }
+//cd nao devia mandar para o home quando nao manda argumento a seguir, e deixa leaks e um invalid read size 8

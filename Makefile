@@ -6,7 +6,7 @@
 #    By: gufreire <gufreire@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/22 19:44:06 by gufreire          #+#    #+#              #
-#    Updated: 2025/05/28 17:31:54 by gufreire         ###   ########.fr        #
+#    Updated: 2025/06/02 17:17:17 by gufreire         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,6 @@ LIBFT_DIR	= libft/
 LIBFT		= $(LIBFT_DIR)libft.a
 LIBS		= -lreadline -lncurses -ltermcap
 
-<<<<<<< HEAD
 # cmd functions directory
 CMD_DIR = src/cmd
 CMD_FILES = cd.c create_cmd_list.c echo.c export.c external_commands.c pwd.c unset.c
@@ -71,51 +70,6 @@ SRC = $(SRC_CMD) $(SRC_ENV) $(SRC_EXC) $(SRC_HDL) $(SRC_MAIN) $(SRC_PARS) $(SRC_
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(notdir $(SRC:.c=.o)))
 	
-=======
-# Source files
-SRCS	= $(SRC_DIR)cd.c \
-			$(SRC_DIR)check_envp.c \
-			$(SRC_DIR)check_tokens.c \
-			$(SRC_DIR)copy_envp.c \
-			$(SRC_DIR)create_cmd_list.c \
-			$(SRC_DIR)dolar.c \
-			$(SRC_DIR)echo.c \
-			$(SRC_DIR)env.c \
-			$(SRC_DIR)exe.c \
-			$(SRC_DIR)execute_builtin.c \
-			$(SRC_DIR)execute_commands.c \
-			$(SRC_DIR)export.c \
-			$(SRC_DIR)external_commands.c \
-			$(SRC_DIR)finders.c \
-			$(SRC_DIR)ft_free.c \
-			$(SRC_DIR)ft_isspace.c \
-			$(SRC_DIR)ft_strcat.c \
-			$(SRC_DIR)ft_strcmp.c \
-			$(SRC_DIR)ft_strcpy.c \
-			$(SRC_DIR)ft_strdup_two.c \
-			$(SRC_DIR)ft_strjoin_free.c \
-			$(SRC_DIR)ft_strndup.c \
-			$(SRC_DIR)handle_heredoc.c \
-			$(SRC_DIR)input_analizes.c \
-			$(SRC_DIR)main.c \
-			$(SRC_DIR)pipeline.c \
-			$(SRC_DIR)print_lst.c \
-			$(SRC_DIR)prompt.c \
-			$(SRC_DIR)pwd.c \
-			$(SRC_DIR)quote_checker.c \
-			$(SRC_DIR)quote_handle.c \
-			$(SRC_DIR)redirection.c \
-			$(SRC_DIR)set_envvar.c \
-			$(SRC_DIR)set_envvar2.c \
-			$(SRC_DIR)signal.c \
-			$(SRC_DIR)strip_quotes.c \
-			$(SRC_DIR)tokenization.c \
-			$(SRC_DIR)type_tokens.c \
-			$(SRC_DIR)unset.c \
-			$(SRC_DIR)utils.c \
-			
-OBJS	= $(SRCS:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
->>>>>>> luiz
 
 all: $(NAME)
 
@@ -161,11 +115,7 @@ fclean: clean
 	@$(RM) $(LIBFT)
 
 valgrind:
-<<<<<<< HEAD
-	valgrind --suppressions=readline.supp  --track-fds=all --leak-check=full --show-leak-kinds=all env -i ./minishell || true
-=======
 	valgrind --suppressions=readline.supp --track-fds=all --leak-check=full --show-leak-kinds=all ./minishell || true
->>>>>>> luiz
 
 re: fclean all
 

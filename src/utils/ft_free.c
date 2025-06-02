@@ -69,6 +69,13 @@ void	clean_cmd_list(t_command *lst)
 		free(temp);
 	}
 }
+
+// void	ft_close(int fd)
+// {
+// 	if (fd > 2)
+// 		close(fd);
+// }
+
 //fcntl nao permitido, preciso ver uma maneira melhor de dar close
 void	close_remaining_fds()
 {
@@ -115,3 +122,4 @@ void	free_exit(t_shell *data)
 	close_remaining_fds();
 	rl_clear_history();
 }
+//quando usa o pipe usar o ft_close para fechar os fds maiores que 2
