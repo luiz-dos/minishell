@@ -57,8 +57,8 @@ int main(int ac, char **av, char **envp)
 	global_sig = 0;
 	if (!*envp)
 	{
-		shell()->envvar = min_env();
-		shell()->envvar_export = create_lst_export();
+		shell()->envvar = NULL;
+		shell()->envvar_export = NULL;
 	}
 	else
 	{

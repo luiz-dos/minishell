@@ -69,7 +69,7 @@ void	clean_cmd_list(t_command *lst)
 		free(temp);
 	}
 }
-
+//fcntl nao permitido, preciso ver uma maneira melhor de dar close
 void	close_remaining_fds()
 {
 	int	fd;
@@ -86,7 +86,7 @@ void	close_remaining_fds()
 	}
 }
 
-// TODO: melhorar essa funcao
+// TODO: melhorar essa funcao data->envvar
 void	free_exit(t_shell *data)
 {
 	if (data->std_fileno[0] != -1)
@@ -100,10 +100,18 @@ void	free_exit(t_shell *data)
 		data->std_fileno[1] = -1;
 	}
 	free_lst(data->envvar);
+	data->envvar = NULL;
 	free_lst(data->envvar_export);
+	data->envvar_export = NULL;
 	ft_tokenclear(data->tokens);
+	data->tokens = NULL;
 	clean_cmd_list(data->commands);
+	data->commands = NULL;
 	if (data->input)
+	{
 		free(data->input);
+		data->input = NULL;
+	}
 	close_remaining_fds();
+	rl_clear_history();
 }

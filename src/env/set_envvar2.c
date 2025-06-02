@@ -61,3 +61,7 @@ t_var	*min_env(void)
 	free(data);
 	return (ret);
 }
+
+/*se nao tiver env, e suposto so funcionar os builtins se usar o caminho absoluto, por exemplo,
+ ' /bin/ls ', e quandop se chama o cmd ' env ' nao mostra nada
+ */
