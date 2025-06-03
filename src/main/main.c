@@ -83,4 +83,5 @@ int main(int ac, char **av, char **envp)
  * TODO: tratar a criacao de uma nova variavel (export a=12)
  * TODO: salvar a raiz "/" em OLDPWD quando usar (cd) para voltar quando usar (cd -)
  * TODO: $A deve expandir a variavel e caso o conteudo for um comando executa-lo ✅
+ * TODO: fazer set_questionvar setar o valor de data->return_status tambem
 */

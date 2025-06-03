@@ -28,7 +28,7 @@ LIBS		= -lreadline -lncurses -ltermcap
 
 # cmd functions directory
 CMD_DIR = src/cmd
-CMD_FILES = cd.c create_cmd_list.c echo.c export.c external_commands.c pwd.c unset.c
+CMD_FILES = cd.c create_cmd_list.c echo.c export.c export_args.c external_commands.c pwd.c unset.c
 SRC_CMD = $(addprefix $(CMD_DIR)/, $(CMD_FILES))
 
 # env functions directory

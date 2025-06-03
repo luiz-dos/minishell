@@ -15,10 +15,7 @@ void	execute_builtin(t_shell *data, t_command *cmd)
 	if (ft_strcmp(cmd->cmd, "env") == 0) // ambos
 		mini_env(data->envvar);
 	else if (ft_strcmp(cmd->cmd, "export") == 0) // ambos
-	{
-		// tratar a criacao de uma nova variavel
-		print_export(data);
-	}
+		mini_export(cmd);
 	else if (ft_strcmp(cmd->cmd, "exit") == 0) // pai
 	{
 		free_exit(data);

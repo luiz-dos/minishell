@@ -84,4 +84,5 @@ void	exec_external_cmd(char **cmd)
 }
 /*
  * TODO: verificar se o arg e /bin/ls , se sim, nao procurar em get_command_path e mandar assim para execve
+ * TODO: verificar permissao na hora de executar um programa, veficar se e um diretorio 
 */

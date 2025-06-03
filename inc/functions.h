@@ -97,6 +97,8 @@ void	mini_pwd(t_shell *data);
 void	mini_env(t_var *lst);
 
 /* export */
+void    mini_export(t_command *cmd);
+int		count_args(char **args);
 void	print_export(t_shell *data);
 void	sort_var(t_var *lst);
 void	swap_nodes(t_var *current, t_var *next);

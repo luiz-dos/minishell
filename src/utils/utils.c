@@ -12,18 +12,16 @@ int	only_space(char *str)
 	return (0);
 }
 
-int	open_file(char *file, int flags, int mode)
+int count_args(char **args)
 {
-	int	fd;
+    int i;
 
-	fd = open(file, flags, mode);
-	if (fd == -1)
-	{
-		printf("Error opening %s", file);
-		perror(file);
-		exit(EXIT_FAILURE);
-	}
-	return (fd);
+    if (!args || !*args)
+        return (0);
+    i = 0;
+    while (args[i])
+        i++;
+    return (i);
 }
 
 void	close_fds(int fd[2])

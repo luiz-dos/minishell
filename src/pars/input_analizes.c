@@ -11,10 +11,10 @@ static int	check_dolar(t_shell *data)
 	if (data->input[i] == '$')
 	{
 		temp = ft_strdup(data->input);
-		printf("temp: %s\n", temp);
+		// printf("temp: %s\n", temp);
 		free(data->input);
 		data->input = expand_envvar(data, temp);
-		printf("data->input: %s\n", data->input);
+		// printf("data->input: %s\n", data->input);
 		free(temp);
 		if (only_space(data->input))
 			return (0);
@@ -32,7 +32,7 @@ void	ft_input_analizes(t_shell *data)
 	free(data->input);
 	data->input = normalized;
 	/* somente para testes */
-	printf("-Normalized: %s\n=================================\n", shell()->input);
+	// printf("-Normalized: %s\n=================================\n", shell()->input);
 	if (ft_quote_checker(data->input) && check_dolar(data))  
 	{
 		ft_tokenization(data);
@@ -45,7 +45,7 @@ void	ft_input_analizes(t_shell *data)
 			exe(data);
 		}
 		/* somente para testes */
-		print_token_lst(data->tokens);
-		print_cmd_lst(data->commands);
+		// print_token_lst(data->tokens);
+		// print_cmd_lst(data->commands);
 	}
 }
