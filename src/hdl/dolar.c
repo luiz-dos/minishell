@@ -55,7 +55,7 @@ char	*expand_envvar(t_shell *data, char *input)
 			expanded[j++] = input[i++];
 	}
 	expanded[j] = '\0';
-	return (ft_strdup(expanded));
+	return (expanded);
 }
 
 void	expand_envvar_all(t_shell *data)

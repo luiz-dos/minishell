@@ -82,3 +82,6 @@ void	exec_external_cmd(char **cmd)
 	perror("execve");
 	exit(1);
 }
+/*
+ * TODO: verificar se o arg e /bin/ls , se sim, nao procurar em get_command_path e mandar assim para execve
+*/
