@@ -52,7 +52,7 @@ t_var	*min_env(void)
 	data = (char **)(malloc)( 5 * sizeof(char *));
 	if (!data)
 		return (NULL);
-	data[0] = ft_strdup("PWD=/home/user/common_git/minishell");
+	getcwd(data[0], 1000);
 	data[1] = ft_strdup("SHLVL=1");
 	data[2] = ft_strdup("PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin");
 	data[3] = ft_strdup("_=/usr/bin/env");
@@ -62,6 +62,5 @@ t_var	*min_env(void)
 	return (ret);
 }
 
-/*se nao tiver env, e suposto so funcionar os builtins se usar o caminho absoluto, por exemplo,
- ' /bin/ls ', e quando se chama o cmd ' env ' nao mostra nada
+/* afinal se env -i, mostra apenas o shlvl, o pwd e _=
  */

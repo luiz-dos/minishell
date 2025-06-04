@@ -57,8 +57,8 @@ int main(int ac, char **av, char **envp)
 	global_sig = 0;
 	if (!*envp)
 	{
-		shell()->envvar = NULL;
-		shell()->envvar_export = NULL;
+		shell()->envvar = min_env();
+		shell()->envvar_export = create_lst_export();
 	}
 	else
 	{
@@ -76,9 +76,11 @@ int main(int ac, char **av, char **envp)
 }
 /*
  * TODO (expand_envvar): Alocar "expanded" aos poucos, de acordo com o tamanho das expansoes para evitar overflow
- * TODO: quotes ainda nao esta 100% indentico ao bash (add whitespace no input \2 \3 )
+ * TODO: quotes ainda nao esta 100% indentico ao bash (add whitespace no input \2 \3 ) ✅
  * TODO: criar funcoes para lidar com escapes \
- * cd sem nada diz que tem demasiados argumentos mas move para o HOME na mesma
- * nao da para entrar no minishell quando ja dentro do minishell
- * no set_envvar da leaks quando usa o update_envvar por causa do ft_strdup
+ * TODO: cd sem nada diz que tem demasiados argumentos mas move para o HOME na mesma ✅
+ * TODO: nao da para entrar no minishell quando ja dentro do minishell
+ * TODO: tratar a criacao de uma nova variavel (export a=12)
+ * TODO: salvar a raiz "/" em OLDPWD quando usar (cd) para voltar quando usar (cd -)
+ * TODO: $A deve expandir a variavel e caso o conteudo for um comando executa-lo ✅
 */
