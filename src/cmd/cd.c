@@ -50,23 +50,32 @@ void	update_pwd(t_shell *data, char *dir)
 
 void	change_dir(char *dir, int flag_free, t_shell *data)
 {
-	struct stat buf;
-	if (dir && dir[0] != 0 && chdir(dir) == -1)
+	char	*oldpwd;
+
+	oldpwd = getcwd(NULL, 0);
+	if (!oldpwd)
 	{
-		if (stat(dir, &buf) == 0)
-		{
-			if ((buf.st_mode & __S_IFREG))
-				perror(dir);
-		}
-		else
-			perror(dir);
+		perror("getcwd");
+		data->return_status = 1;
+		set_questionvar(data);
+		return ;
+	}
+	if (chdir(dir) == -1)
+	{
+		perror(dir);
+		free(oldpwd);
 		data->return_status = 1;
 		set_questionvar(data);
 	}
 	else
+	{
+		set_envvar(data, "OLDPWD", oldpwd, 1);
 		update_pwd(data, dir);
+	}
 	if (flag_free == 1)
 		free(dir);
+	if (oldpwd)
+		free(oldpwd);
 }
 
 void    cd(t_shell *data, char **args)

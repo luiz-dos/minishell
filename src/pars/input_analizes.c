@@ -31,21 +31,19 @@ void	ft_input_analizes(t_shell *data)
 		return ;
 	free(data->input);
 	data->input = normalized;
-	/* somente para testes */
-	// printf("-Normalized: %s\n=================================\n", shell()->input);
+	printf("-Normalized: %s\n", shell()->input); /* somente para testes */
 	if (ft_quote_checker(data->input) && check_dolar(data))  
 	{
 		ft_tokenization(data);
 		strip_quotes_all(data->tokens);
 		expand_envvar_all(data);
 		ft_set_token_type(data->tokens);
+		print_token_lst(data->tokens); /* somente para testes */
 		if (check_tokens(data))
 		{
 			data->commands = create_cmd_list(data->tokens);
+			print_cmd_lst(data->commands); /* somente para testes */
 			exe(data);
 		}
-		/* somente para testes */
-		// print_token_lst(data->tokens);
-		// print_cmd_lst(data->commands);
 	}
 }
