@@ -8,10 +8,12 @@ char	*get_dir(char *arg, int *flag_free, t_shell *data)
 	dir = NULL;
 	if (ft_strcmp(arg, "-") == 0)
 	{
-		tmp = get_value(data, "OLDPWD");
-		if (only_space(tmp))
+		dir = get_value(data, "OLDPWD");
+		if (!dir)
 		{
-			printf("NO OLDPWD\n");
+			ft_putstr_fd("OLDPWD not set\n", 2);
+			data->return_status = 1;
+			set_questionvar(data);
 			return (NULL);
 		}
 		dir = ft_strdup(tmp);
@@ -44,8 +46,7 @@ void	update_pwd(t_shell *data, char *dir)
 		return ;
 	}
 	oldpwd = get_value(data, "PWD");
-	if (oldpwd)
-	{
+	if (!oldpwd)
 		set_envvar(data, "OLDPWD", oldpwd, 1);
 		free(oldpwd);
 	}
@@ -55,25 +56,32 @@ void	update_pwd(t_shell *data, char *dir)
 
 void	change_dir(char *dir, int flag_free, t_shell *data)
 {
-	struct stat buf;
-	if (!dir)
-		return ;
-	if (dir[0] != 0 && chdir(dir) == -1)
+	char	*oldpwd;
+
+	oldpwd = getcwd(NULL, 0);
+	if (!oldpwd)
 	{
-		if (stat(dir, &buf) == 0)
-		{
-			if ((buf.st_mode & __S_IFREG))
-				perror(dir);
-		}
-		else
-			perror(dir);
+		perror("getcwd");
+		data->return_status = 1;
+		set_questionvar(data);
+		return ;
+	}
+	if (chdir(dir) == -1)
+	{
+		perror(dir);
+		free(oldpwd);
 		data->return_status = 1;
 		set_questionvar(data);
 	}
 	else
+	{
+		set_envvar(data, "OLDPWD", oldpwd, 1);
 		update_pwd(data, dir);
+	}
 	if (flag_free == 1)
 		free(dir);
+	if (oldpwd)
+		free(oldpwd);
 }
 
 void    cd(t_shell *data, char **args)
@@ -83,7 +91,7 @@ void    cd(t_shell *data, char **args)
 
 	dir = NULL;
 	flag_free = 0;
-	if (args[2])
+	if (args[1] && args[2])
 	{
 		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
 		data->return_status = 1;
@@ -93,14 +101,8 @@ void    cd(t_shell *data, char **args)
 	if (!args[1] || ft_strcmp(args[1], "--") == 0)
 	{
 		dir = get_value(data, "HOME");
-		if (only_space(dir))
-		{
-			ft_putstr_fd("minishell: cd: HOME not set\n", 2);
-			data->return_status = 1;
-			set_questionvar(data);
-			return ;
-		}
-		flag_free = 1;
+		if (!dir)
+			printf("HOME not set\n");
 	}
 	else if (args[1])
 		dir = get_dir(args[1], &flag_free, data);

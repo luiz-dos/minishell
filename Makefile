@@ -6,7 +6,7 @@
 #    By: gufreire <gufreire@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/22 19:44:06 by gufreire          #+#    #+#              #
-#    Updated: 2025/06/02 17:17:17 by gufreire         ###   ########.fr        #
+#    Updated: 2025/06/04 18:55:18 by gufreire         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ LIBS		= -lreadline -lncurses -ltermcap
 
 # cmd functions directory
 CMD_DIR = src/cmd
-CMD_FILES = cd.c create_cmd_list.c echo.c export.c external_commands.c pwd.c unset.c
+CMD_FILES = cd.c create_cmd_list.c echo.c export.c export_args.c external_commands.c pwd.c unset.c
 SRC_CMD = $(addprefix $(CMD_DIR)/, $(CMD_FILES))
 
 # env functions directory
@@ -53,7 +53,7 @@ SRC_MAIN = $(addprefix $(MAIN_DIR)/, $(MAIN_FILES))
 
 # parsing functions directory
 PARS_DIR = src/pars
-PARS_FILES = check_tokens.c input_analizes.c quote_checker.c quote_handle.c strip_quotes.c tokenization.c type_tokens.c
+PARS_FILES = check_tokens.c input_analizes.c normalize_input.c quote_checker.c quote_handle.c strip_quotes.c tokenization.c type_tokens.c
 SRC_PARS = $(addprefix $(PARS_DIR)/, $(PARS_FILES))
 
 # struct functions directory
@@ -83,28 +83,28 @@ $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
 $(OBJ_DIR)/%.o: $(CMD_DIR)/%.c | $(OBJ_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR)/%.o: $(ENV_DIR)/%.c | $(OBJ_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR)/%.o: $(EXC_DIR)/%.c | $(OBJ_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR)/%.o: $(HDL_DIR)/%.c | $(OBJ_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR)/%.o: $(MAIN_DIR)/%.c | $(OBJ_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR)/%.o: $(PARS_DIR)/%.c | $(OBJ_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR)/%.o: $(STRC_DIR)/%.c | $(OBJ_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR)/%.o: $(UTILS_DIR)/%.c | $(OBJ_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	@$(RM) -rf $(OBJ_DIR)
@@ -119,4 +119,4 @@ valgrind:
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean valgrind re

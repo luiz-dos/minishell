@@ -24,6 +24,8 @@ void    wait_for_children(t_shell *data, t_command *cmd, int cmd_count);
 void	save_std_fileno(int code);
 
 /* parsing */
+char	*normalize_input(char *input);
+void	update_quote(char c, char *quote);
 int		ft_inside_quotes(char	*str, int index);
 void	strip_quotes_all(t_tokens *lst);
 int		ft_quote_checker(char *input);
@@ -95,6 +97,8 @@ void	mini_pwd(t_shell *data);
 void	mini_env(t_var *lst);
 
 /* export */
+void    mini_export(t_command *cmd);
+int		count_args(char **args);
 void	print_export(t_shell *data);
 void	sort_var(t_var *lst);
 void	swap_nodes(t_var *current, t_var *next);

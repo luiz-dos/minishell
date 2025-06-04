@@ -56,9 +56,7 @@ char	*expand_envvar(t_shell *data, char *input)
 			expanded[j++] = input[i++];
 	}
 	expanded[j] = '\0';
-	result = ft_strdup(expanded);
-	free(expanded);
-	return (result);
+	return (expanded);
 }
 //precisa se de dar free ao expanded, porque da leaks
 //esta funcao nao funciona em expanded fora de quotes

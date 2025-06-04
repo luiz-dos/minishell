@@ -59,8 +59,6 @@ void	ft_strip_quotes(t_tokens *node)
 	clean = ft_calloc(len + 1, sizeof(*clean));
 	if (!clean)
 		return ;
-	node->single_quotes = false;
-	node->double_quotes = false;
 	src = node->content;
 	dst = clean;
 	ft_strip_quotes_loop(&src, &dst, node);

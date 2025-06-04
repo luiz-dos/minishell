@@ -44,12 +44,7 @@ char	*ft_gettoken(char **input)
 	while ((*input)[len])
 	{
 		if ((*input)[len] == '\'' || (*input)[len] == '\"')
-		{
-			if (quote == '\0')
-				quote = (*input)[len];
-			else if (quote == (*input)[len])
-				quote = '\0';
-		}
+			update_quote((*input)[len], &quote);
 		else if ((*input)[len] == ' ' && quote == '\0')
 			break ;
 		len++;
@@ -73,16 +68,8 @@ void	ft_tokenization(t_shell *data)
 		node = ft_calloc(1, sizeof(t_tokens));
 		node->content = token;
 		node->type = -1;
-
-		if (token[0] == '\'' && token[ft_strlen(token) - 1] == '\'')
-			node->single_quotes = true;
-		else
-			node->single_quotes = false;
-		if (token[0] == '\"' && token[ft_strlen(token) - 1] == '\"')
-			node->double_quotes = true;
-		else
-			node->double_quotes = false;
-
+		node->single_quotes = false;
+		node->double_quotes = false;
 		ft_tokenadd_back(&head, node);
 	}
 	data->tokens = head;

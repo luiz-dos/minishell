@@ -6,7 +6,9 @@ char	*ft_strdup_two(const char *s, char c)
 	size_t	i;
 
 	i = 0;
-	while (s[i] != c)
+	if (!s)
+		return (NULL);
+	while (s[i] && s[i] != c)
 		i++;
 	dest = (char *)malloc(i + 1);
 	if (!dest)
