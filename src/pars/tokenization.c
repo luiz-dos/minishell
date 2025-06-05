@@ -27,31 +27,39 @@ void	ft_tokenadd_back(t_tokens **lst, t_tokens *new)
 	new->prev = curr;
 }
 
+char	*extract_literal(char **input)
+{
+	char	*start;
+
+	start = *input;
+	while (**input && **input != ' ' && **input != '\'' && **input != '"')
+		(*input)++;
+	return (ft_strndup(start, *input - start));
+}
+
 char	*ft_gettoken(char **input)
 {
 	char	*start;
 	char	*token;
 	char	quote;
-	int		len;
 
 	while (**input && **input == ' ')
 		(*input)++;
 	if (**input == '\0')
 		return (NULL);
-	start = *input;
-	quote = '\0';
-	len = 0;
-	while ((*input)[len])
+	if (**input == '\'' || **input == '"')
 	{
-		if ((*input)[len] == '\'' || (*input)[len] == '\"')
-			update_quote((*input)[len], &quote);
-		else if ((*input)[len] == ' ' && quote == '\0')
-			break ;
-		len++;
+		quote = **input;
+		start = (*input);
+		(*input)++;
+		while (**input && **input != quote)
+			(*input)++;
+		if (**input == quote)
+			(*input)++;
+		token = ft_strndup(start, *input - start);
+		return (token);
 	}
-	token = ft_strndup(start, len);
-	*input += len;
-	return (token);
+	return (extract_literal(input));
 }
 
 void	ft_tokenization(t_shell *data)
@@ -65,12 +73,18 @@ void	ft_tokenization(t_shell *data)
 	head = NULL;
 	while ((token = ft_gettoken(&cursor)) != NULL)
 	{
-		node = ft_calloc(1, sizeof(t_tokens));
-		node->content = token;
-		node->type = -1;
-		node->single_quotes = false;
-		node->double_quotes = false;
-		ft_tokenadd_back(&head, node);
+		if ((token[0] == '\'' && token[1] == '\'' && token[2] == '\0') ||
+		(token[0] == '"' && token[1] == '"' && token[2] == '\0'))
+			free(token);
+		else
+		{
+			node = ft_calloc(1, sizeof(t_tokens));
+			node->content = token;
+			node->type = -1;
+			node->single_quotes = false;
+			node->double_quotes = false;
+			ft_tokenadd_back(&head, node);
+		}
 	}
 	data->tokens = head;
 }
