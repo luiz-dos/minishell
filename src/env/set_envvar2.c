@@ -54,8 +54,8 @@ t_var	*min_env(void)
 		return (NULL);
 	getcwd(data[0], 1000);
 	data[1] = ft_strdup("SHLVL=1");
-	data[2] = ft_strdup("PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin");
 	data[3] = ft_strdup("_=/usr/bin/env");
+	data[2] = ft_strdup("PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin");
 	data[4] = NULL;
 	ret = create_lst_envvar(data);
 	free(data);

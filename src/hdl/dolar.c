@@ -34,7 +34,6 @@ char	*expand_envvar(t_shell *data, char *input)
 	char	*expanded;
 	char	*var_name;
 	char	*var_value;
-	char	*result;
 	int		i;
 	int		j;
 

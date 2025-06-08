@@ -3,7 +3,6 @@
 char	*get_dir(char *arg, int *flag_free, t_shell *data)
 {
 	char	*dir;
-	char	*tmp;
 
 	dir = NULL;
 	if (ft_strcmp(arg, "-") == 0)
@@ -16,9 +15,6 @@ char	*get_dir(char *arg, int *flag_free, t_shell *data)
 			set_questionvar(data);
 			return (NULL);
 		}
-		dir = ft_strdup(tmp);
-		*flag_free = 1;
-		free(tmp);
 	}
 	else
 	{
@@ -48,11 +44,10 @@ void	update_pwd(t_shell *data, char *dir)
 	oldpwd = get_value(data, "PWD");
 	if (!oldpwd)
 		set_envvar(data, "OLDPWD", oldpwd, 1);
-		free(oldpwd);
-	}
 	set_envvar(data, "PWD", pwd, 0);
 	free(pwd);
 }
+
 
 void	change_dir(char *dir, int flag_free, t_shell *data)
 {

@@ -47,3 +47,12 @@
 [90m[main 2025-06-04T15:53:17.628Z][0m Extension host with pid 153195 exited with code: 0, signal: unknown.
 [90m[main 2025-06-04T15:53:28.671Z][0m update#setState checking for updates
 [90m[main 2025-06-04T15:53:28.789Z][0m update#setState idle
+[90m[main 2025-06-05T19:09:23.281Z][0m updateURL https://api2.cursor.sh/updates/api/update/linux-x64/cursor/0.50.5/732d35b227762e80f8dc9d8b08f7d7bbd661b8e286ff72006212a84b63a89096/stable
+[90m[main 2025-06-05T19:09:23.282Z][0m update#setState idle
+[90m[main 2025-06-05T19:09:53.283Z][0m update#setState checking for updates
+[90m[main 2025-06-05T19:09:53.406Z][0m update#setState ready
+[90m[main 2025-06-05T20:17:36.782Z][0m Extension host with pid 19392 exited with code: 0, signal: unknown.
+[90m[main 2025-06-08T14:59:12.010Z][0m updateURL https://api2.cursor.sh/updates/api/update/linux-x64/cursor/0.50.5/732d35b227762e80f8dc9d8b08f7d7bbd661b8e286ff72006212a84b63a89096/stable
+[90m[main 2025-06-08T14:59:12.011Z][0m update#setState idle
+[90m[main 2025-06-08T14:59:42.014Z][0m update#setState checking for updates
+[90m[main 2025-06-08T14:59:42.134Z][0m update#setState ready
