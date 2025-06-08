@@ -21,7 +21,7 @@ void	handle_child_heredoc(t_shell *data, t_command *current, int fd[2]);
 void	exe(t_shell *data);
 void	handle_pipeline(t_shell *data, t_command *cmd);
 void    wait_for_children(t_shell *data, t_command *cmd, int cmd_count);
-void	save_std_fileno(int code);
+void	save_std_fileno(void);
 
 /* parsing */
 char	*normalize_input(char *input);

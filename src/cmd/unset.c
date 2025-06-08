@@ -14,6 +14,8 @@ void	remove_envvar(t_var **lst, t_var *envvar)
 {
 	t_var	*temp;
 
+	if (!lst || !*lst || !envvar)
+		return ;
 	temp = find_envvar(*lst, envvar->name);
 	if (!temp)
 		return ;
@@ -23,6 +25,8 @@ void	remove_envvar(t_var **lst, t_var *envvar)
 			*lst = envvar->next;
 		else
 			envvar->prev->next = envvar->next;
+		if (envvar->next)
+			envvar->next->prev = envvar->prev;
 		free(envvar->content);
 		free(envvar->name);
 		free(envvar->value);

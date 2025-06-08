@@ -46,16 +46,20 @@ void	set_questionvar(t_shell *data)
 
 t_var	*min_env(void)
 {
-	char **data;
-	t_var *ret;
+	char	**data;
+	char	*pwd;
+	t_var	*ret;
 
 	data = (char **)(malloc)( 5 * sizeof(char *));
 	if (!data)
 		return (NULL);
-	getcwd(data[0], 1000);
+	pwd = getcwd(NULL, 1000);
+	if (!pwd)
+		return (NULL);
+	data[0] = pwd;
 	data[1] = ft_strdup("SHLVL=1");
-	data[3] = ft_strdup("_=/usr/bin/env");
 	data[2] = ft_strdup("PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin");
+	data[3] = ft_strdup("_=/usr/bin/env");
 	data[4] = NULL;
 	ret = create_lst_envvar(data);
 	free(data);

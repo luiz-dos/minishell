@@ -19,14 +19,17 @@ t_var   *copy_var_node(t_var *envvar)
     return (copy);
 }
 
-t_var	*create_lst_export()
+t_var	*create_lst_export(void)
 {
 	t_var	*current;
 	t_var	*head;
 	t_var	*node_export;
+	t_var	*envvar;
 
-	current = shell()->envvar;
 	head = NULL;
+	current = shell()->envvar;
+	if (!current)
+		return (NULL);
 	while (current)
 	{
 		node_export = copy_var_node(current);
@@ -38,8 +41,10 @@ t_var	*create_lst_export()
 		add_var_back(&head, node_export);
 		current = current->next;
 	}
-	remove_envvar(&head, find_envvar(head, "_"));
-	return(head);
+	envvar = find_envvar(head, "_");
+	if (envvar)
+		remove_envvar(&head, envvar);
+	return (head);
 }
 
 void	swap_nodes(t_var *current, t_var *next)
