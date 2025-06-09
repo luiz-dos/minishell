@@ -28,8 +28,6 @@ t_var	*create_lst_export(void)
 
 	head = NULL;
 	current = shell()->envvar;
-	if (!current)
-		return (NULL);
 	while (current)
 	{
 		node_export = copy_var_node(current);

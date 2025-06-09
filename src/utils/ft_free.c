@@ -32,11 +32,17 @@ void	ft_tokenclear(t_tokens *lst)
 	t_tokens	*tokens;
 	t_tokens	*next;
 
+	if (!lst)
+		return ;
 	tokens = lst;
 	while (tokens != NULL)
 	{
 		next = tokens->next;
-		free(tokens->content);
+		if (tokens->content)
+			free(tokens->content);
+		tokens->content = NULL;
+		tokens->next = NULL;
+		tokens->prev = NULL;
 		free(tokens);
 		tokens = next;
 	}
@@ -47,6 +53,8 @@ void	clean_cmd_list(t_command *lst)
 	t_command	*temp;
 	int			i;
 
+	if (!lst)
+		return ;
 	while (lst)
 	{
 		temp = lst;

@@ -50,19 +50,23 @@ t_var	*min_env(void)
 	char	*pwd;
 	t_var	*ret;
 
-	data = (char **)(malloc)( 5 * sizeof(char *));
+	data = (char **)malloc(5 * sizeof(char *));
 	if (!data)
 		return (NULL);
 	pwd = getcwd(NULL, 1000);
 	if (!pwd)
+	{
+		free(data);
 		return (NULL);
-	data[0] = pwd;
+	}
+	data[0] = ft_strjoin("PWD=", pwd);
+	free(pwd);
 	data[1] = ft_strdup("SHLVL=1");
 	data[2] = ft_strdup("PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin");
 	data[3] = ft_strdup("_=/usr/bin/env");
 	data[4] = NULL;
 	ret = create_lst_envvar(data);
-	free(data);
+	free_array(data);
 	return (ret);
 }
 
