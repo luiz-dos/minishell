@@ -26,7 +26,7 @@ void	save_std_fileno(int code);
 /* parsing */
 char	*normalize_input(char *input);
 void	update_quote(char c, char *quote);
-int		ft_inside_quotes(char	*str, int index);
+int		inside_quotes(char	*str, size_t index);
 void	strip_quotes_all(t_tokens *lst);
 int		ft_quote_checker(char *input);
 void	expand_envvar_all(t_shell *data);
@@ -46,6 +46,7 @@ void	loop_heredoc(t_shell *data, t_command *current, int fd[2]);
 void	close_fds(int fd[2]);
 
 /* tokens */
+void	input_analizes(t_shell *data);
 void	ft_input_analizes(t_shell *data);
 char	*ft_gettoken(char **input);
 void	ft_tokenization(t_shell *data);
@@ -70,7 +71,6 @@ char	**envvar_array(t_var *lst);
 
 /* utils */
 int		only_space(char *str);
-int		open_file(char *file, int flags, int mode);
 int		check_envp(char **envp);
 bool	check_options(char *option);
 t_var	*find_envvar(t_var *lst, char *name);

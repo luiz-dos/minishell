@@ -52,6 +52,13 @@ enum e_types
 	REDIR_IN // <
 };
 
+enum e_markers
+{
+	N_SPACE = -32,
+	N_DQUOTE = -34,
+	N_SQUOTE = -39,
+};
+
 typedef struct s_shell
 {
 	char        *input;
