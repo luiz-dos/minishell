@@ -37,8 +37,7 @@ void	not_valid(t_command *cmd, int i)
 	ft_putstr_fd("minishell: export: `", 2);
 	ft_putstr_fd(cmd->args[i], 2);
 	ft_putstr_fd("': not a valid identifier\n", 2);
-	shell()->return_status = 1;
-	set_questionvar(shell());
+	set_questionvar(shell(), 1);
 }
 
 void	mini_export(t_command *cmd)

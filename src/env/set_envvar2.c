@@ -25,7 +25,7 @@ void	set_shlvl(t_shell *data)
 	}
 }
 
-void	set_questionvar(t_shell *data)
+void	set_questionvar(t_shell *data, int return_status)
 {
 	t_var	*envvar;
 	char	*str_value;
@@ -38,7 +38,8 @@ void	set_questionvar(t_shell *data)
 	}
 	else
 	{
-		str_value = ft_itoa(data->return_status);
+		data->return_status = return_status;
+		str_value = ft_itoa(return_status);
 		set_envvar(data, "?", str_value, 0);
 		free(str_value);
 	}

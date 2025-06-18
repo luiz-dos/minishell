@@ -38,7 +38,7 @@ SRC_ENV = $(addprefix $(ENV_DIR)/, $(ENV_FILES))
 
 # exc functions directory
 EXC_DIR = src/exc
-EXC_FILES = exe.c execute_builtin.c execute_commands.c
+EXC_FILES = exe.c execute_builtin.c 
 SRC_EXC = $(addprefix $(EXC_DIR)/, $(EXC_FILES))
 
 # handle functions directory

@@ -9,8 +9,7 @@ int 	redirect_input(char *file)
 	if (fd_in == -1)
 	{
 		perror(file);
-		shell()->return_status = 1;
-		set_questionvar(shell());
+		set_questionvar(shell(), 1);
 		return (-1);
 	}
 	if (dup2(fd_in, STDIN_FILENO) == -1)
@@ -32,8 +31,7 @@ int	redirect_output(char *file)
 	if (fd_out == -1)
 	{
 		perror(file);
-		shell()->return_status = 1;
-		set_questionvar(shell());
+		set_questionvar(shell(), 1);
 		return (-1);
 	}
 	if (dup2(fd_out, STDOUT_FILENO) == -1)
@@ -55,8 +53,7 @@ int	redirect_output_append(char *file)
 	if (fd_out == -1)
 	{
 		perror(file);
-		shell()->return_status = 1;
-		set_questionvar(shell());
+		set_questionvar(shell(), 1);
 		return (-1);
 	}
 	if (dup2(fd_out, STDOUT_FILENO) == -1)

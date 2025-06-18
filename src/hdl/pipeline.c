@@ -23,13 +23,12 @@ void	wait_for_children(t_shell *data, t_command *cmd, int cmd_count)
 		if (pid == last_cmd->pid)
 		{
 			if (WIFEXITED(status))
-				data->return_status = WEXITSTATUS(status);
+				set_questionvar(data, WEXITSTATUS(status));
 			else if (WIFSIGNALED(status))
-				data->return_status = 128 + WTERMSIG(status);
+				set_questionvar(data, (128 + WTERMSIG(status)));
 		}
 		i++;
 	}
-	set_questionvar(data);
 }
 
 void	handle_pipeline(t_shell *data, t_command *cmd)

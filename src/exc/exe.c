@@ -61,8 +61,7 @@ void	exe(t_shell *data)
 			else
 			{
 				waitpid(pid, &status, 0);
-				data->return_status = WEXITSTATUS(status);
-				set_questionvar(data);
+				set_questionvar(data, WEXITSTATUS(status));
 			}
 		}
 	}

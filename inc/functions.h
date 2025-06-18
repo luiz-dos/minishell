@@ -12,7 +12,6 @@ t_command	*cmmd(void);
 t_tokens	*input(void);
 
 /* execucao */
-void	execute_commands(t_shell *data);
 int		is_builtin(char *cmd);
 void	execute_builtin(t_shell *data, t_command *cmd);
 void	create_heredoc(t_command *current);
@@ -133,7 +132,7 @@ void	add_new_envvar(t_var *lst, char *name, char *value, int flag);
 void	update_envvar(t_var *envvar, char *name, char *value);
 char	*create_envvar_content(char *name, char *value);
 void	set_shlvl(t_shell *data);
-void	set_questionvar(t_shell *data);
+void	set_questionvar(t_shell *data, int return_status);
 t_var	*min_env(void);
 
 /* free*/
