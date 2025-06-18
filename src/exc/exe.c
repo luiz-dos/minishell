@@ -69,6 +69,7 @@ void	exe(t_shell *data)
 				set_questionvar(data, WEXITSTATUS(status));
 			}
 		}
+		cmd = cmd->next;
 	}
 	save_std_fileno();
 }
