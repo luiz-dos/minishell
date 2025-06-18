@@ -37,17 +37,6 @@ static bool	is_operator(char c)
 	return (c == '|' || c == '>' || c == '<');
 }
 
-void	update_quote(char c, char *quote)
-{
-	if (c == '\'' || c == '"')
-	{
-		if (*quote == '\0')
-			*quote = c;
-		else if (*quote == c)
-			*quote = '\0';
-	}
-}
-
 static int extra_spaces(char *input)
 {
     int     i;

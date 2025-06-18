@@ -1,14 +1,14 @@
 #include "../../inc/libs.h"
 
-void	write_line_to_pipe(t_shell *data, char *line, int fd[2])
+void	write_line_to_pipe(char *line, int fd[2])
 {
-	line = expand_envvar(data, line);
+	expand_dolar(&line);
 	write(fd[1], line, ft_strlen(line));
 	write(fd[1], "\n", 1);
 	free(line);
 }
 
-void	loop_heredoc(t_shell *data, t_command *current, int fd[2])
+void	loop_heredoc(t_command *current, int fd[2])
 {
 	char	*line;
 
@@ -31,14 +31,14 @@ void	loop_heredoc(t_shell *data, t_command *current, int fd[2])
 			free(line);
 			break;
 		}
-		write_line_to_pipe(data, line, fd);
+		write_line_to_pipe(line, fd);
 	}
 }
 
-void	handle_child_heredoc(t_shell *data, t_command *current, int fd[2])
+void	handle_child_heredoc(t_command *current, int fd[2])
 {
 	close(fd[0]);
-	loop_heredoc(data, current, fd);
+	loop_heredoc(current, fd);
 	close(fd[1]);
 	exit(0);
 }
@@ -66,7 +66,7 @@ void	create_heredoc(t_command *current)
 	{
 		signal(SIGINT, SIG_DFL); // Configura sinais para heredoc
 		close(fd[0]); // Fecha a leitura no filho
-		handle_child_heredoc(shell(), current, fd);
+		handle_child_heredoc(current, fd);
 		close(fd[1]);
 		exit(0);
 	}
