@@ -42,6 +42,7 @@ void	exe(t_shell *data)
 	t_command	*cmd;
 	int			status;
 	int			last_status;
+	int			pid;
 
 	cmd = data->commands;
 	if (!cmd)
@@ -69,7 +70,7 @@ void	exe(t_shell *data)
 			}
 		}
 	}
-	save_std_fileno(1);
+	save_std_fileno();
 }
 
 /* TODO: lidar com os redirects quando nao tiver pipes (else) ✅
