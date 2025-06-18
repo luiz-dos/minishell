@@ -80,14 +80,14 @@ void	close_remaining_fds()
 		if (fcntl(fd, F_GETFD) != -1)
 		{
 			close(fd);
-			printf("Closed FD: %d\n", fd);
+			// printf("Closed FD: %d\n", fd);
 		}
 		fd++;
 	}
 }
 
 // TODO: melhorar essa funcao
-void	free_exit(t_shell *data)
+void	free_exit(t_shell *data, int exit_code)
 {
 	if (data->std_fileno[0] != -1)
 	{
@@ -106,4 +106,5 @@ void	free_exit(t_shell *data)
 	if (data->input)
 		free(data->input);
 	close_remaining_fds();
+	exit(exit_code);
 }

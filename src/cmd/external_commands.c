@@ -57,18 +57,37 @@ char	*get_command_path(char *cmd, char **env_var)
 	return (NULL);
 }
 
-void	exec_external_cmd(char **cmd)
+void	check_command(char *cmd)
 {
-	char	*command_path;
-	char	**env_var;
+	struct stat buf;
 
-	env_var = envvar_array(shell()->envvar);
-	if (!cmd[0] || only_space(cmd[0]) || check_envp(env_var))
+	if (stat(cmd, &buf) == 0)
 	{
-		free_array(env_var);
-		exit(1);
+		if (buf.st_mode & __S_IFDIR && (ft_strncmp(cmd, "./", 2) == 0
+				|| cmd[0] == '/'))
+		{
+			ft_putstr_fd(" Is a directory\n", 2);
+			exit (126);
+		}
+		else if (access(cmd, X_OK) != 0
+			&& ft_strncmp(cmd, "./", 2) == 0)
+		{
+			ft_putstr_fd(" Permission denied\n", 2);
+			exit (126);
+		}
 	}
-	command_path = get_command_path(cmd[0], env_var);
+	else
+	{
+		if (ft_strncmp(cmd, "./", 2) == 0 || cmd[0] == '/')
+		{
+			ft_putstr_fd(" No such file or directory\n", 2);
+			exit (127);
+		}
+	}
+}
+
+void	exec_ext_cmd(char *command_path, char **cmd,char **env_var)
+{
 	if (!command_path)
 	{
 		ft_putstr_fd(" command not found\n", 2);
@@ -82,7 +101,26 @@ void	exec_external_cmd(char **cmd)
 	perror("execve");
 	exit(1);
 }
+
+void	analize_ext_cmd(char **cmd)
+{
+	char	*command_path;
+	char	**env_var;
+
+	env_var = envvar_array(shell()->envvar);
+	if (!cmd[0] || only_space(cmd[0]) || check_envp(env_var))
+	{
+		free_array(env_var);
+		exit(1);
+	}
+	check_command(cmd[0]);
+	if (ft_strncmp(cmd[0], "./", 2) == 0 || cmd[0][0] == '/')
+		command_path = cmd[0];
+	else
+		command_path = get_command_path(cmd[0], env_var);
+	exec_ext_cmd(command_path, cmd, env_var);
+}
 /*
- * TODO: verificar se o arg e /bin/ls , se sim, nao procurar em get_command_path e mandar assim para execve
- * TODO: verificar permissao na hora de executar um programa, veficar se e um diretorio 
+ * TODO: verificar se o arg e /bin/ls , se sim, nao procurar em get_command_path e mandar assim para execve ✅
+ * TODO: verificar permissao na hora de executar um programa, veficar se e um diretorio ✅
 */

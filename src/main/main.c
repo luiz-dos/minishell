@@ -11,10 +11,7 @@ bool    ft_get_input(t_shell *data)
 	input = readline(pwd);
 	free(pwd);
 	if (input == NULL) // crtl+D faz o readline retonar NULL, entao fecha o minishell
-	{
-		free_exit(data);
-		exit(EXIT_SUCCESS);
-	}
+		free_exit(data, EXIT_SUCCESS);
 	if (input[0] == 0 || only_space(input)) /* input somente espaco devolve um novo prompt */
 	{
 		free(input);
@@ -75,6 +72,6 @@ int main(int ac, char **av, char **envp)
 	return (0);
 }
 /*
- * TODO: Nao da para entrar no minishell quando ja dentro do minishell
+ * TODO: Nao da para entrar no minishell quando ja dentro do minishell ✅
  * TODO: (Talvez) salvar a raiz "/" em OLDPWD quando usar (cd) para voltar quando usar (cd -)
 */
