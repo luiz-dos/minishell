@@ -38,7 +38,7 @@ SRC_ENV = $(addprefix $(ENV_DIR)/, $(ENV_FILES))
 
 # exc functions directory
 EXC_DIR = src/exc
-EXC_FILES = exe.c execute_builtin.c execute_commands.c
+EXC_FILES = exe.c execute_builtin.c 
 SRC_EXC = $(addprefix $(EXC_DIR)/, $(EXC_FILES))
 
 # handle functions directory
@@ -53,7 +53,7 @@ SRC_MAIN = $(addprefix $(MAIN_DIR)/, $(MAIN_FILES))
 
 # parsing functions directory
 PARS_DIR = src/pars
-PARS_FILES = check_tokens.c input_analizes.c 2_input_analizes.c normalize_input.c quote_checker.c quote_handle.c strip_quotes.c tokenization.c 2_tokenization.c type_tokens.c
+PARS_FILES = check_tokens.c input_analizes.c normalize_input.c quote_checker.c quote_handle.c tokenization.c type_tokens.c
 SRC_PARS = $(addprefix $(PARS_DIR)/, $(PARS_FILES))
 
 # struct functions directory

@@ -1,6 +1,6 @@
 #include "../../inc/libs.h"
 
-void	ft_set_token_type(t_tokens *lst)
+void	set_token_type(t_tokens *lst)
 {
 	t_tokens	*current;
 

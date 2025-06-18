@@ -1,16 +1,42 @@
 #include "../../inc/libs.h"
 
-char	*extract_var_name(char *input, int *index)
+char	*insert_into_str(char *str, int i, char *value, char *name)
+{
+	char	*start;
+	char	*temp;
+	char	*new;
+
+	start = ft_substr(str, 0, i);
+	temp = ft_strjoin(start, value);
+	new = ft_strjoin(temp, str + i + ft_strlen(name) + 1);
+	free(start);
+	free(temp);
+	free(str);
+	free(name);
+	return (new);
+}
+
+bool	is_sep(char sep)
+{
+	if (sep == ' ' || sep == '\0' || sep == '"' || sep == '\''
+		|| sep == '=' || sep == '/' || sep == '|' || sep == '&')
+		return (true);
+	return (false);
+}
+
+char	*get_var_name(char *input, int index)
 {
 	char	*var_name;
 	int		start;
 	int		len;
 
-	start = *index + 1;
+	start = index;
 	len = 0;
+	if (is_sep(input[start]))
+		return (NULL);
 	if (input[start] == '?')
 	{
-		*index += 2;
+		index += 2;
 		return (ft_strdup("?"));
 	}
 	while (ft_isalnum(input[start + len]) || input[start + len] == '_')
@@ -18,65 +44,52 @@ char	*extract_var_name(char *input, int *index)
 	var_name = ft_strndup(input + start, len);
 	if (!var_name)
 		return (NULL);
-	*index += len + 1;
+	index += len + 1;
 	return (var_name);
 }
 
-void	expand_envvar_two(char *expanded, char *var_name, char *var_value, int *j)
+int	handle_expansion(char **input, t_shell *data, int i)
 {
-	free(var_name);
-	ft_strcpy(expanded + *j, var_value);
-	*j += ft_strlen(var_value);
-}
-
-char	*expand_envvar(t_shell *data, char *input)
-{
-	char	*expanded;
 	char	*var_name;
 	char	*var_value;
-	int		i;
-	int		j;
+	t_var	*var;
+	bool	free_flag;
+	int		end;
 
-	expanded = malloc(1024);
-	if (!expanded)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (input[i])
+	end = 0;
+	var_name = get_var_name((*input), i + 1);
+	if (!var_name)
+		return (0);
+	var = find_envvar(data->envvar, var_name);
+	free_flag = false;
+	var_value = "";
+	if (var && var->value)
 	{
-		if (input[i] == '$' && input[i + 1] && (ft_isalnum(input[i + 1]) 
-			|| input[i + 1] == '_' || input[i + 1] == '?'))
-		{
-			var_name = extract_var_name(input, &i);
-			var_value = get_value(data, var_name);
-			expand_envvar_two(expanded, var_name, var_value, &j);
-		}
-		else
-			expanded[j++] = input[i++];
+		var_value = ft_strdup(var->value);
+		free_flag = true;
 	}
-	expanded[j] = '\0';
-	return (expanded);
+	(*input) = insert_into_str((*input), i, var_value, var_name);
+	if (var_value[0] == 0)
+		end = 1;
+	if (free_flag)
+		free(var_value);
+	return(end);
 }
 //precisa se de dar free ao expanded, porque da leaks
 //esta funcao nao funciona em expanded fora de quotes
 
-void	expand_envvar_all(t_shell *data)
+void	expand_dolar(char **input)
 {
-	t_tokens	*curr;
-	char		*expanded;
+	int		i;
 
-	curr = data->tokens;
-	while (curr)
+	i = -1;
+	while((*input)[++i])
 	{
-		if (!curr->single_quotes && ft_strchr(curr->content, '$'))
+		if ((*input)[i] == '$' && inside_quotes((*input), i) != 1
+			&& (*input)[i + 1] != '\0')
 		{
-			expanded = expand_envvar(data, curr->content);
-			if (expanded)
-			{
-				free(curr->content);
-				curr->content = expanded;
-			}
+			if (handle_expansion(input, shell(), i) == 1)
+				i = -1;
 		}
-		curr = curr->next;
 	}
 }

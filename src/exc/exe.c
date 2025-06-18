@@ -58,17 +58,18 @@ void	exe(t_shell *data)
 		if (is_builtin(cmd->cmd))
 			execute_builtin(data, cmd);
 		else
-			execute_commands(data);
-		cmd = cmd->next;
+		{
+			pid = create_fork();
+			if (pid == 0)
+				exec_external_cmd(cmd->args);
+			else
+			{
+				waitpid(pid, &status, 0);
+				set_questionvar(data, WEXITSTATUS(status));
+			}
+		}
 	}
-	restore_std_fileno();
-	while (waitpid(-1, &status, 0) > 0)
-	{
-		if (WIFEXITED(status))
-			last_status = WEXITSTATUS(status);
-	}
-	data->return_status = last_status;
-	set_questionvar(data);
+	save_std_fileno(1);
 }
 
 /* TODO: lidar com os redirects quando nao tiver pipes (else) ✅

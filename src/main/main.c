@@ -73,7 +73,7 @@ int main(int ac, char **av, char **envp)
 	ft_config_signals(0);
 	sort_var(shell()->envvar_export);
 	set_shlvl(shell());
-	set_questionvar(shell());
+	set_questionvar(shell(), 0);
 	shell()->std_fileno[0] = -1;
 	shell()->std_fileno[1] = -1;
 	loop_those_shells(shell());
@@ -81,15 +81,6 @@ int main(int ac, char **av, char **envp)
 	return (0);
 }
 /*
- * TODO (expand_envvar): Alocar "expanded" aos poucos, de acordo com o tamanho das expansoes para evitar overflow
- * TODO: quotes ainda nao esta 100% indentico ao bash (add whitespace no input \2 \3 ) ✅
- * TODO: criar funcoes para lidar com escapes \
- * TODO: cd sem nada diz que tem demasiados argumentos mas move para o HOME na mesma ✅
- * TODO: nao da para entrar no minishell quando ja dentro do minishell
- * TODO: tratar a criacao de uma nova variavel (export a=12) ✅
- * TODO: salvar a raiz "/" em OLDPWD quando usar (cd) para voltar quando usar (cd -)
- * TODO: $A deve expandir a variavel e caso o conteudo for um comando executa-lo ✅
- * TODO: $PATH nao funcionou, deu command not found e deu leaks
- * TODO: fazer set_questionvar setar o valor de data->return_status tambem
- * TODO: ls | wc -l ou cat Makefile | wc -l nao estao a funcionar e so sai com Control+D ou Control_C
+ * TODO: Nao da para entrar no minishell quando ja dentro do minishell
+ * TODO: (Talvez) salvar a raiz "/" em OLDPWD quando usar (cd) para voltar quando usar (cd -)
 */

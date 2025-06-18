@@ -11,8 +11,7 @@ char	*get_dir(char *arg, int *flag_free, t_shell *data)
 		if (!dir)
 		{
 			ft_putstr_fd("OLDPWD not set\n", 2);
-			data->return_status = 1;
-			set_questionvar(data);
+			set_questionvar(data, 1);
 			return (NULL);
 		}
 	}
@@ -57,16 +56,14 @@ void	change_dir(char *dir, int flag_free, t_shell *data)
 	if (!oldpwd)
 	{
 		perror("getcwd");
-		data->return_status = 1;
-		set_questionvar(data);
+		set_questionvar(data, 1);
 		return ;
 	}
 	if (chdir(dir) == -1)
 	{
 		perror(dir);
 		free(oldpwd);
-		data->return_status = 1;
-		set_questionvar(data);
+		set_questionvar(data, 1);
 	}
 	else
 	{
@@ -89,8 +86,7 @@ void    cd(t_shell *data, char **args)
 	if (args[1] && args[2])
 	{
 		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
-		data->return_status = 1;
-		set_questionvar(data);
+		set_questionvar(data, 1);
 		return ;
 	}
 	if (!args[1] || ft_strcmp(args[1], "--") == 0)

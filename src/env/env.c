@@ -9,8 +9,7 @@ void	mini_env(t_var *lst)
 		ft_putstr_fd("env: '", 2);
 		ft_putstr_fd(shell()->commands->args[1], 2);
 		ft_putstr_fd("': No such file or directory\n", 2);
-		shell()->return_status = 127;
-		set_questionvar(shell());
+		set_questionvar(shell(), 127);
 		return ;
 	}
 	current  = lst;
