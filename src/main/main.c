@@ -35,7 +35,7 @@ void	loop_those_shells(t_shell *data)
 	{
 		if(ft_get_input(data))
 		{
-			ft_input_analizes(data);
+			input_analizes(data);
 			ft_tokenclear(data->tokens);
 			clean_cmd_list(data->commands);
 			free(data->input);

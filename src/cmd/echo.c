@@ -17,8 +17,8 @@ void	mini_echo(char	**args, int fd)
 	while (args[i])
 	{
 		ft_putstr_fd(args[i], fd);
-		// if (args[i + 1])
-		// 	ft_putchar_fd(' ', fd);
+		if (args[i + 1])
+			ft_putchar_fd(' ', fd);
 		i++;
 	}
 	if (!flag_nl)

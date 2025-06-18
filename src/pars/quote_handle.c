@@ -1,11 +1,11 @@
 #include "../../inc/libs.h"
 
-int	ft_inside_quotes(char	*str, int index)
+int	inside_quotes(char	*str, size_t index)
 {
 	char	c;
 
 	c = 0;
-	if (!str)
+	if (!str || index > ft_strlen(str))
 		return (0);
 	while (*str && index--)
 	{

@@ -4,6 +4,7 @@
         "minishell.h": "c",
         "libs.h": "c",
         "cstdlib": "c",
-        "libft.h": "c"
+        "libft.h": "c",
+        "initializer_list": "c"
     }
 }
