@@ -96,12 +96,18 @@ int 	redirect_input(char *file);
 int		redirect_output(char *file);
 int 	redirect_output_append(char *file);
 
+/* builtins */
 void	mini_echo(char	**args, int fd);
 void	mini_pwd(t_shell *data);
 void	mini_env(t_var *lst);
+void	mini_exit(char **args);
+int		is_numeric_arg(char *str);
 
 /* export */
 void	mini_export(t_command *cmd);
+void	not_valid(t_command *cmd, int i);
+int		is_valid_identifier(char *str);
+void	check_value(t_command *cmd, char **var_name, char **var_value, int i);
 int		count_args(char **args);
 void	print_export(t_shell *data);
 void	sort_var(t_var *lst);

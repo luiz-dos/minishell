@@ -17,7 +17,7 @@ void	execute_builtin(t_shell *data, t_command *cmd)
 	else if (ft_strcmp(cmd->cmd, "export") == 0) // ambos
 		mini_export(cmd);
 	else if (ft_strcmp(cmd->cmd, "exit") == 0) // pai
-		free_exit(data, data->return_status);
+		mini_exit(cmd->args);
 	else if (ft_strcmp(cmd->cmd, "cd") == 0) // pai
 		cd(data, cmd->args);
 	else if (ft_strcmp(cmd->cmd, "unset") == 0) // pai
