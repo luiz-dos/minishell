@@ -95,14 +95,14 @@ void	close_remaining_fds()
 		if (fcntl(fd, F_GETFD) != -1)
 		{
 			close(fd);
-			printf("Closed FD: %d\n", fd);
+			// printf("Closed FD: %d\n", fd);
 		}
 		fd++;
 	}
 }
 
-// TODO: melhorar essa funcao data->envvar
-void	free_exit(t_shell *data)
+// TODO: melhorar essa funcao
+void	free_exit(t_shell *data, int exit_code)
 {
 	if (data->std_fileno[0] != -1)
 	{
@@ -128,6 +128,6 @@ void	free_exit(t_shell *data)
 		data->input = NULL;
 	}
 	close_remaining_fds();
-	rl_clear_history();
+	exit(exit_code);
 }
 //quando usa o pipe usar o ft_close para fechar os fds maiores que 2

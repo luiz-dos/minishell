@@ -40,8 +40,7 @@ void    create_pipe(int fd[2])
 	if (pipe(fd) == -1)
 	{
 		perror("pipe");
-		free_exit(data);
-		exit(EXIT_FAILURE);
+		free_exit(data, EXIT_FAILURE);
 	}
 }
 
@@ -55,8 +54,7 @@ pid_t    create_fork(void)
 	if (pid == -1)
 	{
 		perror("fork");
-		free_exit(data);
-		exit(EXIT_FAILURE);
+		free_exit(data, EXIT_FAILURE);
 	}
 	return (pid);
 }

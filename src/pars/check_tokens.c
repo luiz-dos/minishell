@@ -25,6 +25,8 @@ int	check_tokens(t_shell *data)
 	t_tokens	*token;
 
 	token = data->tokens;
+	if (token == NULL)
+		return (0);
 	if (!token->next && ft_strcmp(token->content, ".") == 0)
 	{
 		printf("minishell: .: filename argument required\n");

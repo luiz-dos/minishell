@@ -18,10 +18,7 @@ void	input_analizes(t_shell *data)
 		// printf("-----Marked: %s\n", shell()->input); /* somente para testes */
 		tokens = ft_split(data->input, N_SPACE);
 		if (!tokens)
-		{
-			free_exit(data);
-			exit (1);
-		}
+			free_exit(data, EXIT_FAILURE);
 		create_tokens(tokens);
 		// print_token_lst(data->tokens); /* somente para testes */
 		if (check_tokens(data))

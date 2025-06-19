@@ -65,7 +65,8 @@ void		clean_cmd_list(t_command *lst);
 
 /* execute commands */
 char	*get_command_path(char *cmd, char **envp);
-void	exec_external_cmd(char **cmd);
+void	analize_ext_cmd(char **cmd);
+void	exec_ext_cmd(char *command_path, char **cmd,char **env_var);
 char	**envvar_array(t_var *lst);
 
 /* utils */
@@ -139,7 +140,7 @@ t_var	*min_env(void);
 void	free_array(char **array);
 void	free_lst(t_var *lst);
 void	ft_tokenclear(t_tokens *lst);
-void	free_exit(t_shell *data);
+void	free_exit(t_shell *data, int exit_code);
 
 /* testes */
 void	print_token_lst(t_tokens *lst);
