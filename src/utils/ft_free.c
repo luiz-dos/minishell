@@ -42,6 +42,23 @@ void	ft_tokenclear(t_tokens *lst)
 	}
 }
 
+void	clean_redir(t_command *cmd)
+{
+	t_redir_out *tmp;
+	
+	if (!cmd || !cmd->out_redirs) 
+		return;
+		
+	while (cmd->out_redirs)
+	{
+		tmp = cmd->out_redirs;
+		cmd->out_redirs = cmd->out_redirs->next;
+		free(tmp->filename);
+		free(tmp);
+	}
+	cmd->out_redirs = NULL;
+}
+
 void	clean_cmd_list(t_command *lst)
 {
 	t_command	*temp;
@@ -62,10 +79,9 @@ void	clean_cmd_list(t_command *lst)
 		}
 		if (temp->infile)
 			free(temp->infile);
-		if (temp->outfile)
-			free(temp->outfile);
 		if (temp->heredoc_delim)
 			free(temp->heredoc_delim);
+		clean_redir(temp);
 		free(temp);
 	}
 }

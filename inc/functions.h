@@ -18,9 +18,13 @@ void	create_heredoc(t_command *current);
 void	handle_parent_heredoc(t_command *current, int fd[2], pid_t pid);
 void	handle_child_heredoc(t_command *current, int fd[2]);
 void	exe(t_shell *data);
-void	handle_pipeline(t_shell *data, t_command *cmd);
-void    wait_for_children(t_shell *data, t_command *cmd, int cmd_count);
 void	save_std_fileno(int code);
+
+/* pipeline */
+void	handle_pipeline(t_shell *data, t_command *cmd);
+void	child_process(t_command *cmd, int fd[2], int prev_fd);
+void	update_pipe_descriptors(int *prev_fd, int fd[2], t_command *current);
+void    wait_for_children(t_shell *data, t_command *cmd, int cmd_count);
 
 /* parsing */
 void	input_analizes(t_shell *data);
@@ -140,6 +144,7 @@ t_var	*min_env(void);
 void	free_array(char **array);
 void	free_lst(t_var *lst);
 void	ft_tokenclear(t_tokens *lst);
+void	clean_redir(t_command *cmd);
 void	free_exit(t_shell *data, int exit_code);
 
 /* testes */

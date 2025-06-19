@@ -22,18 +22,24 @@ typedef struct				s_tokens
 	struct s_tokens	*prev;
 }							t_tokens;
 
+typedef struct	s_redir_out
+{
+    char		*filename;
+    int			append; // 1 se ">>", 0 se ">"
+    struct s_redir_out *next;
+}				t_redir_out;
+
 typedef struct	s_command
 {
 	char				*cmd;
 	char				**args;
 	char				*infile;
-	char				*outfile;
+	t_redir_out			*out_redirs;
 	char				*heredoc_delim;
 	bool				has_heredoc;
 	int					heredoc_fd;
 	pid_t				heredoc_pid;
-	pid_t				pid;
-	int					append; // 1 se ">>", 0 se ">", -1 se nenhum 
+	pid_t				pid; 
 	bool				has_pipe;
 	int					pipe_fd[2];
 	struct s_command	*next;

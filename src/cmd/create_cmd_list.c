@@ -10,7 +10,6 @@ void	handle_new_command(t_command **head, t_command **current, t_tokens *token)
 	new_cmd->cmd = ft_strdup(token->content);
 	new_cmd->args = ft_calloc(2, sizeof(char *));
 	new_cmd->args[0] = ft_strdup(token->content);
-	new_cmd->append = -1;
 	new_cmd->next = NULL;
 	if (!*head)
 		*head = new_cmd;
@@ -61,14 +60,27 @@ t_tokens	*handle_redir_in(t_command *cmd, t_tokens *token)
 
 t_tokens	*handle_redir_out(t_command *cmd, t_tokens *token)
 {
+	t_redir_out *new_redir;
+	t_redir_out *last;
+
 	if (!cmd || !token || !token->next)
 		return (token);
-	cmd->outfile = ft_strdup(token->next->content);
-	if (token->type == APPEND_OUT)
-		cmd->append = 1;
+	
+	new_redir = ft_calloc(1, sizeof(t_redir_out));
+	new_redir->filename = ft_strdup(token->next->content);
+	new_redir->append = (token->type == APPEND_OUT);
+	new_redir->next = NULL;
+
+	if (!cmd->out_redirs)
+		cmd->out_redirs = new_redir;
 	else
-		cmd->append = 0;
-	return(token->next);
+	{
+		last = cmd->out_redirs;
+		while (last->next)
+			last = last->next;
+		last->next = new_redir;
+	}
+	return (token->next);
 }
 
 t_command	*create_cmd_list(t_tokens *tokens)

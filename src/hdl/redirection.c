@@ -68,23 +68,24 @@ int	redirect_output_append(char *file)
 
 int	handle_redirects(t_command *cmd)
 {
-	if (cmd->infile)
+	t_redir_out *out;
+
+	if (cmd->infile && redirect_input(cmd->infile) == -1)
+		return (-1);
+	out = cmd->out_redirs;
+	while (out)
 	{
-		if (redirect_input(cmd->infile) == -1)
-			return (-1);
-	}
-	if (cmd->outfile)
-	{
-		if (cmd->append)
+		if (out->append)
 		{
-			if (redirect_output_append(cmd->outfile) == -1)
+			if (redirect_output_append(out->filename) == -1)
 				return (-1);
 		}
 		else
 		{
-			if (redirect_output(cmd->outfile) == -1)
+			if (redirect_output(out->filename) == -1)
 				return (-1);
 		}
+		out = out->next;
 	}
 	if (cmd->has_heredoc)
 	{
