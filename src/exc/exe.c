@@ -2,27 +2,24 @@
 
 void save_std_fileno(int code)
 {
-	t_shell *data;
-
-	data = shell();
 	if (code == 0)
 	{
-		if (data->std_fileno[0] != -1) // Fecha antigos descritores
-			close(data->std_fileno[0]);
-		if (data->std_fileno[1] != -1)
-			close(data->std_fileno[1]);
+		if (shell()->std_fileno[0] != -1) // Fecha antigos descritores
+			close(shell()->std_fileno[0]);
+		if (shell()->std_fileno[1] != -1)
+			close(shell()->std_fileno[1]);
 
-		data->std_fileno[0] = dup(STDIN_FILENO);
-		data->std_fileno[1] = dup(STDOUT_FILENO);
+		shell()->std_fileno[0] = dup(STDIN_FILENO);
+		shell()->std_fileno[1] = dup(STDOUT_FILENO);
 	}
-	else if (code == 1 && data->std_fileno[0] != -1 && data->std_fileno[1] != -1)
+	else if (code == 1 && shell()->std_fileno[0] != -1 && shell()->std_fileno[1] != -1)
 	{
-		dup2(data->std_fileno[0], STDIN_FILENO);
-		dup2(data->std_fileno[1], STDOUT_FILENO);
-		close(data->std_fileno[0]);
-		close(data->std_fileno[1]);
-		data->std_fileno[0] = -1;
-		data->std_fileno[1] = -1;
+		dup2(shell()->std_fileno[0], STDIN_FILENO);
+		dup2(shell()->std_fileno[1], STDOUT_FILENO);
+		close(shell()->std_fileno[0]);
+		close(shell()->std_fileno[1]);
+		shell()->std_fileno[0] = -1;
+		shell()->std_fileno[1] = -1;
 	}
 }
 
