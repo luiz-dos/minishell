@@ -12,6 +12,16 @@ typedef struct		s_var
 	struct s_var	*prev;
 }					t_var;
 
+typedef struct				s_tokens
+{
+	char					*content;
+	int						type;
+	bool					double_quotes;
+	bool					single_quotes;
+	struct s_tokens	*next;
+	struct s_tokens	*prev;
+}							t_tokens;
+
 typedef struct	s_command
 {
 	char				*cmd;
@@ -42,16 +52,12 @@ enum e_types
 	REDIR_IN // <
 };
 
-typedef struct				s_tokens
+enum e_markers
 {
-	char					*content;
-	int						type;
-	bool					double_quotes;
-	bool					single_qoutes;
-	struct s_tokens	*next;
-	struct s_tokens	*prev;
-}							t_tokens;
-
+	N_SPACE = -32,
+	N_DQUOTE = -34,
+	N_SQUOTE = -39,
+};
 
 typedef struct s_shell
 {
