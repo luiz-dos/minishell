@@ -77,11 +77,7 @@ void	close_remaining_fds()
 	fd = 3;
 	while (fd < 1024)
 	{
-		if (fcntl(fd, F_GETFD) != -1)
-		{
-			close(fd);
-			// printf("Closed FD: %d\n", fd);
-		}
+		close(fd);
 		fd++;
 	}
 }
@@ -105,6 +101,8 @@ void	free_exit(t_shell *data, int exit_code)
 	clean_cmd_list(data->commands);
 	if (data->input)
 		free(data->input);
+	if (data->ev_array)
+		free_array(data->ev_array);
 	close_remaining_fds();
 	exit(exit_code);
 }
