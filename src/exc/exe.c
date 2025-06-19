@@ -42,10 +42,6 @@ void	exe(t_shell *data)
 	t_command	*cmd;
 	int			status;
 	int			last_status;
-<<<<<<< HEAD
-	int			pid;
-=======
->>>>>>> f99adde (so experimentar, nada permanente por agora, mexi no exec, no clr_list_cmm)
 
 	cmd = data->commands;
 	if (!cmd)
@@ -62,21 +58,6 @@ void	exe(t_shell *data)
 		if (is_builtin(cmd->cmd))
 			execute_builtin(data, cmd);
 		else
-<<<<<<< HEAD
-		{
-			pid = create_fork();
-			if (pid == 0)
-				analize_ext_cmd(cmd->args);
-			else
-			{
-				waitpid(pid, &status, 0);
-				set_questionvar(data, WEXITSTATUS(status));
-			}
-		}
-		cmd = cmd->next;
-	}
-	save_std_fileno();
-=======
 			execute_commands(data);
 		cmd = cmd->next;
 	}
@@ -88,7 +69,6 @@ void	exe(t_shell *data)
 	}
 	data->return_status = last_status;
 	set_questionvar(data);
->>>>>>> f99adde (so experimentar, nada permanente por agora, mexi no exec, no clr_list_cmm)
 }
 
 /* TODO: lidar com os redirects quando nao tiver pipes (else) ✅
