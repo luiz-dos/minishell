@@ -4,8 +4,6 @@ t_var   *copy_var_node(t_var *envvar)
 {
     t_var   *copy;
 
-    if (!envvar)
-        return (NULL);
     copy = ft_calloc(1, sizeof(t_var));
     if (!copy)
         return (NULL);
@@ -19,15 +17,14 @@ t_var   *copy_var_node(t_var *envvar)
     return (copy);
 }
 
-t_var	*create_lst_export(void)
+t_var	*create_lst_export()
 {
 	t_var	*current;
 	t_var	*head;
 	t_var	*node_export;
-	t_var	*envvar;
 
-	head = NULL;
 	current = shell()->envvar;
+	head = NULL;
 	while (current)
 	{
 		node_export = copy_var_node(current);
@@ -39,10 +36,8 @@ t_var	*create_lst_export(void)
 		add_var_back(&head, node_export);
 		current = current->next;
 	}
-	envvar = find_envvar(head, "_");
-	if (envvar)
-		remove_envvar(&head, envvar);
-	return (head);
+	remove_envvar(&head, find_envvar(head, "_"));
+	return(head);
 }
 
 void	swap_nodes(t_var *current, t_var *next)

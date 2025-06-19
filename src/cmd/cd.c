@@ -47,7 +47,6 @@ void	update_pwd(t_shell *data, char *dir)
 	free(pwd);
 }
 
-
 void	change_dir(char *dir, int flag_free, t_shell *data)
 {
 	char	*oldpwd;
@@ -100,4 +99,3 @@ void    cd(t_shell *data, char **args)
 	if (dir)
 		change_dir(dir, flag_free, data);
 }
-//cd nao devia mandar para o home quando nao manda argumento a seguir, e deixa leaks e um invalid read size 8

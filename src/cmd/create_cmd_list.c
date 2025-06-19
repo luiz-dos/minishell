@@ -4,35 +4,12 @@ void	handle_new_command(t_command **head, t_command **current, t_tokens *token)
 {
 	t_command	*new_cmd;
 
-	if (!token || !token->content)
-		return ;
 	new_cmd = ft_calloc(1, sizeof(t_command));
 	if (!new_cmd)
-	{
-		clean_cmd_list(*head);
-		*head = NULL;
 		return ;
-	}
 	new_cmd->cmd = ft_strdup(token->content);
 	new_cmd->args = ft_calloc(2, sizeof(char *));
-	if (!new_cmd->args)
-	{
-		free(new_cmd->cmd);
-		free(new_cmd);
-		clean_cmd_list(*head);
-		*head = NULL;
-		return ;
-	}
 	new_cmd->args[0] = ft_strdup(token->content);
-	if (!new_cmd->args[0])
-	{
-		free(new_cmd->cmd);
-		free(new_cmd->args);
-		free(new_cmd);
-		clean_cmd_list(*head);
-		*head = NULL;
-		return ;
-	}
 	new_cmd->append = -1;
 	new_cmd->next = NULL;
 	if (!*head)
@@ -47,7 +24,7 @@ void	handle_argument(t_command *cmd, t_tokens *token)
 	int		i;
 	char	**new_args;
 
-	if (!cmd || !token || !token->content)
+	if (!cmd || !token)
 		return ;
 	i = 0;
 	while (cmd->args[i])
@@ -59,24 +36,10 @@ void	handle_argument(t_command *cmd, t_tokens *token)
 	while (cmd->args[i])
 	{
 		new_args[i] = ft_strdup(cmd->args[i]);
-		if (!new_args[i])
-		{
-			while (--i >= 0)
-				free(new_args[i]);
-			free(new_args);
-			return ;
-		}
 		free(cmd->args[i]);
 		i++;
 	}
 	new_args[i] = ft_strdup(token->content);
-	if (!new_args[i])
-	{
-		while (--i >= 0)
-			free(new_args[i]);
-		free(new_args);
-		return ;
-	}
 	new_args[i + 1] = NULL;
 	free(cmd->args);
 	cmd->args = new_args;

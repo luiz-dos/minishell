@@ -52,14 +52,9 @@ int	handle_expansion(char **input, t_shell *data, int i)
 {
 	char	*var_name;
 	char	*var_value;
-<<<<<<< HEAD
 	t_var	*var;
 	bool	free_flag;
 	int		end;
-=======
-	int		i;
-	int		j;
->>>>>>> ed14289 (reset)
 
 	end = 0;
 	var_name = get_var_name((*input), i + 1);
@@ -80,8 +75,6 @@ int	handle_expansion(char **input, t_shell *data, int i)
 		free(var_value);
 	return(end);
 }
-//precisa se de dar free ao expanded, porque da leaks
-//esta funcao nao funciona em expanded fora de quotes
 
 void	expand_dolar(char **input)
 {

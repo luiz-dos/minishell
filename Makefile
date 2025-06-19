@@ -6,7 +6,7 @@
 #    By: gufreire <gufreire@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/22 19:44:06 by gufreire          #+#    #+#              #
-#    Updated: 2025/06/04 18:55:18 by gufreire         ###   ########.fr        #
+#    Updated: 2025/05/28 17:31:54 by gufreire         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -115,7 +115,7 @@ fclean: clean
 	@$(RM) $(LIBFT)
 
 valgrind:
-	valgrind --suppressions=readline.supp --track-fds=all --leak-check=full --show-leak-kinds=all ./minishell || true
+	valgrind --suppressions=readline.supp  --track-fds=all --leak-check=full --show-leak-kinds=all ./minishell || true
 
 re: fclean all
 

@@ -1,74 +1,71 @@
 #include "../../inc/libs.h"
 
-void	save_std_fileno(void)
+void save_std_fileno(int code)
 {
-	static int	saved_stdin = -1;
-	static int	saved_stdout = -1;
+	t_shell *data;
 
-	if (saved_stdin != -1)
+	data = shell();
+	if (code == 0)
 	{
-		close(saved_stdin);
-		saved_stdin = -1;
-	}
-	if (saved_stdout != -1)
-	{
-		close(saved_stdout);
-		saved_stdout = -1;
-	}
-	saved_stdin = dup(STDIN_FILENO);
-	saved_stdout = dup(STDOUT_FILENO);
-	shell()->std_fileno[0] = saved_stdin;
-	shell()->std_fileno[1] = saved_stdout;
-}
+		if (data->std_fileno[0] != -1) // Fecha antigos descritores
+			close(data->std_fileno[0]);
+		if (data->std_fileno[1] != -1)
+			close(data->std_fileno[1]);
 
-void	restore_std_fileno(void)
-{
-	if (shell()->std_fileno[0] != -1)
-	{
-		dup2(shell()->std_fileno[0], STDIN_FILENO);
-		close(shell()->std_fileno[0]);
-		shell()->std_fileno[0] = -1;
+		data->std_fileno[0] = dup(STDIN_FILENO);
+		data->std_fileno[1] = dup(STDOUT_FILENO);
 	}
-	if (shell()->std_fileno[1] != -1)
+	else if (code == 1 && data->std_fileno[0] != -1 && data->std_fileno[1] != -1)
 	{
-		dup2(shell()->std_fileno[1], STDOUT_FILENO);
-		close(shell()->std_fileno[1]);
-		shell()->std_fileno[1] = -1;
+		dup2(data->std_fileno[0], STDIN_FILENO);
+		dup2(data->std_fileno[1], STDOUT_FILENO);
+		close(data->std_fileno[0]);
+		close(data->std_fileno[1]);
+		data->std_fileno[0] = -1;
+		data->std_fileno[1] = -1;
 	}
 }
 
 void	exe(t_shell *data)
 {
 	t_command	*cmd;
+	pid_t		pid;
 	int			status;
-	int			last_status;
-
+	
 	cmd = data->commands;
-	if (!cmd)
-		return ;
-	save_std_fileno();
-	last_status = 0;
+	// Primeiro, processa todos os heredocs antes de executar os comandos
 	while (cmd)
 	{
-		if (handle_redirects(cmd) == 1)
+		if (cmd->has_heredoc)
+			create_heredoc(cmd);
+		cmd = cmd->next;
+	}
+	cmd = data->commands;
+	if (cmd->has_pipe)
+		handle_pipeline(data, cmd);
+	else
+	{
+		save_std_fileno(0);
+		if (handle_redirects(cmd) == -1)
 		{
-			restore_std_fileno();
+			save_std_fileno(1);
 			return ;
 		}
 		if (is_builtin(cmd->cmd))
 			execute_builtin(data, cmd);
 		else
-			execute_commands(data);
-		cmd = cmd->next;
+		{
+			pid = create_fork();
+			if (pid == 0)
+				analize_ext_cmd(cmd->args);
+			else
+			{
+				waitpid(pid, &status, 0);
+				set_questionvar(data, WEXITSTATUS(status));
+			}
+		}
 	}
-	restore_std_fileno();
-	while (waitpid(-1, &status, 0) > 0)
-	{
-		if (WIFEXITED(status))
-			last_status = WEXITSTATUS(status);
-	}
-	data->return_status = last_status;
-	set_questionvar(data);
+	save_std_fileno(1);
 }
 
 /* TODO: lidar com os redirects quando nao tiver pipes (else) ✅

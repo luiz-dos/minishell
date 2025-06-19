@@ -32,17 +32,11 @@ void	ft_tokenclear(t_tokens *lst)
 	t_tokens	*tokens;
 	t_tokens	*next;
 
-	if (!lst)
-		return ;
 	tokens = lst;
 	while (tokens != NULL)
 	{
 		next = tokens->next;
-		if (tokens->content)
-			free(tokens->content);
-		tokens->content = NULL;
-		tokens->next = NULL;
-		tokens->prev = NULL;
+		free(tokens->content);
 		free(tokens);
 		tokens = next;
 	}
@@ -53,8 +47,6 @@ void	clean_cmd_list(t_command *lst)
 	t_command	*temp;
 	int			i;
 
-	if (!lst)
-		return ;
 	while (lst)
 	{
 		temp = lst;
@@ -78,13 +70,6 @@ void	clean_cmd_list(t_command *lst)
 	}
 }
 
-// void	ft_close(int fd)
-// {
-// 	if (fd > 2)
-// 		close(fd);
-// }
-
-//fcntl nao permitido, preciso ver uma maneira melhor de dar close
 void	close_remaining_fds()
 {
 	int	fd;
@@ -115,19 +100,11 @@ void	free_exit(t_shell *data, int exit_code)
 		data->std_fileno[1] = -1;
 	}
 	free_lst(data->envvar);
-	data->envvar = NULL;
 	free_lst(data->envvar_export);
-	data->envvar_export = NULL;
 	ft_tokenclear(data->tokens);
-	data->tokens = NULL;
 	clean_cmd_list(data->commands);
-	data->commands = NULL;
 	if (data->input)
-	{
 		free(data->input);
-		data->input = NULL;
-	}
 	close_remaining_fds();
 	exit(exit_code);
 }
-//quando usa o pipe usar o ft_close para fechar os fds maiores que 2

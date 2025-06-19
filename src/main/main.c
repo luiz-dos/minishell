@@ -62,11 +62,6 @@ int main(int ac, char **av, char **envp)
 		shell()->envvar = create_lst_envvar(envp);
 		shell()->envvar_export = create_lst_export();
 	}
-	if (!shell()->envvar || !shell()->envvar_export)
-	{
-		free_exit(shell());
-		return (1);
-	}
 	ft_config_signals(0);
 	sort_var(shell()->envvar_export);
 	set_shlvl(shell());
@@ -74,7 +69,6 @@ int main(int ac, char **av, char **envp)
 	shell()->std_fileno[0] = -1;
 	shell()->std_fileno[1] = -1;
 	loop_those_shells(shell());
-	free_exit(shell());
 	return (0);
 }
 /*
