@@ -28,6 +28,11 @@ t_var	*create_lst_export(void)
 
 	head = NULL;
 	current = shell()->envvar;
+<<<<<<< HEAD
+=======
+	if (!current)
+		return (NULL);
+>>>>>>> f99adde (so experimentar, nada permanente por agora, mexi no exec, no clr_list_cmm)
 	while (current)
 	{
 		node_export = copy_var_node(current);
