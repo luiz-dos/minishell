@@ -99,7 +99,7 @@ int 	redirect_output_append(char *file);
 /* builtins */
 void	mini_echo(char	**args, int fd);
 void	mini_pwd(t_shell *data);
-void	mini_env(t_var *lst);
+void	mini_env(char **args);
 void	mini_exit(char **args);
 int		is_numeric_arg(char *str);
 
