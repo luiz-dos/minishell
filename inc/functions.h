@@ -14,7 +14,7 @@ t_tokens	*input(void);
 /* execucao */
 int		is_builtin(char *cmd);
 void	execute_builtin(t_shell *data, t_command *cmd);
-void	create_heredoc(t_command *current);
+int		create_heredoc(t_command *current);
 void	handle_parent_heredoc(t_command *current, int fd[2], pid_t pid);
 void	handle_child_heredoc(t_command *current, int fd[2]);
 void	exe(t_shell *data);

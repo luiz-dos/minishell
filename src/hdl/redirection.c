@@ -116,13 +116,16 @@ int	handle_redirects(t_command *cmd)
 		if (in && in->filename && redirect_input(in->filename) == -1)
 			return (-1);
 	}
+	if (cmd->has_heredoc)
+	{
+		if (create_heredoc(cmd) == -1)
+			return (-1);
+		if (dup2(cmd->heredoc_fd, STDIN_FILENO) == -1)
+			return (-1);
+		close (cmd->heredoc_fd);
+	}
 	out = cmd->out_redirs;
 	if (out && handle_outfiles(out) == -1)
 		return (-1);
-	if (cmd->has_heredoc)
-	{
-		dup2(cmd->heredoc_fd, STDIN_FILENO);
-		close(cmd->heredoc_fd);
-	}
 	return (0);
 }
