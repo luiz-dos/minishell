@@ -42,6 +42,44 @@ void	ft_tokenclear(t_tokens *lst)
 	}
 }
 
+void	clean_redir_in(t_command *cmd)
+{
+	t_redir_in *tmp;
+	
+	if (!cmd || !cmd->in_redirs) 
+		return;
+		
+	while (cmd->in_redirs)
+	{
+		tmp = cmd->in_redirs;
+		if (tmp->filename)
+			free(tmp->filename);
+		if (tmp->heredoc_delim)
+			free(tmp->heredoc_delim);
+		free(tmp);
+		cmd->in_redirs = cmd->in_redirs->next;
+	}
+	cmd->in_redirs = NULL;
+}
+
+void	clean_redir_out(t_command *cmd)
+{
+	t_redir_out *tmp;
+	
+	if (!cmd || !cmd->out_redirs) 
+		return;
+		
+	while (cmd->out_redirs)
+	{
+		tmp = cmd->out_redirs;
+		if (tmp->filename)
+			free(tmp->filename);
+		free(tmp);
+		cmd->out_redirs = cmd->out_redirs->next;
+	}
+	cmd->out_redirs = NULL;
+}
+
 void	clean_cmd_list(t_command *lst)
 {
 	t_command	*temp;
@@ -62,10 +100,10 @@ void	clean_cmd_list(t_command *lst)
 		}
 		if (temp->infile)
 			free(temp->infile);
-		if (temp->outfile)
-			free(temp->outfile);
 		if (temp->heredoc_delim)
 			free(temp->heredoc_delim);
+		clean_redir_out(temp);
+		clean_redir_in(temp);
 		free(temp);
 	}
 }
@@ -77,11 +115,7 @@ void	close_remaining_fds()
 	fd = 3;
 	while (fd < 1024)
 	{
-		if (fcntl(fd, F_GETFD) != -1)
-		{
-			close(fd);
-			// printf("Closed FD: %d\n", fd);
-		}
+		close(fd);
 		fd++;
 	}
 }
@@ -105,6 +139,8 @@ void	free_exit(t_shell *data, int exit_code)
 	clean_cmd_list(data->commands);
 	if (data->input)
 		free(data->input);
+	if (data->ev_array)
+		free_array(data->ev_array);
 	close_remaining_fds();
 	exit(exit_code);
 }

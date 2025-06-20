@@ -11,3 +11,7 @@
 [90m[main 2025-05-28T14:53:45.737Z][0m update#setState idle
 [90m[main 2025-05-28T14:54:15.738Z][0m update#setState checking for updates
 [90m[main 2025-05-28T14:54:15.862Z][0m update#setState ready
+[90m[main 2025-06-20T18:50:57.664Z][0m updateURL https://api2.cursor.sh/updates/api/update/linux-x64/cursor/0.50.5/732d35b227762e80f8dc9d8b08f7d7bbd661b8e286ff72006212a84b63a89096/stable
+[90m[main 2025-06-20T18:50:57.664Z][0m update#setState idle
+[90m[main 2025-06-20T18:51:27.666Z][0m update#setState checking for updates
+[90m[main 2025-06-20T18:51:27.787Z][0m update#setState ready

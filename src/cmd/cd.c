@@ -62,6 +62,7 @@ void	change_dir(char *dir, int flag_free, t_shell *data)
 	{
 		perror(dir);
 		free(oldpwd);
+		oldpwd = NULL;
 		set_questionvar(data, 1);
 	}
 	else

@@ -10,7 +10,6 @@ void	handle_new_command(t_command **head, t_command **current, t_tokens *token)
 	new_cmd->cmd = ft_strdup(token->content);
 	new_cmd->args = ft_calloc(2, sizeof(char *));
 	new_cmd->args[0] = ft_strdup(token->content);
-	new_cmd->append = -1;
 	new_cmd->next = NULL;
 	if (!*head)
 		*head = new_cmd;
@@ -47,28 +46,60 @@ void	handle_argument(t_command *cmd, t_tokens *token)
 
 t_tokens	*handle_redir_in(t_command *cmd, t_tokens *token)
 {
+	t_redir_in	*new_redir;
+	t_redir_in	*last;
+
 	if (!cmd || !token || !token->next)
 		return (token);
+	new_redir = ft_calloc(1, sizeof(t_redir_in));
+	if (!new_redir)
+		return (token->next);
 	if (token->type == REDIR_IN)
-		cmd->infile = ft_strdup(token->next->content);
+	{
+		new_redir->filename = ft_strdup(token->next->content);
+		new_redir->is_heredoc = false;
+	}
 	else if (token->type == HEREDOC)
 	{
-		cmd->has_heredoc = true;
-		cmd->heredoc_delim = ft_strdup(token->next->content);
+		new_redir->is_heredoc = true;
+		new_redir->heredoc_delim = ft_strdup(token->next->content);
+	}
+	if (!cmd->in_redirs)
+		cmd->in_redirs = new_redir;
+	else
+	{
+		last = cmd->in_redirs;
+		while (last->next)
+			last = last->next;
+		last->next = new_redir;
 	}
 	return (token->next);
 }
 
+
 t_tokens	*handle_redir_out(t_command *cmd, t_tokens *token)
 {
+	t_redir_out *new_redir;
+	t_redir_out *last;
+
 	if (!cmd || !token || !token->next)
 		return (token);
-	cmd->outfile = ft_strdup(token->next->content);
-	if (token->type == APPEND_OUT)
-		cmd->append = 1;
+	new_redir = ft_calloc(1, sizeof(t_redir_out));
+	if (!new_redir)
+		return (NULL);
+	new_redir->filename = ft_strdup(token->next->content);
+	new_redir->append = (token->type == APPEND_OUT);
+	new_redir->next = NULL;
+	if (!cmd->out_redirs)
+		cmd->out_redirs = new_redir;
 	else
-		cmd->append = 0;
-	return(token->next);
+	{
+		last = cmd->out_redirs;
+		while (last->next)
+			last = last->next;
+		last->next = new_redir;
+	}
+	return (token->next);
 }
 
 t_command	*create_cmd_list(t_tokens *tokens)

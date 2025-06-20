@@ -14,13 +14,17 @@ t_tokens	*input(void);
 /* execucao */
 int		is_builtin(char *cmd);
 void	execute_builtin(t_shell *data, t_command *cmd);
-void	create_heredoc(t_command *current);
+int		create_heredoc(t_command *current);
 void	handle_parent_heredoc(t_command *current, int fd[2], pid_t pid);
 void	handle_child_heredoc(t_command *current, int fd[2]);
 void	exe(t_shell *data);
-void	handle_pipeline(t_shell *data, t_command *cmd);
-void    wait_for_children(t_shell *data, t_command *cmd, int cmd_count);
 void	save_std_fileno(int code);
+
+/* pipeline */
+void	handle_pipeline(t_shell *data, t_command *cmd);
+void	child_process(t_command *cmd, int fd[2], int prev_fd);
+void	update_pipe_descriptors(int *prev_fd, int fd[2], t_command *current);
+void    wait_for_children(t_shell *data, t_command *cmd, int cmd_count);
 
 /* parsing */
 void	input_analizes(t_shell *data);
@@ -92,12 +96,18 @@ int 	redirect_input(char *file);
 int		redirect_output(char *file);
 int 	redirect_output_append(char *file);
 
+/* builtins */
 void	mini_echo(char	**args, int fd);
 void	mini_pwd(t_shell *data);
-void	mini_env(t_var *lst);
+void	mini_env(char **args);
+void	mini_exit(char **args);
+int		is_numeric_arg(char *str);
 
 /* export */
 void	mini_export(t_command *cmd);
+void	not_valid(t_command *cmd, int i);
+int		is_valid_identifier(char *str);
+void	check_value(t_command *cmd, char **var_name, char **var_value, int i);
 int		count_args(char **args);
 void	print_export(t_shell *data);
 void	sort_var(t_var *lst);
@@ -140,6 +150,8 @@ t_var	*min_env(void);
 void	free_array(char **array);
 void	free_lst(t_var *lst);
 void	ft_tokenclear(t_tokens *lst);
+void	clean_redir_out(t_command *cmd);
+void	clean_redir_in(t_command *cmd);
 void	free_exit(t_shell *data, int exit_code);
 
 /* testes */

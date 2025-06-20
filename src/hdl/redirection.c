@@ -66,30 +66,66 @@ int	redirect_output_append(char *file)
 	return (0);
 }
 
-int	handle_redirects(t_command *cmd)
+int	handle_infiles(t_redir_in *in)
 {
-	if (cmd->infile)
+	int fd;
+
+	while (in && in->next)
 	{
-		if (redirect_input(cmd->infile) == -1)
-			return (-1);
-	}
-	if (cmd->outfile)
-	{
-		if (cmd->append)
+		fd = open(in->filename, O_RDONLY, 0);
+		if (fd == -1)
 		{
-			if (redirect_output_append(cmd->outfile) == -1)
-				return (-1);
+			perror(in->filename);
+			set_questionvar(shell(), 1);
+			return (-1);
 		}
+		close(fd);
+		in = in->next;
+	}
+	return (0);
+}
+
+int	handle_outfiles(t_redir_out *out)
+{
+	while (out)
+	{
+		if (out->append && redirect_output_append(out->filename) == -1)
+			return (-1);
 		else
 		{
-			if (redirect_output(cmd->outfile) == -1)
+			if (redirect_output(out->filename) == -1)
 				return (-1);
 		}
+		out = out->next;
+	}
+	return (0);
+}
+
+int	handle_redirects(t_command *cmd)
+{
+	t_redir_in	*in;
+	t_redir_out	*out;
+
+	in = cmd->in_redirs;
+	if (in)
+	{
+		if (handle_infiles(in) == -1)
+			return (-1);
+		while (in && in->next)
+			in = in->next;
+		if (in && in->filename && redirect_input(in->filename) == -1)
+			return (-1);
 	}
 	if (cmd->has_heredoc)
 	{
-		dup2(cmd->heredoc_fd, STDIN_FILENO);
-		close(cmd->heredoc_fd);
+		if (create_heredoc(cmd) == -1)
+			return (-1);
+		if (dup2(cmd->heredoc_fd, STDIN_FILENO) == -1)
+			return (-1);
+		close (cmd->heredoc_fd);
 	}
+	out = cmd->out_redirs;
+	if (out && handle_outfiles(out) == -1)
+		return (-1);
 	return (0);
 }
