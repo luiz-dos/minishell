@@ -1,7 +1,7 @@
 #ifndef STRUCTS_H
 # define STRUCTS_H
 
-typedef struct		s_var
+typedef struct	s_var
 {
 	char			*content;
 	char			*name;
@@ -10,24 +10,33 @@ typedef struct		s_var
 	bool			exp;
 	struct s_var	*next;
 	struct s_var	*prev;
-}					t_var;
+}	t_var;
 
-typedef struct				s_tokens
+typedef struct	s_tokens
 {
-	char					*content;
-	int						type;
-	bool					double_quotes;
-	bool					single_quotes;
-	struct s_tokens	*next;
-	struct s_tokens	*prev;
-}							t_tokens;
+	char				*content;
+	int					type;
+	bool				double_quotes;
+	bool				single_quotes;
+	struct s_tokens		*next;
+	struct s_tokens		*prev;
+}	t_tokens;
+
+typedef struct	s_redir_in
+{
+	char				*filename;
+	bool				is_heredoc;
+	char				*heredoc_delim;
+	struct s_redir_in	*next;
+}	t_redir_in;
+
 
 typedef struct	s_redir_out
 {
-    char		*filename;
-    int			append; // 1 se ">>", 0 se ">"
-    struct s_redir_out *next;
-}				t_redir_out;
+    char				*filename;
+    int					append; // 1 se ">>", 0 se ">"
+    struct s_redir_out	*next;
+}	t_redir_out;
 
 typedef struct	s_command
 {
@@ -35,6 +44,7 @@ typedef struct	s_command
 	char				**args;
 	char				*infile;
 	t_redir_out			*out_redirs;
+	t_redir_in			*in_redirs;
 	char				*heredoc_delim;
 	bool				has_heredoc;
 	int					heredoc_fd;
@@ -43,7 +53,7 @@ typedef struct	s_command
 	bool				has_pipe;
 	int					pipe_fd[2];
 	struct s_command	*next;
-}						t_command;
+}	t_command;
 
 enum e_types
 {
@@ -65,19 +75,19 @@ enum e_markers
 	N_SQUOTE = -39,
 };
 
-typedef struct s_shell
+typedef struct	s_shell
 {
-	char        *input;
-	int			signal;
-	int			return_status; // $?
-	int			std_fileno[2];
-	char		**ev_array;
-	t_var		*envvar;
-	t_var		*envvar_export;
-	t_tokens	*tokens;
-	t_command	*commands;
+	char			*input;
+	int				signal;
+	int				return_status; // $?
+	int				std_fileno[2];
+	char			**ev_array;
+	t_var			*envvar;
+	t_var			*envvar_export;
+	t_tokens		*tokens;
+	t_command		*commands;
 	struct	s_shell	*next;
 	struct	s_shell	*prev;
-}  				t_shell;
+}	t_shell;
 
 #endif /* STRUCTS_H */

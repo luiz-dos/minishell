@@ -150,7 +150,8 @@ t_var	*min_env(void);
 void	free_array(char **array);
 void	free_lst(t_var *lst);
 void	ft_tokenclear(t_tokens *lst);
-void	clean_redir(t_command *cmd);
+void	clean_redir_out(t_command *cmd);
+void	clean_redir_in(t_command *cmd);
 void	free_exit(t_shell *data, int exit_code);
 
 /* testes */

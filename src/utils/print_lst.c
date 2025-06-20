@@ -23,10 +23,12 @@ void	print_cmd_lst(t_command *lst)
 {
 	t_command	*current;
 	t_redir_out	*outs;
+	t_redir_in	*in;
 	int			i;
 
 	current = lst;
 	outs = current->out_redirs;
+	in = current->in_redirs;
 	while (current)
 	{
 		printf("=================================\n");
@@ -41,6 +43,14 @@ void	print_cmd_lst(t_command *lst)
 		}
 		if (current->infile)
 			printf("Infile: %s\n", current->infile);
+		while (in)
+		{
+			if(in->filename)
+				printf("Infile ( < ): %s\n", in->filename);
+			if (in->heredoc_delim)
+				printf("Heredoc_delim: %s\n", in->heredoc_delim);
+			in = in->next;
+		}
 		while (outs && outs->filename)
 		{
 			if(outs->append == 0)

@@ -66,20 +66,31 @@ int	redirect_output_append(char *file)
 	return (0);
 }
 
-int	handle_redirects(t_command *cmd)
+int	handle_infiles(t_redir_in *in)
 {
-	t_redir_out *out;
+	int fd;
 
-	if (cmd->infile && redirect_input(cmd->infile) == -1)
-		return (-1);
-	out = cmd->out_redirs;
+	while (in && in->next)
+	{
+		fd = open(in->filename, O_RDONLY, 0);
+		if (fd == -1)
+		{
+			perror(in->filename);
+			set_questionvar(shell(), 1);
+			return (-1);
+		}
+		close(fd);
+		in = in->next;
+	}
+	return (0);
+}
+
+int	handle_outfiles(t_redir_out *out)
+{
 	while (out)
 	{
-		if (out->append)
-		{
-			if (redirect_output_append(out->filename) == -1)
-				return (-1);
-		}
+		if (out->append && redirect_output_append(out->filename) == -1)
+			return (-1);
 		else
 		{
 			if (redirect_output(out->filename) == -1)
@@ -87,6 +98,27 @@ int	handle_redirects(t_command *cmd)
 		}
 		out = out->next;
 	}
+	return (0);
+}
+
+int	handle_redirects(t_command *cmd)
+{
+	t_redir_in	*in;
+	t_redir_out	*out;
+
+	in = cmd->in_redirs;
+	if (in)
+	{
+		if (handle_infiles(in) == -1)
+			return (-1);
+		while (in && in->next)
+			in = in->next;
+		if (in && in->filename && redirect_input(in->filename) == -1)
+			return (-1);
+	}
+	out = cmd->out_redirs;
+	if (out && handle_outfiles(out) == -1)
+		return (-1);
 	if (cmd->has_heredoc)
 	{
 		dup2(cmd->heredoc_fd, STDIN_FILENO);
