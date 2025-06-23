@@ -14,9 +14,7 @@ t_tokens	*input(void);
 /* execucao */
 int		is_builtin(char *cmd);
 void	execute_builtin(t_shell *data, t_command *cmd);
-int		create_heredoc(t_command *current);
-void	handle_parent_heredoc(t_command *current, int fd[2], pid_t pid);
-void	handle_child_heredoc(t_command *current, int fd[2]);
+int		create_heredoc(t_command *current, t_redir *redir);
 void	exe(t_shell *data);
 void	save_std_fileno(int code);
 
@@ -45,7 +43,7 @@ void	ft_redefine_child_signals(void);
 void	create_pipe(int fd[2]);
 pid_t	create_fork(void);
 void	write_line_to_pipe(char *line, int fd[2]);
-void	loop_heredoc(t_command *current, int fd[2]);
+void	loop_heredoc(t_redir *redir, int fd[2]);
 void	close_fds(int fd[2]);
 
 /* tokens */
@@ -61,8 +59,7 @@ int		check_tokens_two(t_tokens *token);
 
 /* command list */
 t_command	*create_cmd_list(t_tokens *tokens);
-t_tokens	*handle_redir_out(t_command *cmd, t_tokens *token);
-t_tokens	*handle_redir_in(t_command *cmd, t_tokens *token);
+t_tokens	*handle_redir(t_command *cmd, t_tokens *token);
 void		handle_argument(t_command *cmd, t_tokens *token);
 void		handle_new_command(t_command **head, t_command **current, t_tokens *token);
 void		clean_cmd_list(t_command *lst);
@@ -150,8 +147,7 @@ t_var	*min_env(void);
 void	free_array(char **array);
 void	free_lst(t_var *lst);
 void	ft_tokenclear(t_tokens *lst);
-void	clean_redir_out(t_command *cmd);
-void	clean_redir_in(t_command *cmd);
+void	clean_redir(t_command *cmd);
 void	free_exit(t_shell *data, int exit_code);
 
 /* testes */

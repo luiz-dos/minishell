@@ -42,42 +42,23 @@ void	ft_tokenclear(t_tokens *lst)
 	}
 }
 
-void	clean_redir_in(t_command *cmd)
+void	clean_redir(t_command *cmd)
 {
-	t_redir_in *tmp;
-	
-	if (!cmd || !cmd->in_redirs) 
-		return;
-		
-	while (cmd->in_redirs)
-	{
-		tmp = cmd->in_redirs;
-		if (tmp->filename)
-			free(tmp->filename);
-		if (tmp->heredoc_delim)
-			free(tmp->heredoc_delim);
-		free(tmp);
-		cmd->in_redirs = cmd->in_redirs->next;
-	}
-	cmd->in_redirs = NULL;
-}
+	t_redir *next;
+	t_redir	*lst;
 
-void	clean_redir_out(t_command *cmd)
-{
-	t_redir_out *tmp;
-	
-	if (!cmd || !cmd->out_redirs) 
+	if (!cmd || !cmd->redirs) 
 		return;
-		
-	while (cmd->out_redirs)
+	lst = cmd->redirs;		
+	while (lst)
 	{
-		tmp = cmd->out_redirs;
-		if (tmp->filename)
-			free(tmp->filename);
-		free(tmp);
-		cmd->out_redirs = cmd->out_redirs->next;
+		next = lst->next;
+		if (lst->filename)
+			free(lst->filename);
+		free(lst);
+		lst = next;
 	}
-	cmd->out_redirs = NULL;
+	cmd->redirs = NULL;
 }
 
 void	clean_cmd_list(t_command *lst)
@@ -89,6 +70,7 @@ void	clean_cmd_list(t_command *lst)
 	{
 		temp = lst;
 		lst = lst->next;
+		clean_redir(temp);
 		if (temp->cmd)
 			free(temp->cmd);
 		if (temp->args)
@@ -100,10 +82,6 @@ void	clean_cmd_list(t_command *lst)
 		}
 		if (temp->infile)
 			free(temp->infile);
-		if (temp->heredoc_delim)
-			free(temp->heredoc_delim);
-		clean_redir_out(temp);
-		clean_redir_in(temp);
 		free(temp);
 	}
 }

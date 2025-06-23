@@ -8,7 +8,7 @@ void	write_line_to_pipe(char *line, int fd[2])
 	free(line);
 }
 
-void	loop_heredoc(t_command *current, int fd[2])
+void	loop_heredoc(t_redir *redir, int fd[2])
 {
 	char	*line;
 
@@ -26,7 +26,7 @@ void	loop_heredoc(t_command *current, int fd[2])
 			write(STDERR_FILENO, "-minishell: Warning: here-document delimited by end-of-file\n", 60);
 			break;
 		}
-		if (ft_strcmp(line, current->heredoc_delim) == 0)
+		if (ft_strcmp(line, redir->filename) == 0)
 		{
 			free(line);
 			break;
@@ -35,7 +35,7 @@ void	loop_heredoc(t_command *current, int fd[2])
 	}
 }
 
-int	create_heredoc(t_command *current)
+int	create_heredoc(t_command *current, t_redir *redir)
 {
 	int		fd[2];
 	pid_t	pid;
@@ -48,7 +48,7 @@ int	create_heredoc(t_command *current)
 	{
 		signal(SIGINT, SIG_DFL); // Configura sinais para heredoc
 		close(fd[0]);
-		loop_heredoc(current, fd);
+		loop_heredoc(redir, fd);
 		close(fd[1]);
 		exit(0);
 	}

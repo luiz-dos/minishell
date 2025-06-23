@@ -33,14 +33,6 @@ void	exe(t_shell *data)
 	int			status;
 	
 	cmd = data->commands;
-	// // Primeiro, processa todos os heredocs antes de executar os comandos
-	// while (cmd)
-	// {
-	// 	if (cmd->has_heredoc)
-	// 		create_heredoc(cmd);
-	// 	cmd = cmd->next;
-	// }
-	// cmd = data->commands;
 	if (cmd->has_pipe)
 		handle_pipeline(data, cmd);
 	else

@@ -37,13 +37,45 @@ void	update_pipe_descriptors(int *prev_fd, int fd[2], t_command *current)
 	close(fd[1]);
 }
 
+int	there_in_redir(t_command *cmd)
+{
+	t_redir	*curr;
+
+	if (!cmd->redirs)
+		return (0);
+	curr = cmd->redirs;
+	while (curr)
+	{
+		if (curr->type == REDIR_IN)
+			return (1);
+		curr = curr->next;
+	}
+	return (0);
+}
+
+int	there_out_redir(t_command *cmd)
+{
+	t_redir	*curr;
+
+	if (!cmd->redirs)
+		return (0);
+	curr = cmd->redirs;
+	while (curr)
+	{
+		if (curr->type == REDIR_OUT || curr->type == APPEND_OUT)
+			return (1);
+		curr = curr->next;
+	}
+	return (0);
+}
+
 void	child_process(t_command *cmd, int fd[2], int prev_fd)
 {
 	// Redireciona entrada (se houver pipe anterior)
-	if (!cmd->has_heredoc && !cmd->infile && prev_fd != -1)
+	if (!cmd->has_heredoc && !there_in_redir(cmd) && prev_fd != -1)
 		dup2(prev_fd, STDIN_FILENO);
 	// Redireciona saida (pipe ou arquivo)
-	if (cmd->has_pipe && cmd->out_redirs == NULL)
+	if (cmd->has_pipe && !there_out_redir(cmd))
 		dup2(fd[1], STDOUT_FILENO);
 	if (prev_fd != -1)
 		close(prev_fd);
