@@ -6,14 +6,15 @@ void	print_token_lst(t_tokens *lst)
 {
 	t_tokens	*current;
 	int			i;
-
+	const char	*type_names[] = { "CMD", "ARG", "FILENAME" ,"DELIM", "PIPE", 
+		"HEREDOC", "APPEND_OUT", "REDIR_OUT","REDIR_IN"};
 	current = lst;
 	i = 1;
 	while(current)
 	{
 		if (i == 1)
 			printf("=================================\n");
-		printf("Token %d (type: %d): %s\n", i, current->type, current->content);
+		printf("Token %d (%s): %s\n", i, type_names[current->type], current->content);
 		i++;
 		current = current->next;
 	}
@@ -26,9 +27,9 @@ void	print_cmd_lst(t_command *lst)
 	int			i;
 
 	current = lst;
-	redir = current->redirs;
 	while (current)
 	{
+		redir = current->redirs;
 		printf("=================================\n");
 		printf("Command name: %s\n", current->cmd);
 		if (current->args)
@@ -45,15 +46,13 @@ void	print_cmd_lst(t_command *lst)
 		{
 			if(redir->filename)
 			{
-				printf("Redir: %s\n", redir->filename);
-				printf("Redir type: %d\n", redir->type);
+				if (redir->type == HEREDOC)
+					printf("Delimiter: %s\n", redir->filename);
+				else
+					printf("Filename: %s\n", redir->filename);
 			}
 			redir = redir->next;
 		}
-		if (current->has_heredoc)
-			printf("Heredoc: True \n");
-		if (current->heredoc_delim)
-			printf("Delim: %s\n", current->heredoc_delim);
 		if (current->has_pipe)
 			printf("Pipe: True\n");
 		printf("=================================\n");
