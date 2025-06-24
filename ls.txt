@@ -1,6 +1,0 @@
-qwe
-wqe
-qw
-
-e
-[?2004h[1;36m~/minishell$ [0m[?2004l

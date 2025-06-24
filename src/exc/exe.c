@@ -12,8 +12,8 @@ void save_std_fileno(int code)
 		if (data->std_fileno[1] != -1)
 			close(data->std_fileno[1]);
 
-		//data->std_fileno[0] = dup(STDIN_FILENO);
-		//data->std_fileno[1] = dup(STDOUT_FILENO);daqui vinham os leaks dos fds
+		data->std_fileno[0] = dup(STDIN_FILENO);
+		data->std_fileno[1] = dup(STDOUT_FILENO);
 	}
 	else if (code == 1 && data->std_fileno[0] != -1 && data->std_fileno[1] != -1)
 	{
@@ -65,4 +65,6 @@ void	exe(t_shell *data)
  * TODO: arrumar o redirect quando o arquivo no existir ✅
  * TODO: "cat << e > a.txt | ls -l"   
  * ⬆️ se der CTRL+C no heredoc deve cancelar tudo e nao esta cancelando
+ * TODO: cmd "< e" ou "<< w" "> e" ou ">> e" dao segfault
+ * TODO: "env | grep SL" deu leaks de memoria
 */

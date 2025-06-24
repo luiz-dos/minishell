@@ -115,8 +115,5 @@ int	handle_redirects(t_command *cmd)
 			return (-1);
 		redir = redir->next;
 	}
-	out = cmd->out_redirs;
-	if (out && handle_outfiles(out) == -1)
-		return (-1);
 	return (0);
 }
