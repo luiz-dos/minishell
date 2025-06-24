@@ -92,9 +92,13 @@ void	exec_ext_cmd(char *command_path, char **cmd,char **env_var)
 	{
 		ft_putstr_fd(" command not found\n", 2);
 		// printf("minishell: %s: command not found\n", cmd[0]);
-		free_exit(shell(), 127);//daqui vinham os leaks quando os cmds nao existiam
+		free_exit(shell(), 127);
 	}
 	execve(command_path, cmd, env_var);
+	free_array(env_var);
+	free(command_path);
+	perror("execve");
+	free_exit(shell(), 1);
 }
 
 void	analize_ext_cmd(char **cmd)

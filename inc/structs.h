@@ -22,29 +22,19 @@ typedef struct	s_tokens
 	struct s_tokens		*prev;
 }	t_tokens;
 
-typedef struct	s_redir_in
+typedef struct	s_redir
 {
-	char				*filename;
-	bool				is_heredoc;
-	char				*heredoc_delim;
-	struct s_redir_in	*next;
-}	t_redir_in;
-
-
-typedef struct	s_redir_out
-{
-    char				*filename;
-    int					append; // 1 se ">>", 0 se ">"
-    struct s_redir_out	*next;
-}	t_redir_out;
+	int					type; // in, out, append ou heredor
+	char				*filename; // ou delimitador
+	struct s_redir		*next;
+}	t_redir;
 
 typedef struct	s_command
 {
 	char				*cmd;
 	char				**args;
 	char				*infile;
-	t_redir_out			*out_redirs;
-	t_redir_in			*in_redirs;
+	t_redir				*redirs;
 	char				*heredoc_delim;
 	bool				has_heredoc;
 	int					heredoc_fd;
@@ -81,6 +71,8 @@ typedef struct	s_shell
 	int				signal;
 	int				return_status; // $?
 	int				std_fileno[2];
+	int				save_in;
+	int				save_out;
 	char			**ev_array;
 	t_var			*envvar;
 	t_var			*envvar_export;

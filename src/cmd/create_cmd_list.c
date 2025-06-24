@@ -44,60 +44,26 @@ void	handle_argument(t_command *cmd, t_tokens *token)
 	cmd->args = new_args;
 }
 
-t_tokens	*handle_redir_in(t_command *cmd, t_tokens *token)
+t_tokens	*handle_redir(t_command *cmd, t_tokens *token)
 {
-	t_redir_in	*new_redir;
-	t_redir_in	*last;
+	t_redir		*new;
+	t_redir		*last;
 
 	if (!cmd || !token || !token->next)
 		return (token);
-	new_redir = ft_calloc(1, sizeof(t_redir_in));
-	if (!new_redir)
+	new = ft_calloc(1, sizeof(t_redir));
+	if (!new)
 		return (token->next);
-	if (token->type == REDIR_IN)
-	{
-		new_redir->filename = ft_strdup(token->next->content);
-		new_redir->is_heredoc = false;
-	}
-	else if (token->type == HEREDOC)
-	{
-		new_redir->is_heredoc = true;
-		new_redir->heredoc_delim = ft_strdup(token->next->content);
-	}
-	if (!cmd->in_redirs)
-		cmd->in_redirs = new_redir;
+	new->type = token->type;
+	new->filename = ft_strdup(token->next->content);
+	if (!cmd->redirs)
+		cmd->redirs = new;
 	else
 	{
-		last = cmd->in_redirs;
+		last = cmd->redirs;
 		while (last->next)
 			last = last->next;
-		last->next = new_redir;
-	}
-	return (token->next);
-}
-
-
-t_tokens	*handle_redir_out(t_command *cmd, t_tokens *token)
-{
-	t_redir_out *new_redir;
-	t_redir_out *last;
-
-	if (!cmd || !token || !token->next)
-		return (token);
-	new_redir = ft_calloc(1, sizeof(t_redir_out));
-	if (!new_redir)
-		return (NULL);
-	new_redir->filename = ft_strdup(token->next->content);
-	new_redir->append = (token->type == APPEND_OUT);
-	new_redir->next = NULL;
-	if (!cmd->out_redirs)
-		cmd->out_redirs = new_redir;
-	else
-	{
-		last = cmd->out_redirs;
-		while (last->next)
-			last = last->next;
-		last->next = new_redir;
+		last->next = new;
 	}
 	return (token->next);
 }
@@ -115,10 +81,8 @@ t_command	*create_cmd_list(t_tokens *tokens)
 			handle_new_command(&head, &current_cmd, tokens);
 		else if (tokens->type == ARG)
 			handle_argument(current_cmd, tokens);
-		else if (tokens->type == REDIR_IN || tokens->type == HEREDOC)
-			tokens = handle_redir_in(current_cmd, tokens);
-		else if (tokens->type == REDIR_OUT || tokens->type == APPEND_OUT)
-			tokens = handle_redir_out(current_cmd, tokens);
+		else if (tokens->type >= HEREDOC && tokens->type <= REDIR_IN)
+			tokens = handle_redir(current_cmd, tokens);
 		else if (tokens->type == PIPE)
 			current_cmd->has_pipe = true;
 		tokens = tokens->next;

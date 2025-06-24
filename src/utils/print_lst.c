@@ -22,13 +22,11 @@ void	print_token_lst(t_tokens *lst)
 void	print_cmd_lst(t_command *lst)
 {
 	t_command	*current;
-	t_redir_out	*outs;
-	t_redir_in	*in;
+	t_redir		*redir;
 	int			i;
 
 	current = lst;
-	outs = current->out_redirs;
-	in = current->in_redirs;
+	redir = current->redirs;
 	while (current)
 	{
 		printf("=================================\n");
@@ -43,21 +41,14 @@ void	print_cmd_lst(t_command *lst)
 		}
 		if (current->infile)
 			printf("Infile: %s\n", current->infile);
-		while (in)
+		while (redir)
 		{
-			if(in->filename)
-				printf("Infile ( < ): %s\n", in->filename);
-			if (in->heredoc_delim)
-				printf("Heredoc_delim: %s\n", in->heredoc_delim);
-			in = in->next;
-		}
-		while (outs && outs->filename)
-		{
-			if(outs->append == 0)
-				printf("Outfile (substituir > ): %s\n", outs->filename);
-			else
-				printf("Outfile (adicionar >> ): %s\n", outs->filename);
-			outs = outs->next;
+			if(redir->filename)
+			{
+				printf("Redir: %s\n", redir->filename);
+				printf("Redir type: %d\n", redir->type);
+			}
+			redir = redir->next;
 		}
 		if (current->has_heredoc)
 			printf("Heredoc: True \n");
