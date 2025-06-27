@@ -99,4 +99,6 @@ void    cd(t_shell *data, char **args)
 		dir = get_dir(args[1], &flag_free, data);
 	if (dir)
 		change_dir(dir, flag_free, data);
+	else
+		set_questionvar(data, 1);
 }

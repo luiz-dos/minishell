@@ -5,6 +5,8 @@
         "libs.h": "c",
         "cstdlib": "c",
         "libft.h": "c",
-        "initializer_list": "c"
+        "initializer_list": "c",
+        "type_traits": "c",
+        "utility": "c"
     }
 }

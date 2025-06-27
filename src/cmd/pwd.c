@@ -9,6 +9,7 @@ void	mini_pwd(t_shell	*data)
 	if (pwd_envvar)
 	{
 		printf("%s\n", pwd_envvar->value);
+		set_questionvar(data, 0);
 		return ;
 	}
 	else if (!pwd_envvar)
@@ -21,5 +22,6 @@ void	mini_pwd(t_shell	*data)
 		}
 		printf("%s\n", pwd);
 		free(pwd);
+		set_questionvar(data, 0);
 	}
 }

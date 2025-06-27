@@ -39,6 +39,7 @@ void	loop_those_shells(t_shell *data)
 			data->tokens = NULL;
 			data->commands = NULL;
 			data->input = NULL;
+			set_sig_main();
 		}
 	}
 }
@@ -62,7 +63,7 @@ int main(int ac, char **av, char **envp)
 		shell()->envvar = create_lst_envvar(envp);
 		shell()->envvar_export = create_lst_export();
 	}
-	ft_config_signals(0);
+	set_sig_main();
 	sort_var(shell()->envvar_export);
 	set_shlvl(shell());
 	set_questionvar(shell(), 0);

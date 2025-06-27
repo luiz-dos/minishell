@@ -17,6 +17,8 @@ void	execute_builtin(t_shell *data, t_command *cmd);
 int		create_heredoc(t_command *current, t_redir *redir);
 void	exe(t_shell *data);
 void	save_std_fileno(int code);
+int		handle_all_redirects(t_command *cmd);
+int		process_last_redir(t_command *cmd, t_redir *in, t_redir *out);
 
 /* pipeline */
 void	handle_pipeline(t_shell *data, t_command *cmd);
@@ -33,11 +35,12 @@ void	mark_input(char	*input);
 int		mark_quotes(char *input, int *i);
 
 /* signal */
-void	ft_config_signals(int process_type);
-void	hd_ft_handle_sigint(int signal);
-void	ft_handle_sigint(int sig);
-void	ft_ignore_some_signals(void);
-void	ft_redefine_child_signals(void);
+void	handle_sigint_main(int sig);
+void	handle_sigint_heredoc(int sig);
+void	set_sig_main(void);
+void	set_sig_heredoc(void);
+void	set_sig_ignore(void);
+void	set_sig_child(void);
 
 /* heredoc */
 void	create_pipe(int fd[2]);
@@ -105,6 +108,7 @@ void	mini_export(t_command *cmd);
 void	not_valid(t_command *cmd, int i);
 int		is_valid_identifier(char *str);
 void	check_value(t_command *cmd, char **var_name, char **var_value, int i);
+void	check_var_name(t_command *cmd, char *var_name, char *var_value, int i);
 int		count_args(char **args);
 void	print_export(t_shell *data);
 void	sort_var(t_var *lst);
@@ -149,6 +153,8 @@ void	free_lst(t_var *lst);
 void	ft_tokenclear(t_tokens *lst);
 void	clean_redir(t_command *cmd);
 void	free_exit(t_shell *data, int exit_code);
+void	close_remaining_fds();
+void	free_str(char *var_name, char *var_value);
 
 /* testes */
 void	print_token_lst(t_tokens *lst);

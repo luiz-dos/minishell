@@ -10,6 +10,7 @@ void	handle_new_command(t_command **head, t_command **current, t_tokens *token)
 	new_cmd->cmd = ft_strdup(token->content);
 	new_cmd->args = ft_calloc(2, sizeof(char *));
 	new_cmd->args[0] = ft_strdup(token->content);
+	new_cmd->heredoc_fd = -1;
 	new_cmd->next = NULL;
 	if (!*head)
 		*head = new_cmd;

@@ -19,7 +19,8 @@ void	loop_heredoc(t_redir *redir, int fd[2])
 		{
 			if (line)
 				free(line);
-			exit(130);
+			close(fd[1]);
+			free_exit(shell(), 130);
 		}
 		if (!line) // EOF (CTRL+D)
 		{
@@ -42,27 +43,26 @@ int	create_heredoc(t_command *current, t_redir *redir)
 	int		status;
 	
 	create_pipe(fd);
-	ft_ignore_some_signals();
+	set_sig_ignore();
 	pid = create_fork();
 	if (pid == 0)
 	{
-		signal(SIGINT, SIG_DFL); // Configura sinais para heredoc
+		set_sig_heredoc();
 		close(fd[0]);
 		loop_heredoc(redir, fd);
 		close(fd[1]);
-		exit(0);
+		free_exit(shell(), 0);
 	}
 	else
 	{
-		close(fd[1]); // Fecha a escrita no pai
+		close(fd[1]);
 		waitpid(pid, &status, 0);
-		ft_config_signals(0); // Volta para os sinais normais
-		// Verifica se o filho terminou por um sinal (CTRL+C)
-		if (WIFSIGNALED(status) || (WIFEXITED(status) && WEXITSTATUS(status) == 130))
+		set_sig_main();
+		if (WIFSIGNALED(status) || WEXITSTATUS(status) == 130)
 		{
-			close(fd[0]); // Fecha o descritor do pai
-			current->heredoc_fd = -1; // Marca como inválido
-			shell()->return_status = 130;
+			close_fds(fd);
+			current->heredoc_fd = -1;
+			set_questionvar(shell(), 130);
 			return (-1);
 		}
 		current->heredoc_fd = fd[0];

@@ -66,44 +66,10 @@ int	redirect_output_append(char *file)
 	return (0);
 }
 
-int	process_heredoc(t_command *cmd, t_redir *redir)
-{
-	int	last;
-
-	if (!redir)
-		return (0);
-	last = -1;
-	while (redir)
-	{
-		if (redir->type == HEREDOC)
-		{
-			if (create_heredoc(cmd, redir) == -1)
-				return (-1);
-			if (last != -1)
-				close(last);
-			last = cmd->heredoc_fd;
-		}
-		redir = redir->next;
-	}
-	if (last != -1)
-	{
-		if (dup2(last, STDIN_FILENO) == -1)
-		{
-			perror("dup2 heredoc");
-			return (-1);
-		}
-		if (close(last) == -1)
-			perror("close heredoc fd");
-	}
-	return (0);
-}
-
 int	handle_redirects(t_command *cmd)
 {
 	t_redir	*redir;
 
-	if (!cmd || process_heredoc(cmd, cmd->redirs) == -1)
-		return (-1);
 	redir = cmd->redirs;
 	while(redir)
 	{
@@ -116,4 +82,59 @@ int	handle_redirects(t_command *cmd)
 		redir = redir->next;
 	}
 	return (0);
+}
+
+int	process_last_redir(t_command *cmd, t_redir *in, t_redir *out)
+{
+	if (in)
+	{
+		if (in->type == REDIR_IN && redirect_input(in->filename) == -1)
+			return (-1);
+		else if (in->type == HEREDOC)
+		{
+			if (dup2(cmd->heredoc_fd, STDIN_FILENO) == -1)
+			{
+				perror("dup2 heredoc");
+				close(cmd->heredoc_fd);
+				return (-1);
+			}
+			if (cmd->heredoc_fd != -1)
+				close(cmd->heredoc_fd);
+		}
+	}
+	if (out)
+	{
+		if (out->type == REDIR_OUT && redirect_output(out->filename) == -1)
+			return (-1);
+		else if (out->type == APPEND_OUT && redirect_output_append(out->filename) == -1)
+			return (-1);
+	}
+	return (0);
+}
+
+int	handle_all_redirects(t_command *cmd)
+{
+	t_redir	*redir;
+	t_redir	*last_in;
+	t_redir	*last_out;
+
+	last_in = NULL;
+	last_out = NULL;
+	redir = cmd->redirs;
+	while (redir)
+	{
+		if (redir->type == HEREDOC && create_heredoc(cmd, redir) == -1)
+			return (-1);
+		redir = redir->next;
+	}
+	redir = cmd->redirs;
+	while (redir)
+	{
+		if (redir->type == REDIR_IN || redir->type == HEREDOC)
+			last_in = redir;
+		if (redir->type == REDIR_OUT || redir->type == APPEND_OUT)
+			last_out = redir;
+		redir = redir->next;
+	}
+	return (process_last_redir(cmd, last_in, last_out));
 }

@@ -38,7 +38,7 @@ void	exe(t_shell *data)
 	else
 	{
 		save_std_fileno(0);
-		if (handle_redirects(cmd) == -1)
+		if (handle_all_redirects(cmd) == -1)
 		{
 			save_std_fileno(1);
 			return ;
@@ -47,13 +47,25 @@ void	exe(t_shell *data)
 			execute_builtin(data, cmd);
 		else
 		{
+			set_sig_ignore();
 			pid = create_fork();
 			if (pid == 0)
+			{
+				set_sig_child();
 				analize_ext_cmd(cmd->args);
+			}
 			else
 			{
 				waitpid(pid, &status, 0);
-				set_questionvar(data, WEXITSTATUS(status));
+				set_sig_main();
+				if (WIFSIGNALED(status) || WTERMSIG(status) == SIGINT)
+				{
+					save_std_fileno(1);
+					printf("\n");
+					set_questionvar(data, 150);
+				}
+				else
+					set_questionvar(data, WEXITSTATUS(status));
 			}
 		}
 	}

@@ -1,21 +1,11 @@
 #include "../../inc/libs.h"
 
-void	free_array(char **array)
-{
-	int	i;
-
-	if (!array)
-		return ;
-	i = 0;
-	while (array[i])
-		free(array[i++]);
-	free(array);
-}
-
 void	free_lst(t_var *lst)
 {
 	t_var   *temp;
 
+	if (!lst)
+		return ;
 	while (lst)
 	{
 		temp = lst->next;
@@ -32,6 +22,8 @@ void	ft_tokenclear(t_tokens *lst)
 	t_tokens	*tokens;
 	t_tokens	*next;
 
+	if (!lst)
+		return ;
 	tokens = lst;
 	while (tokens != NULL)
 	{
@@ -66,6 +58,8 @@ void	clean_cmd_list(t_command *lst)
 	t_command	*temp;
 	int			i;
 
+	if (!lst)
+		return ;
 	while (lst)
 	{
 		temp = lst;
@@ -83,18 +77,6 @@ void	clean_cmd_list(t_command *lst)
 		if (temp->infile)
 			free(temp->infile);
 		free(temp);
-	}
-}
-
-void	close_remaining_fds()
-{
-	int	fd;
-
-	fd = 3;
-	while (fd < 1024)
-	{
-		close(fd);
-		fd++;
 	}
 }
 
@@ -120,5 +102,6 @@ void	free_exit(t_shell *data, int exit_code)
 	if (data->ev_array)
 		free_array(data->ev_array);
 	close_remaining_fds();
-	exit(exit_code);
+	if (exit_code != -1)
+		exit(exit_code);
 }

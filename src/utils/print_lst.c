@@ -47,9 +47,13 @@ void	print_cmd_lst(t_command *lst)
 			if(redir->filename)
 			{
 				if (redir->type == HEREDOC)
-					printf("Delimiter: %s\n", redir->filename);
-				else
-					printf("Filename: %s\n", redir->filename);
+					printf("Delimiter Heredoc (<<): %s\n", redir->filename);
+				else if (redir->type == APPEND_OUT)
+					printf("Filename Append (>>): %s\n", redir->filename);
+				else if (redir->type == REDIR_OUT)
+					printf("Filename Output (>): %s\n", redir->filename);
+				else if (redir->type == REDIR_IN)
+					printf("Filename Input (<): %s\n", redir->filename);
 			}
 			redir = redir->next;
 		}

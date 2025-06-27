@@ -23,4 +23,5 @@ void	mini_echo(char	**args, int fd)
 	}
 	if (!flag_nl)
 		ft_putchar_fd('\n', fd);
+	set_questionvar(shell(), 0);
 }

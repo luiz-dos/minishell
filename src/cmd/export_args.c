@@ -40,6 +40,18 @@ void	not_valid(t_command *cmd, int i)
 	set_questionvar(shell(), 1);
 }
 
+void	check_var_name(t_command *cmd, char *var_name, char *var_value, int i)
+{
+	int	valid;
+
+	valid = is_valid_identifier(var_name);
+	if (valid == 0)
+		not_valid(cmd, i);
+	else
+		set_envvar(shell(), var_name, var_value, 1);
+	free_str(var_name, var_value);
+}
+
 void	mini_export(t_command *cmd)
 {
 	int		i;
@@ -56,14 +68,12 @@ void	mini_export(t_command *cmd)
 			var_name = NULL;
 			var_value = NULL;
 			check_value(cmd, &var_name, &var_value, i);
-			if (!is_valid_identifier(var_name))
-				not_valid(cmd, i);
-			else
-				set_envvar(shell(), var_name, var_value, 1);
-			if (var_name)
-				free(var_name);
-			if (var_value)
-				free(var_value);
+			if (var_name && var_name[0] == '#')
+			{
+				free_str(var_name, var_value);
+				break;
+			}
+			check_var_name(cmd, var_name, var_value, i);
 			i++;
 		}
 	}
