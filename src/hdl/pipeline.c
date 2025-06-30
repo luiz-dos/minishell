@@ -97,7 +97,7 @@ void	child_process(t_command *cmd, int fd[2], int prev_fd)
 		close(prev_fd);
 	close(fd[0]);
 	close(fd[1]);
-	if (handle_redirects(cmd) == -1)
+	if (handle_all_redirects(cmd) == -1)
 		exit(1);
 	if (is_builtin(cmd->cmd))
 		execute_builtin(shell(), cmd);

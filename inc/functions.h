@@ -17,8 +17,13 @@ void	execute_builtin(t_shell *data, t_command *cmd);
 int		create_heredoc(t_command *current, t_redir *redir);
 void	exe(t_shell *data);
 void	save_std_fileno(int code);
+
+/* redirect */
 int		handle_all_redirects(t_command *cmd);
-int		process_last_redir(t_command *cmd, t_redir *in, t_redir *out);
+int		process_redirects(t_command *cmd, int *fd_in, int *fd_out);
+int		open_redir_file(t_redir *redir);
+void	update_fd_values(t_redir *redir, int *fd_in, int *fd_out, int temp_fd);
+int		apply_last_redirs(int fd_in, int fd_out);
 
 /* pipeline */
 void	handle_pipeline(t_shell *data, t_command *cmd);
@@ -89,12 +94,6 @@ char	*ft_strcat(char *dest, char *src);
 char	*ft_strdup_two(const char *s, char c);
 char	*ft_strndup(const char *s, size_t n);
 bool	ft_isspace(char c);
-
-/* redirect */
-int		handle_redirects(t_command *cmd);
-int 	redirect_input(char *file);
-int		redirect_output(char *file);
-int 	redirect_output_append(char *file);
 
 /* builtins */
 void	mini_echo(char	**args, int fd);

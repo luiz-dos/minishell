@@ -1,113 +1,88 @@
 #include "../../inc/libs.h"
 
-/* < */
-int 	redirect_input(char *file)
+int	apply_last_redirs(int fd_in, int fd_out)
 {
-	int	fd_in;
-
-	fd_in = open(file, O_RDONLY, 0);
-	if (fd_in == -1)
+	if (fd_in != -1)
 	{
-		perror(file);
-		set_questionvar(shell(), 1);
-		return (-1);
-	}
-	if (dup2(fd_in, STDIN_FILENO) == -1)
-	{
-		perror("Error redirecting input");
+		if (dup2(fd_in, STDIN_FILENO) == -1)
+		{
+			perror("dup2 input");
+			close(fd_in);
+			return (-1);
+		}
 		close(fd_in);
-		exit(EXIT_FAILURE);
 	}
-	close(fd_in);
-	return (0);
-}
-
-/* > */
-int	redirect_output(char *file)
-{
-	int	fd_out;
-
-	fd_out = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd_out == -1)
+	if (fd_out != -1)
 	{
-		perror(file);
-		set_questionvar(shell(), 1);
-		return (-1);
-	}
-	if (dup2(fd_out, STDOUT_FILENO) == -1)
-	{
-		perror("Error redirecting output");
+		if (dup2(fd_out, STDOUT_FILENO) == -1)
+		{
+			perror("dup2 output");
+			close(fd_out);
+			return (-1);
+		}
 		close(fd_out);
-		exit(EXIT_FAILURE);
 	}
-	close(fd_out);
 	return (0);
 }
 
-/* >> */
-int	redirect_output_append(char *file)
+void	update_fd_values(t_redir *redir, int *fd_in, int *fd_out, int temp_fd)
 {
-	int	fd_out;
-
-	fd_out = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	if (fd_out == -1)
+	if (redir->type == REDIR_IN)
 	{
-		perror(file);
-		set_questionvar(shell(), 1);
-		return (-1);
+		if (*fd_in != -1)
+			close(*fd_in);
+		*fd_in = temp_fd;
 	}
-	if (dup2(fd_out, STDOUT_FILENO) == -1)
+	else if (redir->type == REDIR_OUT || redir->type == APPEND_OUT)
 	{
-		perror("Error redirecting output");
-		close(fd_out);
-		exit(EXIT_FAILURE);
+		if (*fd_out != -1)
+			close(*fd_out);
+		*fd_out = temp_fd;
 	}
-	close (fd_out);
-	return (0);
 }
 
-int	handle_redirects(t_command *cmd)
+int	open_redir_file(t_redir *redir)
+{
+	int	fd;
+
+	if (redir->type == REDIR_IN)
+		fd = open(redir->filename, O_RDONLY);
+	else if (redir->type == REDIR_OUT)
+		fd = open(redir->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	else if (redir->type == APPEND_OUT)
+		fd = open(redir->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	else
+		return (-1);
+	if (fd == -1)
+	{
+		perror(redir->filename);
+		set_questionvar(shell(), 1);
+	}
+	return (fd);
+}
+
+int	process_redirects(t_command *cmd, int *fd_in, int *fd_out)
 {
 	t_redir	*redir;
+	int		temp_fd;
 
 	redir = cmd->redirs;
-	while(redir)
+	while (redir)
 	{
-		if (redir->type == REDIR_IN && redirect_input(redir->filename) == -1)
-			return (-1);
-		if (redir->type == REDIR_OUT && redirect_output(redir->filename) == -1)
-			return (-1);
-		if (redir->type == APPEND_OUT && redirect_output_append(redir->filename) == -1)
-			return (-1);
-		redir = redir->next;
-	}
-	return (0);
-}
-
-int	process_last_redir(t_command *cmd, t_redir *in, t_redir *out)
-{
-	if (in)
-	{
-		if (in->type == REDIR_IN && redirect_input(in->filename) == -1)
-			return (-1);
-		else if (in->type == HEREDOC)
+		if (redir->type == REDIR_IN || redir->type == REDIR_OUT || redir->type == APPEND_OUT)
 		{
-			if (dup2(cmd->heredoc_fd, STDIN_FILENO) == -1)
-			{
-				perror("dup2 heredoc");
-				close(cmd->heredoc_fd);
+			temp_fd = open_redir_file(redir);
+			if (temp_fd == -1)
 				return (-1);
-			}
-			if (cmd->heredoc_fd != -1)
-				close(cmd->heredoc_fd);
+			update_fd_values(redir, fd_in, fd_out, temp_fd);
 		}
-	}
-	if (out)
-	{
-		if (out->type == REDIR_OUT && redirect_output(out->filename) == -1)
-			return (-1);
-		else if (out->type == APPEND_OUT && redirect_output_append(out->filename) == -1)
-			return (-1);
+		else if (redir->type == HEREDOC)
+		{
+			if (*fd_in != -1)
+				close(*fd_in);
+			*fd_in = cmd->heredoc_fd;
+		}
+		redir = redir->next;
 	}
 	return (0);
 }
@@ -115,26 +90,19 @@ int	process_last_redir(t_command *cmd, t_redir *in, t_redir *out)
 int	handle_all_redirects(t_command *cmd)
 {
 	t_redir	*redir;
-	t_redir	*last_in;
-	t_redir	*last_out;
+	int		fd_in;
+	int		fd_out;
 
-	last_in = NULL;
-	last_out = NULL;
 	redir = cmd->redirs;
+	fd_in = -1;
+	fd_out = -1;
 	while (redir)
 	{
 		if (redir->type == HEREDOC && create_heredoc(cmd, redir) == -1)
 			return (-1);
 		redir = redir->next;
 	}
-	redir = cmd->redirs;
-	while (redir)
-	{
-		if (redir->type == REDIR_IN || redir->type == HEREDOC)
-			last_in = redir;
-		if (redir->type == REDIR_OUT || redir->type == APPEND_OUT)
-			last_out = redir;
-		redir = redir->next;
-	}
-	return (process_last_redir(cmd, last_in, last_out));
+	if (process_redirects(cmd, &fd_in, &fd_out) == -1)
+		return (-1);
+	return (apply_last_redirs(fd_in, fd_out));
 }
