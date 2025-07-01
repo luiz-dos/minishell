@@ -26,21 +26,49 @@ void save_std_fileno(int code)
 	}
 }
 
+void	cleanup_bkp(int stdin_bkp, int stdout_bkp)
+{
+	if (stdin_bkp != -1)
+	{
+		dup2(stdin_bkp, STDIN_FILENO);
+		close(stdin_bkp);
+	}
+	if (stdout_bkp != -1)
+	{
+		dup2(stdout_bkp, STDOUT_FILENO);
+		close(stdout_bkp);
+	}
+}
+
 void	exe(t_shell *data)
 {
 	t_command	*cmd;
 	pid_t		pid;
 	int			status;
+	int			stdin_bkp;
+	int			stdout_bkp;
 	
 	cmd = data->commands;
+	stdin_bkp = -1;
+	stdout_bkp = -1;
 	if (cmd->has_pipe)
 		handle_pipeline(data, cmd);
 	else
 	{
-		save_std_fileno(0);
+		if (there_in_redir(cmd) || there_out_redir(cmd))
+		{
+			stdin_bkp = dup(STDIN_FILENO);
+			stdout_bkp = dup(STDOUT_FILENO);
+			if (stdin_bkp == -1 || stdout_bkp == -1)
+			{
+				perror("dup failed");
+				cleanup_bkp(stdin_bkp, stdout_bkp);
+				return ;
+			}
+		}
 		if (handle_all_redirects(cmd) == -1)
 		{
-			save_std_fileno(1);
+			cleanup_bkp(stdin_bkp, stdout_bkp);
 			return ;
 		}
 		if (is_builtin(cmd->cmd))
@@ -60,16 +88,16 @@ void	exe(t_shell *data)
 				set_sig_main();
 				if (WIFSIGNALED(status) || WTERMSIG(status) == SIGINT)
 				{
-					save_std_fileno(1);
+					cleanup_bkp(stdin_bkp, stdout_bkp);
 					printf("\n");
-					set_questionvar(data, 150);
+					set_questionvar(data, 130);
 				}
 				else
 					set_questionvar(data, WEXITSTATUS(status));
 			}
 		}
 	}
-	save_std_fileno(1);
+	cleanup_bkp(stdin_bkp, stdout_bkp);
 }
 
 /* TODO: lidar com os redirects quando nao tiver pipes (else) ✅

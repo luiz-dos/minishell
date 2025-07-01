@@ -30,6 +30,10 @@ void	handle_pipeline(t_shell *data, t_command *cmd);
 void	child_process(t_command *cmd, int fd[2], int prev_fd);
 void	update_pipe_descriptors(int *prev_fd, int fd[2], t_command *current);
 void    wait_for_children(t_shell *data, t_command *cmd, int cmd_count);
+int		there_heredoc_redir(t_command *cmd);
+int		there_in_redir(t_command *cmd);
+int		there_out_redir(t_command *cmd);
+
 
 /* parsing */
 void	input_analizes(t_shell *data);
