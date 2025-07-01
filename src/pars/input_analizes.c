@@ -25,7 +25,8 @@ void	input_analizes(t_shell *data)
 		{
 			data->commands = create_cmd_list(data->tokens);
 			// print_cmd_lst(data->commands); /* somente para testes */
-			exe(data);
+			if (data->commands)
+				exe(data);
 		}
 	}
 }
