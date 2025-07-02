@@ -40,8 +40,6 @@ void	print_cmd_lst(t_command *lst)
 				printf(" %s", current->args[i]);
 			printf("\n");
 		}
-		if (current->infile)
-			printf("Infile: %s\n", current->infile);
 		while (redir)
 		{
 			if(redir->filename)

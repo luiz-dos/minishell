@@ -54,7 +54,10 @@ void	child_pipeline(t_command *cmd, int fd[2], int prev_fd)
 	if (handle_redir_in_pipeline(cmd) == -1)
 		free_exit(shell(), 1);
 	if (is_builtin(cmd->cmd))
+	{
 		execute_builtin(shell(), cmd);
+		free_exit(shell(), -1);
+	}
 	else
 		analize_ext_cmd(cmd->args);
 	exit(shell()->return_status);
@@ -77,7 +80,7 @@ int		process_hd_pipeline(t_command *cmd)
 	return (0);
 }
 
-void	handle_pipeline(t_shell *data, t_command *cmd)
+void	handle_pipeline(t_command *cmd)
 {
 	int			fd[2];
 	int			prev_fd;
@@ -95,11 +98,10 @@ void	handle_pipeline(t_shell *data, t_command *cmd)
 		pid = create_fork();
 		if (pid == 0)
 			child_pipeline(cmd, fd, prev_fd);
-
 		cmd->pid = pid;
 		cmd_count++;
 		update_pipe_descriptors(&prev_fd, fd, cmd);
 		cmd = cmd->next;
 	}
-	wait_for_children(data, data->commands, cmd_count);
+	wait_for_children(shell(), shell()->commands, cmd_count);
 }

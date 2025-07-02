@@ -12,10 +12,12 @@ t_command	*cmmd(void);
 t_tokens	*input(void);
 
 /* execucao */
+void	execute_commands(t_command *cmd);
+int		has_redir(t_command *cmd, int *stdin_bkp, int *stdout_bkp);
 int		is_builtin(char *cmd);
 void	execute_builtin(t_shell *data, t_command *cmd);
-int		create_heredoc(t_command *current, t_redir *redir);
-void	exe(t_shell *data);
+void	single_command(t_command *cmd);
+void	external_command(t_command *cmd, int *stdin_bkp, int *stdout_bkp, int redir_result);
 
 /* redirect */
 int		handle_all_redirects(t_command *cmd);
@@ -25,7 +27,7 @@ void	update_fd_values(t_redir *redir, int *fd_in, int *fd_out, int temp_fd);
 int		apply_last_redirs(int fd_in, int fd_out);
 
 /* pipeline */
-void	handle_pipeline(t_shell *data, t_command *cmd);
+void	handle_pipeline(t_command *cmd);
 void	child_pipeline(t_command *cmd, int fd[2], int prev_fd);
 int		handle_redir_in_pipeline(t_command *cmd);
 void	update_heredoc_fd(t_command *cmd, int *fd_in);
@@ -54,6 +56,7 @@ void	set_sig_ignore(void);
 void	set_sig_child(void);
 
 /* heredoc */
+int		create_heredoc(t_command *current, t_redir *redir);
 void	create_pipe(int fd[2]);
 pid_t	create_fork(void);
 void	child_heredoc(t_redir *redir, int fd[2]);

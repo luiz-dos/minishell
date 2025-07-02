@@ -33,15 +33,10 @@ typedef struct	s_command
 {
 	char				*cmd;
 	char				**args;
-	char				*infile;
 	t_redir				*redirs;
-	char				*heredoc_delim;
-	bool				has_heredoc;
 	int					heredoc_fd;
-	pid_t				heredoc_pid;
 	pid_t				pid; 
 	bool				has_pipe;
-	int					pipe_fd[2];
 	struct s_command	*next;
 }	t_command;
 
@@ -68,11 +63,7 @@ enum e_markers
 typedef struct	s_shell
 {
 	char			*input;
-	int				signal;
 	int				return_status; // $?
-	int				std_fileno[2];
-	int				save_in;
-	int				save_out;
 	char			**ev_array;
 	t_var			*envvar;
 	t_var			*envvar_export;

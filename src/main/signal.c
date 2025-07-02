@@ -40,5 +40,5 @@ void set_sig_ignore(void)
 void set_sig_child(void)
 {
 	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	signal(SIGQUIT, SIG_IGN);
 }

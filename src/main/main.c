@@ -67,8 +67,6 @@ int main(int ac, char **av, char **envp)
 	sort_var(shell()->envvar_export);
 	set_shlvl(shell());
 	set_questionvar(shell(), 0);
-	shell()->std_fileno[0] = -1;
-	shell()->std_fileno[1] = -1;
 	loop_those_shells(shell());
 	return (0);
 }

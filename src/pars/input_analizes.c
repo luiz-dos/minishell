@@ -1,5 +1,13 @@
 #include "../../inc/libs.h"
 
+void	execute_commands(t_command *cmd)
+{
+	if (cmd->has_pipe)
+		handle_pipeline(cmd);
+	else
+		single_command(cmd);
+}
+
 void	input_analizes(t_shell *data)
 {
 	char	**tokens;
@@ -26,7 +34,7 @@ void	input_analizes(t_shell *data)
 			data->commands = create_cmd_list(data->tokens);
 			// print_cmd_lst(data->commands); /* somente para testes */
 			if (data->commands)
-				exe(data);
+				execute_commands(data->commands);
 		}
 	}
 }

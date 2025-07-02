@@ -6,74 +6,90 @@ void	cleanup_bkp(int stdin_bkp, int stdout_bkp)
 	{
 		dup2(stdin_bkp, STDIN_FILENO);
 		close(stdin_bkp);
+		stdin_bkp = -1;
 	}
 	if (stdout_bkp != -1)
 	{
 		dup2(stdout_bkp, STDOUT_FILENO);
 		close(stdout_bkp);
+		stdout_bkp = -1;
 	}
 }
 
-void	exe(t_shell *data)
+int	has_redir(t_command *cmd, int *stdin_bkp, int *stdout_bkp)
 {
-	t_command	*cmd;
-	pid_t		pid;
-	int			status;
-	int			stdin_bkp;
-	int			stdout_bkp;
-	
-	cmd = data->commands;
-	stdin_bkp = -1;
-	stdout_bkp = -1;
-	if (cmd->has_pipe)
-		handle_pipeline(data, cmd);
-	else
+	if (has_in_redir(cmd) || has_heredoc_redir(cmd) || has_out_redir(cmd))
 	{
-		if (has_in_redir(cmd) || has_heredoc_redir(cmd) || has_out_redir(cmd))
+		*stdin_bkp = dup(STDIN_FILENO);
+		*stdout_bkp = dup(STDOUT_FILENO);
+		if (*stdin_bkp == -1 || *stdout_bkp == -1)
 		{
-			stdin_bkp = dup(STDIN_FILENO);
-			stdout_bkp = dup(STDOUT_FILENO);
-			if (stdin_bkp == -1 || stdout_bkp == -1)
-			{
-				perror("dup failed");
-				return ;
-			}
+			perror("dup failed");
+			if (*stdin_bkp != -1)
+				close(*stdin_bkp);
+			if (*stdout_bkp != -1)
+				close(*stdout_bkp);
+			*stdin_bkp = -1;
+			*stdout_bkp = -1;
+			return (-1);
 		}
 		if (handle_all_redirects(cmd) == -1)
 		{
-			cleanup_bkp(stdin_bkp, stdout_bkp);
-			return ;
+			cleanup_bkp(*stdin_bkp, *stdout_bkp);
+			return (-1);
 		}
-		if (is_builtin(cmd->cmd))
-			execute_builtin(data, cmd);
-		else
-		{
-			set_sig_ignore();
-			pid = create_fork();
-			if (pid == 0)
-			{
-				set_sig_child();
-				analize_ext_cmd(cmd->args);
-			}
-			else
-			{
-				cleanup_bkp(stdin_bkp, stdout_bkp);
-				stdin_bkp = -1;
-				stdout_bkp = -1;
-				waitpid(pid, &status, 0);
-				set_sig_main();
-				if (WIFSIGNALED(status))
-				{
-					cleanup_bkp(stdin_bkp, stdout_bkp);
-					printf("\n");
-					set_questionvar(data, (128 + WTERMSIG(status)));
-				}
-				else
-					set_questionvar(data, WEXITSTATUS(status));
-			}
-		}
+		return (1);
 	}
-	cleanup_bkp(stdin_bkp, stdout_bkp);
+	return (0);
+}
+
+void	external_command(t_command *cmd, int *stdin_bkp, int *stdout_bkp, int redir_result)
+{
+	pid_t	pid;
+	int		status;
+
+	set_sig_ignore();
+	pid = create_fork();
+	if (pid == 0)
+	{
+		set_sig_child();
+		analize_ext_cmd(cmd->args);
+	}
+	else
+	{
+		waitpid(pid, &status, 0);
+		if (redir_result == 1)
+			cleanup_bkp(*stdin_bkp, *stdout_bkp);
+		set_sig_main();
+		if (WIFSIGNALED(status))
+		{
+			printf("\n");
+			set_questionvar(shell(), (128 + WTERMSIG(status)));
+		}
+		else
+			set_questionvar(shell(), WEXITSTATUS(status));
+	}
+}
+
+void	single_command(t_command *cmd)
+{
+	int			stdin_bkp;
+	int			stdout_bkp;
+	int			redir_result;
+	
+	stdin_bkp = -1;
+	stdout_bkp = -1;
+	redir_result =  has_redir(cmd, &stdin_bkp, &stdout_bkp);
+	if (redir_result == -1)
+		return ;
+	if (is_builtin(cmd->cmd))
+	{
+		execute_builtin(shell(), cmd);
+		if (redir_result == 1)
+			cleanup_bkp(stdin_bkp, stdout_bkp);
+	}
+	else
+		external_command(cmd, &stdin_bkp, &stdout_bkp, redir_result);
 }
 
 /* TODO: lidar com os redirects quando nao tiver pipes (else) ✅

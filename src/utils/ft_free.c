@@ -74,8 +74,6 @@ void	clean_cmd_list(t_command *lst)
 				free(temp->args[i++]);
 			free(temp->args);
 		}
-		if (temp->infile)
-			free(temp->infile);
 		free(temp);
 	}
 }
@@ -83,16 +81,6 @@ void	clean_cmd_list(t_command *lst)
 // TODO: melhorar essa funcao
 void	free_exit(t_shell *data, int exit_code)
 {
-	if (data->std_fileno[0] != -1)
-	{
-		close(data->std_fileno[0]);
-		data->std_fileno[0] = -1;
-	}
-	if (data->std_fileno[1] != -1)
-	{
-		close(data->std_fileno[1]);
-		data->std_fileno[1] = -1;
-	}
 	free_lst(data->envvar);
 	free_lst(data->envvar_export);
 	ft_tokenclear(data->tokens);
