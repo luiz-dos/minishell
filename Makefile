@@ -43,7 +43,7 @@ SRC_EXC = $(addprefix $(EXC_DIR)/, $(EXC_FILES))
 
 # handle functions directory
 HDL_DIR = src/hdl
-HDL_FILES = dolar.c handle_heredoc.c pipeline.c redirection.c
+HDL_FILES = dolar.c handle_heredoc.c pipeline_two.c pipeline.c redirection.c
 SRC_HDL = $(addprefix $(HDL_DIR)/, $(HDL_FILES))
 
 # main functions directory
@@ -63,7 +63,7 @@ SRC_STRC = $(addprefix $(STRC_DIR)/, $(STRC_FILES))
 
 # Utils functions directory
 UTILS_DIR = src/utils
-UTILS_FILES = finders.c ft_free_two.c ft_free.c ft_isspace.c ft_strcat.c ft_strcmp.c ft_strcpy.c ft_strdup_two.c ft_strjoin_free.c ft_strndup.c print_lst.c utils.c
+UTILS_FILES = finders.c ft_free_two.c ft_free.c ft_isspace.c ft_strcat.c ft_strcmp.c ft_strcpy.c ft_strdup_two.c ft_strjoin_free.c ft_strndup.c print_lst.c utils_two.c utils.c
 SRC_UTILS = $(addprefix $(UTILS_DIR)/, $(UTILS_FILES))
 
 SRC = $(SRC_CMD) $(SRC_ENV) $(SRC_EXC) $(SRC_HDL) $(SRC_MAIN) $(SRC_PARS) $(SRC_STRC) $(SRC_UTILS)

@@ -45,6 +45,8 @@ int	open_redir_file(t_redir *redir)
 {
 	int	fd;
 
+	if (!redir || !redir->filename)
+		return (-1);
 	if (redir->type == REDIR_IN)
 		fd = open(redir->filename, O_RDONLY);
 	else if (redir->type == REDIR_OUT)
@@ -69,7 +71,7 @@ int	process_redirects(t_command *cmd, int *fd_in, int *fd_out)
 	redir = cmd->redirs;
 	while (redir)
 	{
-		if (redir->type == REDIR_IN || redir->type == REDIR_OUT || redir->type == APPEND_OUT)
+		if (redir->type >= APPEND_OUT && redir->type <= REDIR_IN)
 		{
 			temp_fd = open_redir_file(redir);
 			if (temp_fd == -1)
@@ -99,7 +101,10 @@ int	handle_all_redirects(t_command *cmd)
 	while (redir)
 	{
 		if (redir->type == HEREDOC && create_heredoc(cmd, redir) == -1)
+		{
+			cleanup_hd_in_pipeline(cmd);
 			return (-1);
+		}
 		redir = redir->next;
 	}
 	if (process_redirects(cmd, &fd_in, &fd_out) == -1)

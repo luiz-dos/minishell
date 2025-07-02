@@ -24,7 +24,7 @@ void	loop_heredoc(t_redir *redir, int fd[2])
 		}
 		if (!line) // EOF (CTRL+D)
 		{
-			write(STDERR_FILENO, "-minishell: Warning: here-document delimited by end-of-file\n", 60);
+			write(STDERR_FILENO, WARNING_EOF, 60);
 			break;
 		}
 		if (ft_strcmp(line, redir->filename) == 0)
@@ -34,6 +34,15 @@ void	loop_heredoc(t_redir *redir, int fd[2])
 		}
 		write_line_to_pipe(line, fd);
 	}
+}
+
+void	child_heredoc(t_redir *redir, int fd[2])
+{
+	set_sig_heredoc();
+	close(fd[0]);
+	loop_heredoc(redir, fd);
+	close(fd[1]);
+	free_exit(shell(), 0);
 }
 
 int	create_heredoc(t_command *current, t_redir *redir)
@@ -46,13 +55,7 @@ int	create_heredoc(t_command *current, t_redir *redir)
 	set_sig_ignore();
 	pid = create_fork();
 	if (pid == 0)
-	{
-		set_sig_heredoc();
-		close(fd[0]);
-		loop_heredoc(redir, fd);
-		close(fd[1]);
-		free_exit(shell(), 0);
-	}
+		child_heredoc(redir, fd);
 	else
 	{
 		close(fd[1]);

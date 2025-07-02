@@ -16,7 +16,6 @@ int		is_builtin(char *cmd);
 void	execute_builtin(t_shell *data, t_command *cmd);
 int		create_heredoc(t_command *current, t_redir *redir);
 void	exe(t_shell *data);
-void	save_std_fileno(int code);
 
 /* redirect */
 int		handle_all_redirects(t_command *cmd);
@@ -27,13 +26,16 @@ int		apply_last_redirs(int fd_in, int fd_out);
 
 /* pipeline */
 void	handle_pipeline(t_shell *data, t_command *cmd);
-void	child_process(t_command *cmd, int fd[2], int prev_fd);
+void	child_pipeline(t_command *cmd, int fd[2], int prev_fd);
+int		handle_redir_in_pipeline(t_command *cmd);
+void	update_heredoc_fd(t_command *cmd, int *fd_in);
 void	update_pipe_descriptors(int *prev_fd, int fd[2], t_command *current);
 void    wait_for_children(t_shell *data, t_command *cmd, int cmd_count);
-int		there_heredoc_redir(t_command *cmd);
-int		there_in_redir(t_command *cmd);
-int		there_out_redir(t_command *cmd);
-
+int		has_heredoc_redir(t_command *cmd);
+int		has_in_redir(t_command *cmd);
+int		has_out_redir(t_command *cmd);
+int		create_hd_in_pipeline(t_command *cmd);
+void	cleanup_hd_in_pipeline(t_command *cmd);
 
 /* parsing */
 void	input_analizes(t_shell *data);
@@ -54,6 +56,7 @@ void	set_sig_child(void);
 /* heredoc */
 void	create_pipe(int fd[2]);
 pid_t	create_fork(void);
+void	child_heredoc(t_redir *redir, int fd[2]);
 void	write_line_to_pipe(char *line, int fd[2]);
 void	loop_heredoc(t_redir *redir, int fd[2]);
 void	close_fds(int fd[2]);

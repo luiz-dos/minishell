@@ -26,84 +26,55 @@ void	wait_for_children(t_shell *data, t_command *cmd, int cmd_count)
 	}
 }
 
-void	update_pipe_descriptors(int *prev_fd, int fd[2], t_command *current)
+int	create_hd_in_pipeline(t_command *cmd)
 {
-	if (*prev_fd != -1)
-		close(*prev_fd);
-	if (current->has_pipe)
-		*prev_fd = fd[0];
-	else
-		*prev_fd = -1;
-	close(fd[1]);
-}
+	t_redir *redir;
 
-int	there_in_redir(t_command *cmd)
-{
-	t_redir	*curr;
-
-	if (!cmd->redirs)
-		return (0);
-	curr = cmd->redirs;
-	while (curr)
+	redir = cmd->redirs;
+	while (redir)
 	{
-		if (curr->type == REDIR_IN)
-			return (1);
-		curr = curr->next;
+		if (redir->type == HEREDOC && create_heredoc(cmd, redir) == -1)
+			return (-1);
+		redir = redir->next;
 	}
 	return (0);
 }
 
-int	there_heredoc_redir(t_command *cmd)
-{
-	t_redir	*curr;
-
-	if (!cmd->redirs)
-		return (0);
-	curr = cmd->redirs;
-	while (curr)
-	{
-		if (curr->type == HEREDOC)
-			return (1);
-		curr = curr->next;
-	}
-	return (0);
-}
-
-int	there_out_redir(t_command *cmd)
-{
-	t_redir	*curr;
-
-	if (!cmd->redirs)
-		return (0);
-	curr = cmd->redirs;
-	while (curr)
-	{
-		if (curr->type == REDIR_OUT || curr->type == APPEND_OUT)
-			return (1);
-		curr = curr->next;
-	}
-	return (0);
-}
-
-void	child_process(t_command *cmd, int fd[2], int prev_fd)
+void	child_pipeline(t_command *cmd, int fd[2], int prev_fd)
 {
 	// Redireciona entrada (se houver pipe anterior)
-	if (!there_heredoc_redir(cmd) && !there_in_redir(cmd) && prev_fd != -1)
+	if (!has_heredoc_redir(cmd) && !has_in_redir(cmd) && prev_fd != -1)
 		dup2(prev_fd, STDIN_FILENO);
 	// Redireciona saida (pipe ou arquivo)
-	if (cmd->has_pipe && !there_out_redir(cmd))
+	if (cmd->has_pipe && !has_out_redir(cmd))
 		dup2(fd[1], STDOUT_FILENO);
 	if (prev_fd != -1)
 		close(prev_fd);
-	close(fd[0]);
-	close(fd[1]);
-	if (handle_all_redirects(cmd) == -1)
-		exit(1);
+	close_fds(fd);
+	if (handle_redir_in_pipeline(cmd) == -1)
+		free_exit(shell(), 1);
 	if (is_builtin(cmd->cmd))
 		execute_builtin(shell(), cmd);
 	else
 		analize_ext_cmd(cmd->args);
 	exit(shell()->return_status);
+}
+
+int		process_hd_pipeline(t_command *cmd)
+{
+	t_command	*temp;
+
+	temp = cmd;
+	while(temp)
+	{
+		if (has_heredoc_redir(temp) && create_hd_in_pipeline(temp) == -1)
+		{
+			cleanup_hd_in_pipeline(cmd);
+			return (-1);
+		}
+		temp = temp->next;
+	}
+	return (0);
 }
 
 void	handle_pipeline(t_shell *data, t_command *cmd)
@@ -112,7 +83,9 @@ void	handle_pipeline(t_shell *data, t_command *cmd)
 	int			prev_fd;
 	pid_t		pid;
 	int			cmd_count;
-
+	
+	if (process_hd_pipeline(cmd) == -1)
+		return ;
 	prev_fd = -1;
 	cmd_count = 0;
 	while (cmd)
@@ -121,7 +94,7 @@ void	handle_pipeline(t_shell *data, t_command *cmd)
 			create_pipe(fd);
 		pid = create_fork();
 		if (pid == 0)
-			child_process(cmd, fd, prev_fd);
+			child_pipeline(cmd, fd, prev_fd);
 
 		cmd->pid = pid;
 		cmd_count++;

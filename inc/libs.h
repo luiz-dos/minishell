@@ -24,7 +24,8 @@
 
 # define CYAN "\033[1;36m"
 # define RESET "\033[0m"
-
+# define WARNING_EOF "-minishell: Warning: here-document delimited by \
+end-of-file\n"
 extern int	global_sig;
 
 #endif /* LIBS_H */
