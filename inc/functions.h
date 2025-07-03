@@ -103,7 +103,6 @@ char	*ft_strcpy(char *dest, char *src);
 char	*ft_strcat(char *dest, char *src);
 char	*ft_strdup_two(const char *s, char c);
 char	*ft_strndup(const char *s, size_t n);
-bool	ft_isspace(char c);
 
 /* builtins */
 void	mini_echo(char	**args, int fd);

@@ -78,7 +78,6 @@ void	clean_cmd_list(t_command *lst)
 	}
 }
 
-// TODO: melhorar essa funcao
 void	free_exit(t_shell *data, int exit_code)
 {
 	free_lst(data->envvar);

@@ -48,7 +48,7 @@ SRC_HDL = $(addprefix $(HDL_DIR)/, $(HDL_FILES))
 
 # main functions directory
 MAIN_DIR = src/main
-MAIN_FILES = main.c signal.c
+MAIN_FILES = main.c signal_two.c signal.c
 SRC_MAIN = $(addprefix $(MAIN_DIR)/, $(MAIN_FILES))
 
 # parsing functions directory
@@ -63,7 +63,7 @@ SRC_STRC = $(addprefix $(STRC_DIR)/, $(STRC_FILES))
 
 # Utils functions directory
 UTILS_DIR = src/utils
-UTILS_FILES = finders.c ft_free_two.c ft_free.c ft_isspace.c ft_strcat.c ft_strcmp.c ft_strcpy.c ft_strdup_two.c ft_strjoin_free.c ft_strndup.c print_lst.c utils_two.c utils.c
+UTILS_FILES = finders.c ft_free_two.c ft_free.c ft_strcat.c ft_strcmp.c ft_strcpy.c ft_strdup_two.c ft_strjoin_free.c ft_strndup.c print_lst.c utils_two.c utils.c
 SRC_UTILS = $(addprefix $(UTILS_DIR)/, $(UTILS_FILES))
 
 SRC = $(SRC_CMD) $(SRC_ENV) $(SRC_EXC) $(SRC_HDL) $(SRC_MAIN) $(SRC_PARS) $(SRC_STRC) $(SRC_UTILS)

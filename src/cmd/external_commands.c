@@ -86,7 +86,7 @@ void	check_command(char *cmd)
 	}
 }
 
-void	exec_ext_cmd(char *command_path, char **cmd,char **env_var)
+void	exec_ext_cmd(char *command_path, char **cmd, char **env_var)
 {
 	if (!command_path)
 	{

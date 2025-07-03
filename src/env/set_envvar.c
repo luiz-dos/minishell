@@ -54,12 +54,12 @@ void    set_envvar(t_shell *data, char *name, char *value, int flag)
     envvar = find_envvar(data->envvar, name);
     if (envvar && value)
         update_envvar(envvar, name, value);
-    else
+    else if (!envvar)
         add_new_envvar(data->envvar, name, value, flag);
 
     export_var = find_envvar(data->envvar_export, name);
     if (export_var && value)
         update_envvar(export_var, name, value);
-    else
+    else if (!export_var)
         add_new_envvar(data->envvar_export, name, value, flag);
 }
