@@ -6,7 +6,7 @@
 /*   By: luiz-dos <luiz-dos@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 17:58:17 by luiz-dos          #+#    #+#             */
-/*   Updated: 2025/07/04 18:24:01 by luiz-dos         ###   ########.fr       */
+/*   Updated: 2025/07/04 20:36:40 by luiz-dos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ bool	ft_get_input(t_shell *data)
 	char	*input;
 	char	*pwd;
 
-	pwd = color_to_prompt(get_pathname());
+	pwd = get_pathname();
 	input = readline(pwd);
 	free(pwd);
 	if (input == NULL)
