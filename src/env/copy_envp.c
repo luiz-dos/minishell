@@ -32,7 +32,8 @@ t_var	*create_lst_envvar(char **envp)
 		node->content = ft_strdup(*current);
 		node->name = ft_strdup_two(*current, '=');
 		node->value = ft_strdup(ft_strchr(*current, '=') + 1);
-		node->env = true;
+		if (node->value != NULL)
+			node->env = true;
 		node->exp = true;
 		add_var_back(&head, node);
 		current++;

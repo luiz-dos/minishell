@@ -21,6 +21,9 @@ void    update_envvar(t_var *envvar, char *name, char *value)
     envvar->name = ft_strdup(name);
     envvar->value = ft_strdup(value);
     envvar->content = create_envvar_content(name, value);
+    if (envvar->value != NULL)
+        envvar->env = true;
+    envvar->exp = true;
 }
 
 void    add_new_envvar(t_var *lst, char *name, char *value, int flag)
@@ -41,6 +44,11 @@ void    add_new_envvar(t_var *lst, char *name, char *value, int flag)
         envvar->env = true;
         envvar->exp = true;
     }
+    else
+    {
+        envvar->env = false;
+        envvar->exp = true;
+    }
     envvar->name = ft_strdup(name);
     envvar->value = ft_strdup(value);
     add_var_back(&lst, envvar);
@@ -54,6 +62,8 @@ void    set_envvar(t_shell *data, char *name, char *value, int flag)
     envvar = find_envvar(data->envvar, name);
     if (envvar && value)
         update_envvar(envvar, name, value);
+    else if (!envvar && !value)
+        add_new_envvar(data->envvar, name, value, 0);
     else if (!envvar)
         add_new_envvar(data->envvar, name, value, flag);
 

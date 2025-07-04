@@ -134,7 +134,7 @@ char	*insert_into_str(char *str, int i, char *value, char *name);
 
 /* unset */
 void	unset(t_shell *data, char **args);
-void	remove_envvar(t_var **lst, t_var *envvar);
+void	remove_envvar(t_var **lst, char *var_name);
 
 /* cd */
 void	cd(t_shell *data, char **args);

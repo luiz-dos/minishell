@@ -10,8 +10,9 @@ t_var   *copy_var_node(t_var *envvar)
     copy->content = ft_strdup(envvar->content);
     copy->name = ft_strdup(envvar->name);
     copy->value = ft_strdup(envvar->value);
-    copy->env = envvar->env;
-    copy->exp = envvar->exp;
+	if (copy->value)
+    	copy->env = true;
+    copy->exp = true;
     copy->next = NULL;
     copy->prev = NULL;
     return (copy);
@@ -36,7 +37,6 @@ t_var	*create_lst_export()
 		add_var_back(&head, node_export);
 		current = current->next;
 	}
-	remove_envvar(&head, find_envvar(head, "_"));
 	return(head);
 }
 
@@ -90,9 +90,9 @@ void	print_export(t_shell *data)
 	current = data->envvar_export;
 	while (current)
 	{
-		if (current->exp && current->value)
+		if (current->exp && current->value != NULL)
 			printf("declare -x %s=\"%s\"\n", current->name, current->value);
-		else if (current->exp && !current->value)
+		else if (!current->value)
 			printf("declare -x %s\n", current->name);
 		current = current->next;
 	}

@@ -58,11 +58,13 @@ int main(int ac, char **av, char **envp)
 	{
 		shell()->envvar = min_env();
 		shell()->envvar_export = create_lst_export();
+		remove_envvar(&shell()->envvar_export, "_");
 	}
 	else
 	{
 		shell()->envvar = create_lst_envvar(envp);
 		shell()->envvar_export = create_lst_export();
+		remove_envvar(&shell()->envvar_export, "_");
 	}
 	set_sig_main();
 	sort_var(shell()->envvar_export);
@@ -74,4 +76,5 @@ int main(int ac, char **av, char **envp)
 /*
  * TODO: Nao da para entrar no minishell quando ja dentro do minishell ✅
  * TODO: (Talvez) salvar a raiz "/" em OLDPWD quando usar (cd) para voltar quando usar (cd -)
+ * TODO: Criar variaveis locais (a=12) que nao aparecem em (env)
 */
