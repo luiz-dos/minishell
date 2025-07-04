@@ -1,6 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   create_cmd_list.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luiz-dos <luiz-dos@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/04 17:57:21 by luiz-dos          #+#    #+#             */
+/*   Updated: 2025/07/04 18:13:10 by luiz-dos         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/libs.h"
 
-void	handle_new_command(t_command **head, t_command **current, t_tokens *token)
+void	handle_new_command(t_command **head, t_command **current,
+	t_tokens *token)
 {
 	t_command	*new_cmd;
 

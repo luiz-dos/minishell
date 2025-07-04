@@ -1,25 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luiz-dos <luiz-dos@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/04 17:57:17 by luiz-dos          #+#    #+#             */
+/*   Updated: 2025/07/04 19:58:14 by luiz-dos         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/libs.h"
 
-char	*get_dir(char *arg, int *flag_free, t_shell *data)
+char	*get_dir(char *arg, int *flag_free)
 {
 	char	*dir;
 
-	dir = NULL;
-	if (ft_strcmp(arg, "-") == 0)
-	{
-		dir = get_value(data, "OLDPWD");
-		if (!dir)
-		{
-			ft_putstr_fd("OLDPWD not set\n", 2);
-			set_questionvar(data, 1);
-			return (NULL);
-		}
-	}
-	else
-	{
-		dir = ft_strdup(arg);
-		*flag_free = 1;
-	}
+	dir = ft_strdup(arg);
+	*flag_free = 1;
 	return (dir);
 }
 
@@ -76,7 +74,7 @@ void	change_dir(char *dir, int flag_free, t_shell *data)
 		free(oldpwd);
 }
 
-void    cd(t_shell *data, char **args)
+void	cd(t_shell *data, char **args)
 {
 	char	*dir;
 	int		flag_free;
@@ -96,7 +94,7 @@ void    cd(t_shell *data, char **args)
 			printf("HOME not set\n");
 	}
 	else if (args[1])
-		dir = get_dir(args[1], &flag_free, data);
+		dir = get_dir(args[1], &flag_free);
 	if (dir)
 		change_dir(dir, flag_free, data);
 	else

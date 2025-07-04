@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   dolar.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luiz-dos <luiz-dos@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/04 17:58:05 by luiz-dos          #+#    #+#             */
+/*   Updated: 2025/07/04 18:20:30 by luiz-dos         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/libs.h"
 
 char	*insert_into_str(char *str, int i, char *value, char *name)
@@ -73,7 +85,7 @@ int	handle_expansion(char **input, t_shell *data, int i)
 		end = 1;
 	if (free_flag)
 		free(var_value);
-	return(end);
+	return (end);
 }
 
 void	expand_dolar(char **input)
@@ -81,7 +93,7 @@ void	expand_dolar(char **input)
 	int		i;
 
 	i = -1;
-	while((*input)[++i])
+	while ((*input)[++i])
 	{
 		if ((*input)[i] == '$' && inside_quotes((*input), i) != 1
 			&& (*input)[i + 1] != '\0')

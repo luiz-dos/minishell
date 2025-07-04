@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipeline.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luiz-dos <luiz-dos@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/04 17:58:12 by luiz-dos          #+#    #+#             */
+/*   Updated: 2025/07/04 18:21:38 by luiz-dos         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/libs.h"
 
 void	wait_for_children(t_shell *data, t_command *cmd, int cmd_count)
@@ -6,7 +18,7 @@ void	wait_for_children(t_shell *data, t_command *cmd, int cmd_count)
 	int			status;
 	pid_t		pid;
 	t_command	*last_cmd;
-	
+
 	i = 0;
 	status = 0;
 	last_cmd = cmd;
@@ -28,7 +40,7 @@ void	wait_for_children(t_shell *data, t_command *cmd, int cmd_count)
 
 int	create_hd_in_pipeline(t_command *cmd)
 {
-	t_redir *redir;
+	t_redir	*redir;
 
 	redir = cmd->redirs;
 	while (redir)
@@ -42,10 +54,8 @@ int	create_hd_in_pipeline(t_command *cmd)
 
 void	child_pipeline(t_command *cmd, int fd[2], int prev_fd)
 {
-	// Redireciona entrada (se houver pipe anterior)
 	if (!has_heredoc_redir(cmd) && !has_in_redir(cmd) && prev_fd != -1)
 		dup2(prev_fd, STDIN_FILENO);
-	// Redireciona saida (pipe ou arquivo)
 	if (cmd->has_pipe && !has_out_redir(cmd))
 		dup2(fd[1], STDOUT_FILENO);
 	if (prev_fd != -1)
@@ -63,12 +73,12 @@ void	child_pipeline(t_command *cmd, int fd[2], int prev_fd)
 	exit(shell()->return_status);
 }
 
-int		process_hd_pipeline(t_command *cmd)
+int	process_hd_pipeline(t_command *cmd)
 {
 	t_command	*temp;
 
 	temp = cmd;
-	while(temp)
+	while (temp)
 	{
 		if (has_heredoc_redir(temp) && create_hd_in_pipeline(temp) == -1)
 		{
@@ -86,7 +96,7 @@ void	handle_pipeline(t_command *cmd)
 	int			prev_fd;
 	pid_t		pid;
 	int			cmd_count;
-	
+
 	if (process_hd_pipeline(cmd) == -1)
 		return ;
 	prev_fd = -1;

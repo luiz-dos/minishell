@@ -1,18 +1,37 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luiz-dos <luiz-dos@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/04 17:58:17 by luiz-dos          #+#    #+#             */
+/*   Updated: 2025/07/04 18:24:01 by luiz-dos         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/libs.h"
 
-int global_sig;
+int	g_sig;
 
-bool    ft_get_input(t_shell *data)
+t_shell	*shell(void)
+{
+	static t_shell	shell;
+
+	return (&shell);
+}
+
+bool	ft_get_input(t_shell *data)
 {
 	char	*input;
 	char	*pwd;
-	
+
 	pwd = color_to_prompt(get_pathname());
 	input = readline(pwd);
 	free(pwd);
-	if (input == NULL) // crtl+D faz o readline retonar NULL, entao fecha o minishell
+	if (input == NULL)
 		free_exit(data, EXIT_SUCCESS);
-	if (input[0] == 0 || only_space(input)) /* input somente espaco devolve um novo prompt */
+	if (input[0] == 0 || only_space(input))
 	{
 		free(input);
 		return (false);
@@ -30,7 +49,7 @@ void	loop_those_shells(t_shell *data)
 {
 	while (1)
 	{
-		if(ft_get_input(data))
+		if (ft_get_input(data))
 		{
 			input_analizes(data);
 			ft_tokenclear(data->tokens);
@@ -45,7 +64,7 @@ void	loop_those_shells(t_shell *data)
 	}
 }
 
-int main(int ac, char **av, char **envp)
+int	main(int ac, char **av, char **envp)
 {
 	if (ac != 1)
 	{
@@ -53,7 +72,7 @@ int main(int ac, char **av, char **envp)
 		return (1);
 	}
 	(void)av;
-	global_sig = 0;
+	g_sig = 0;
 	if (!*envp)
 	{
 		shell()->envvar = min_env();
@@ -73,8 +92,3 @@ int main(int ac, char **av, char **envp)
 	loop_those_shells(shell());
 	return (0);
 }
-/*
- * TODO: Nao da para entrar no minishell quando ja dentro do minishell ✅
- * TODO: (Talvez) salvar a raiz "/" em OLDPWD quando usar (cd) para voltar quando usar (cd -)
- * TODO: Criar variaveis locais (a=12) que nao aparecem em (env)
-*/

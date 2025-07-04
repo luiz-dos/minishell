@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luiz-dos <luiz-dos@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/04 17:57:49 by luiz-dos          #+#    #+#             */
+/*   Updated: 2025/07/04 18:14:37 by luiz-dos         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/libs.h"
 
 void	mini_env(char **args)
@@ -12,7 +24,7 @@ void	mini_env(char **args)
 		set_questionvar(shell(), 127);
 		return ;
 	}
-	current  = shell()->envvar;
+	current = shell()->envvar;
 	while (current)
 	{
 		if (current->env == true && current->value != NULL)

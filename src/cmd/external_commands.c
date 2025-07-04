@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   external_commands.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luiz-dos <luiz-dos@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/04 17:57:35 by luiz-dos          #+#    #+#             */
+/*   Updated: 2025/07/04 18:14:03 by luiz-dos         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/libs.h"
 
 char	**envvar_array(t_var *lst)
@@ -37,7 +49,7 @@ char	*get_command_path(char *cmd, char **env_var)
 	int		i;
 
 	i = 0;
-	while((ft_strnstr(env_var[i], "PATH", 4)) == NULL)
+	while ((ft_strnstr(env_var[i], "PATH", 4)) == NULL)
 		i++;
 	all_paths = ft_split(env_var[i] + 5, ':');
 	i = 0;
@@ -59,7 +71,7 @@ char	*get_command_path(char *cmd, char **env_var)
 
 void	check_command(char *cmd)
 {
-	struct stat buf;
+	struct stat	buf;
 
 	if (stat(cmd, &buf) == 0)
 	{
@@ -91,7 +103,6 @@ void	exec_ext_cmd(char *command_path, char **cmd, char **env_var)
 	if (!command_path)
 	{
 		ft_putstr_fd(" command not found\n", 2);
-		// printf("minishell: %s: command not found\n", cmd[0]);
 		free_exit(shell(), 127);
 	}
 	execve(command_path, cmd, env_var);
@@ -115,7 +126,3 @@ void	analize_ext_cmd(char **cmd)
 		command_path = get_command_path(cmd[0], shell()->ev_array);
 	exec_ext_cmd(command_path, cmd, shell()->ev_array);
 }
-/*
- * TODO: verificar se o arg e /bin/ls , se sim, nao procurar em get_command_path e mandar assim para execve ✅
- * TODO: verificar permissao na hora de executar um programa, veficar se e um diretorio ✅
-*/

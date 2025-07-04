@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gufreire <gufreire@student.42.fr>          +#+  +:+       +#+         #
+#    By: luiz-dos <luiz-dos@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/22 19:44:06 by gufreire          #+#    #+#              #
-#    Updated: 2025/05/28 17:31:54 by gufreire         ###   ########.fr        #
+#    Updated: 2025/07/04 18:03:42 by luiz-dos         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,17 +56,12 @@ PARS_DIR = src/pars
 PARS_FILES = check_tokens.c input_analizes.c normalize_input.c quote_checker.c quote_handle.c tokenization.c type_tokens.c
 SRC_PARS = $(addprefix $(PARS_DIR)/, $(PARS_FILES))
 
-# struct functions directory
-STRC_DIR = src/strc
-STRC_FILES = structs.c
-SRC_STRC = $(addprefix $(STRC_DIR)/, $(STRC_FILES))
-
 # Utils functions directory
 UTILS_DIR = src/utils
-UTILS_FILES = finders.c ft_free_two.c ft_free.c ft_strcat.c ft_strcmp.c ft_strcpy.c ft_strdup_two.c ft_strjoin_free.c ft_strndup.c print_lst.c utils_two.c utils.c
+UTILS_FILES = finders.c ft_free_two.c ft_free.c ft_strcat.c ft_strcmp.c ft_strcpy.c ft_strdup_two.c ft_strjoin_free.c ft_strndup.c utils_two.c utils.c
 SRC_UTILS = $(addprefix $(UTILS_DIR)/, $(UTILS_FILES))
 
-SRC = $(SRC_CMD) $(SRC_ENV) $(SRC_EXC) $(SRC_HDL) $(SRC_MAIN) $(SRC_PARS) $(SRC_STRC) $(SRC_UTILS)
+SRC = $(SRC_CMD) $(SRC_ENV) $(SRC_EXC) $(SRC_HDL) $(SRC_MAIN) $(SRC_PARS) $(SRC_UTILS)
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(notdir $(SRC:.c=.o)))
 	
@@ -98,9 +93,6 @@ $(OBJ_DIR)/%.o: $(MAIN_DIR)/%.c | $(OBJ_DIR)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR)/%.o: $(PARS_DIR)/%.c | $(OBJ_DIR)
-	@$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJ_DIR)/%.o: $(STRC_DIR)/%.c | $(OBJ_DIR)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR)/%.o: $(UTILS_DIR)/%.c | $(OBJ_DIR)

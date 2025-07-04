@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signal.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luiz-dos <luiz-dos@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/04 17:58:23 by luiz-dos          #+#    #+#             */
+/*   Updated: 2025/07/04 18:24:19 by luiz-dos         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/libs.h"
 
-void handle_sigint_main(int sig)
+void	handle_sigint_main(int sig)
 {
 	(void)sig;
 	printf("\n");
@@ -10,23 +22,23 @@ void handle_sigint_main(int sig)
 	set_questionvar(shell(), 130);
 }
 
-void handle_sigint_heredoc(int sig)
+void	handle_sigint_heredoc(int sig)
 {
 	(void)sig;
-	global_sig = SIGINT;
+	g_sig = SIGINT;
 	printf("\n");
 	close(STDIN_FILENO);
 }
 
-void set_sig_main(void)
+void	set_sig_main(void)
 {
 	signal(SIGINT, handle_sigint_main);
 	signal(SIGQUIT, SIG_IGN);
 }
 
-void set_sig_heredoc(void)
+void	set_sig_heredoc(void)
 {
-	global_sig = 0;
+	g_sig = 0;
 	signal(SIGINT, handle_sigint_heredoc);
 	signal(SIGQUIT, SIG_IGN);
 }

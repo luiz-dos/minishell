@@ -1,24 +1,35 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luiz-dos <luiz-dos@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/04 17:57:32 by luiz-dos          #+#    #+#             */
+/*   Updated: 2025/07/04 18:12:04 by luiz-dos         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/libs.h"
 
-t_var   *copy_var_node(t_var *envvar)
+t_var	*copy_var_node(t_var *envvar)
 {
-    t_var   *copy;
+	t_var	*copy;
 
-    copy = ft_calloc(1, sizeof(t_var));
-    if (!copy)
-        return (NULL);
-    copy->content = ft_strdup(envvar->content);
-    copy->name = ft_strdup(envvar->name);
-    copy->value = ft_strdup(envvar->value);
-	if (copy->value)
-    	copy->env = true;
-    copy->exp = true;
-    copy->next = NULL;
-    copy->prev = NULL;
-    return (copy);
+	copy = ft_calloc(1, sizeof(t_var));
+	if (!copy)
+		return (NULL);
+	copy->content = ft_strdup(envvar->content);
+	copy->name = ft_strdup(envvar->name);
+	copy->value = ft_strdup(envvar->value);
+	copy->env = (copy->value != NULL);
+	copy->exp = true;
+	copy->next = NULL;
+	copy->prev = NULL;
+	return (copy);
 }
 
-t_var	*create_lst_export()
+t_var	*create_lst_export(void)
 {
 	t_var	*current;
 	t_var	*head;
@@ -37,7 +48,7 @@ t_var	*create_lst_export()
 		add_var_back(&head, node_export);
 		current = current->next;
 	}
-	return(head);
+	return (head);
 }
 
 void	swap_nodes(t_var *current, t_var *next)

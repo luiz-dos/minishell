@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_tokens.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luiz-dos <luiz-dos@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/04 17:58:26 by luiz-dos          #+#    #+#             */
+/*   Updated: 2025/07/04 18:25:35 by luiz-dos         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/libs.h"
 
 int	check_tokens_two(t_tokens *token)
@@ -9,10 +21,12 @@ int	check_tokens_two(t_tokens *token)
 	}
 	if (token->type != PIPE && token->next->type >= PIPE)
 	{
-		printf("minishell: syntax error near unexpected token `%s'\n", token->next->content);
+		printf("minishell: syntax error near unexpected token `%s'\n",
+			token->next->content);
 		return (0);
 	}
-	if (token->type == PIPE && (!token->prev || (token->next && token->next->type == PIPE)))
+	if (token->type == PIPE && (!token->prev
+			|| (token->next && token->next->type == PIPE)))
 	{
 		printf("minishell: syntax error near unexpected token `|'\n");
 		return (0);

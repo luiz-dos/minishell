@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   structs.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luiz-dos <luiz-dos@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/04 18:01:07 by luiz-dos          #+#    #+#             */
+/*   Updated: 2025/07/04 18:56:12 by luiz-dos         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef STRUCTS_H
 # define STRUCTS_H
 
-typedef struct	s_var
+typedef struct s_var
 {
 	char			*content;
 	char			*name;
@@ -12,7 +24,7 @@ typedef struct	s_var
 	struct s_var	*prev;
 }	t_var;
 
-typedef struct	s_tokens
+typedef struct s_tokens
 {
 	char				*content;
 	int					type;
@@ -22,45 +34,25 @@ typedef struct	s_tokens
 	struct s_tokens		*prev;
 }	t_tokens;
 
-typedef struct	s_redir
+typedef struct s_redir
 {
 	int					type; // in, out, append ou heredor
 	char				*filename; // ou delimitador
 	struct s_redir		*next;
 }	t_redir;
 
-typedef struct	s_command
+typedef struct s_command
 {
 	char				*cmd;
 	char				**args;
 	t_redir				*redirs;
 	int					heredoc_fd;
-	pid_t				pid; 
+	pid_t				pid;
 	bool				has_pipe;
 	struct s_command	*next;
 }	t_command;
 
-enum e_types
-{
-	CMD,
-	ARG,
-	FILENAME,
-	DELIM,
-	PIPE,
-	HEREDOC, // <<
-	APPEND_OUT, // >>
-	REDIR_OUT, // >
-	REDIR_IN // <
-};
-
-enum e_markers
-{
-	N_SPACE = -32,
-	N_DQUOTE = -34,
-	N_SQUOTE = -39,
-};
-
-typedef struct	s_shell
+typedef struct s_shell
 {
 	char			*input;
 	int				return_status; // $?
@@ -69,8 +61,8 @@ typedef struct	s_shell
 	t_var			*envvar_export;
 	t_tokens		*tokens;
 	t_command		*commands;
-	struct	s_shell	*next;
-	struct	s_shell	*prev;
+	struct s_shell	*next;
+	struct s_shell	*prev;
 }	t_shell;
 
 #endif /* STRUCTS_H */

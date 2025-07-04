@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exe.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luiz-dos <luiz-dos@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/04 17:57:59 by luiz-dos          #+#    #+#             */
+/*   Updated: 2025/07/04 18:20:04 by luiz-dos         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/libs.h"
 
 void	cleanup_bkp(int stdin_bkp, int stdout_bkp)
@@ -43,7 +55,8 @@ int	has_redir(t_command *cmd, int *stdin_bkp, int *stdout_bkp)
 	return (0);
 }
 
-void	external_command(t_command *cmd, int *stdin_bkp, int *stdout_bkp, int redir_result)
+void	external_command(t_command *cmd, int *stdin_bkp, int *stdout_bkp,
+	int redir_result)
 {
 	pid_t	pid;
 	int		status;
@@ -76,10 +89,10 @@ void	single_command(t_command *cmd)
 	int			stdin_bkp;
 	int			stdout_bkp;
 	int			redir_result;
-	
+
 	stdin_bkp = -1;
 	stdout_bkp = -1;
-	redir_result =  has_redir(cmd, &stdin_bkp, &stdout_bkp);
+	redir_result = has_redir(cmd, &stdin_bkp, &stdout_bkp);
 	if (redir_result == -1)
 		return ;
 	if (is_builtin(cmd->cmd))

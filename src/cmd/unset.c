@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   unset.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luiz-dos <luiz-dos@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/04 17:57:40 by luiz-dos          #+#    #+#             */
+/*   Updated: 2025/07/04 18:10:25 by luiz-dos         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/libs.h"
 
 bool	check_options(char *option)
@@ -13,12 +25,12 @@ bool	check_options(char *option)
 void	remove_envvar(t_var **lst, char *var_name)
 {
 	t_var	*temp;
-	
+
 	if (!lst || !*lst || !var_name)
-		return;
+		return ;
 	temp = find_envvar(*lst, var_name);
 	if (!temp)
-		return;
+		return ;
 	if (temp->prev)
 		temp->prev->next = temp->next;
 	else

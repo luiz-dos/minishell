@@ -1,27 +1,39 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luiz-dos <luiz-dos@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/04 17:59:48 by luiz-dos          #+#    #+#             */
+/*   Updated: 2025/07/04 18:28:53 by luiz-dos         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/libs.h"
 
 int	only_space(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while(str[i] == ' ' || str[i] == '\t' || str[i] == '\n')
+	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n')
 		i++;
 	if (str[i] == '\0')
 		return (1);
 	return (0);
 }
 
-int count_args(char **args)
+int	count_args(char **args)
 {
-    int i;
+	int	i;
 
-    if (!args || !*args)
-        return (0);
-    i = 0;
-    while (args[i])
-        i++;
-    return (i);
+	if (!args || !*args)
+		return (0);
+	i = 0;
+	while (args[i])
+		i++;
+	return (i);
 }
 
 void	close_fds(int fd[2])
@@ -32,9 +44,9 @@ void	close_fds(int fd[2])
 		close(fd[1]);
 }
 
-void    create_pipe(int fd[2])
+void	create_pipe(int fd[2])
 {
-	t_shell *data;
+	t_shell	*data;
 
 	data = shell();
 	if (pipe(fd) == -1)
@@ -44,10 +56,10 @@ void    create_pipe(int fd[2])
 	}
 }
 
-pid_t    create_fork(void)
+pid_t	create_fork(void)
 {
-	pid_t   pid;
-	t_shell *data;
+	pid_t	pid;
+	t_shell	*data;
 
 	pid = fork();
 	data = shell();

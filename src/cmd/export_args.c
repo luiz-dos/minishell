@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export_args.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luiz-dos <luiz-dos@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/04 17:57:30 by luiz-dos          #+#    #+#             */
+/*   Updated: 2025/07/04 18:13:24 by luiz-dos         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/libs.h"
 
 void	check_value(t_command *cmd, char **var_name, char **var_value, int i)
@@ -71,11 +83,10 @@ void	mini_export(t_command *cmd)
 			if (var_name && var_name[0] == '#')
 			{
 				free_str(var_name, var_value);
-				break;
+				break ;
 			}
 			check_var_name(cmd, var_name, var_value, i);
 			i++;
 		}
 	}
 }
-

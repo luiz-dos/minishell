@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_free.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luiz-dos <luiz-dos@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/04 17:59:06 by luiz-dos          #+#    #+#             */
+/*   Updated: 2025/07/04 18:29:27 by luiz-dos         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/libs.h"
 
 void	free_lst(t_var *lst)
 {
-	t_var   *temp;
+	t_var	*temp;
 
 	if (!lst)
 		return ;
@@ -36,12 +48,12 @@ void	ft_tokenclear(t_tokens *lst)
 
 void	clean_redir(t_command *cmd)
 {
-	t_redir *next;
+	t_redir	*next;
 	t_redir	*lst;
 
-	if (!cmd || !cmd->redirs) 
-		return;
-	lst = cmd->redirs;		
+	if (!cmd || !cmd->redirs)
+		return ;
+	lst = cmd->redirs;
 	while (lst)
 	{
 		next = lst->next;

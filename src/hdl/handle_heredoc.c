@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handle_heredoc.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luiz-dos <luiz-dos@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/04 17:58:08 by luiz-dos          #+#    #+#             */
+/*   Updated: 2025/07/04 18:22:59 by luiz-dos         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/libs.h"
 
 void	write_line_to_pipe(char *line, int fd[2])
@@ -15,22 +27,22 @@ void	loop_heredoc(t_redir *redir, int fd[2])
 	while (1)
 	{
 		line = readline("> ");
-		if (global_sig == SIGINT)
+		if (g_sig == SIGINT)
 		{
 			if (line)
 				free(line);
 			close(fd[1]);
 			free_exit(shell(), 130);
 		}
-		if (!line) // EOF (CTRL+D)
+		if (!line)
 		{
 			write(STDERR_FILENO, WARNING_EOF, 60);
-			break;
+			break ;
 		}
 		if (ft_strcmp(line, redir->filename) == 0)
 		{
 			free(line);
-			break;
+			break ;
 		}
 		write_line_to_pipe(line, fd);
 	}
@@ -50,7 +62,7 @@ int	create_heredoc(t_command *current, t_redir *redir)
 	int		fd[2];
 	pid_t	pid;
 	int		status;
-	
+
 	create_pipe(fd);
 	set_sig_ignore();
 	pid = create_fork();

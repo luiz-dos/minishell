@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   normalize_input.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luiz-dos <luiz-dos@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/04 17:58:33 by luiz-dos          #+#    #+#             */
+/*   Updated: 2025/07/04 18:26:16 by luiz-dos         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/libs.h"
 
 static bool	is_double_operator(const char *input, int i)
@@ -37,30 +49,30 @@ static bool	is_operator(char c)
 	return (c == '|' || c == '>' || c == '<');
 }
 
-static int extra_spaces(char *input)
+static int	extra_spaces(char *input)
 {
-    int     i;
-    int     count;
-    char    quote;
+	int		i;
+	int		count;
+	char	quote;
 
-    i = 0;
-    count = 0;
-    quote = '\0';
-    while (input[i])
-    {
-        update_quote(input[i], &quote);
-        if (quote == '\0' && is_operator(input[i]))
-        {
-            if (i > 0 && input[i - 1] != ' ')
-                count++;
-            if (is_double_operator(input, i))
-                i++;
-            if (input[i + 1] && input[i + 1] != ' ')
-                count++;
-        }
-        i++;
-    }
-    return (count);
+	i = 0;
+	count = 0;
+	quote = '\0';
+	while (input[i])
+	{
+		update_quote(input[i], &quote);
+		if (quote == '\0' && is_operator(input[i]))
+		{
+			if (i > 0 && input[i - 1] != ' ')
+				count++;
+			if (is_double_operator(input, i))
+				i++;
+			if (input[i + 1] && input[i + 1] != ' ')
+				count++;
+		}
+		i++;
+	}
+	return (count);
 }
 
 char	*normalize_input(char *input)
