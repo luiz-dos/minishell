@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_cmd_list.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luiz-dos <luiz-dos@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: luiz-dos <luiz-dos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 17:57:21 by luiz-dos          #+#    #+#             */
-/*   Updated: 2025/07/04 18:13:10 by luiz-dos         ###   ########.fr       */
+/*   Updated: 2025/07/06 17:55:56 by luiz-dos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,25 @@ t_tokens	*handle_redir(t_command *cmd, t_tokens *token)
 	return (token->next);
 }
 
+void	handle_empty_command(t_command **head, t_command **current)
+{
+	t_command	*new_cmd;
+
+	new_cmd = ft_calloc(1, sizeof(t_command));
+	if (!new_cmd)
+		return ;
+	new_cmd->cmd = ft_strdup("empty");
+	new_cmd->args = ft_calloc(1, sizeof(char *));
+	new_cmd->args[0] = NULL;
+	new_cmd->heredoc_fd = -1;
+	new_cmd->next = NULL;
+	if (!*head)
+		*head = new_cmd;
+	else
+		(*current)->next = new_cmd;
+	*current = new_cmd;
+}
+
 t_command	*create_cmd_list(t_tokens *tokens)
 {
 	t_command	*head;
@@ -96,9 +115,13 @@ t_command	*create_cmd_list(t_tokens *tokens)
 		else if (tokens->type == ARG)
 			handle_argument(current_cmd, tokens);
 		else if (tokens->type >= HEREDOC && tokens->type <= REDIR_IN)
+		{
+			if (!current_cmd)
+				handle_empty_command(&head, &current_cmd);
 			tokens = handle_redir(current_cmd, tokens);
+		}
 		else if (tokens->type == PIPE)
-			current_cmd->has_pipe = true;
+			create_cmd_list_two(current_cmd);
 		tokens = tokens->next;
 	}
 	return (head);

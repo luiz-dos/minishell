@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luiz-dos <luiz-dos@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: luiz-dos <luiz-dos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 18:01:09 by luiz-dos          #+#    #+#             */
-/*   Updated: 2025/07/04 19:57:56 by luiz-dos         ###   ########.fr       */
+/*   Updated: 2025/07/06 17:29:51 by luiz-dos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ int			check_tokens_two(t_tokens *token);
 
 /* command list */
 t_command	*create_cmd_list(t_tokens *tokens);
+void		create_cmd_list_two(t_command *current_cmd);
 t_tokens	*handle_redir(t_command *cmd, t_tokens *token);
 void		handle_argument(t_command *cmd, t_tokens *token);
 void		handle_new_command(t_command **head, t_command **current, \

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: luiz-dos <luiz-dos@student.42lisboa.com    +#+  +:+       +#+         #
+#    By: luiz-dos <luiz-dos@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/22 19:44:06 by gufreire          #+#    #+#              #
-#    Updated: 2025/07/04 18:03:42 by luiz-dos         ###   ########.fr        #
+#    Updated: 2025/07/06 20:11:51 by luiz-dos         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ LIBS		= -lreadline -lncurses -ltermcap
 
 # cmd functions directory
 CMD_DIR = src/cmd
-CMD_FILES = cd.c create_cmd_list.c echo.c exit.c export.c export_args.c external_commands.c pwd.c unset.c
+CMD_FILES = cd.c create_cmd_list_two.c create_cmd_list.c echo.c exit.c export.c export_args.c external_commands.c pwd.c unset.c
 SRC_CMD = $(addprefix $(CMD_DIR)/, $(CMD_FILES))
 
 # env functions directory
