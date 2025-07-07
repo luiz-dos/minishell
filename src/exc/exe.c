@@ -104,10 +104,3 @@ void	single_command(t_command *cmd)
 	else
 		external_command(cmd, &stdin_bkp, &stdout_bkp, redir_result);
 }
-
-/* TODO: lidar com os redirects quando nao tiver pipes (else) ✅
- * TODO: arrumar: segundo heredoc do pipe nao escreve no arquivo, apenas cria ✅
- * TODO: arrumar o redirect quando o arquivo no existir ✅
- * TODO: "cat << e > a.txt | ls -l"   ✅
- * ⬆️ se der CTRL+C no heredoc deve cancelar tudo e nao esta cancelando
-*/

@@ -107,7 +107,7 @@ fclean: clean
 	@$(RM) $(LIBFT)
 
 valgrind:
-	valgrind --suppressions=readline.supp  --track-fds=all --leak-check=full --show-leak-kinds=all ./minishell || true
+	valgrind --suppressions=.readline.supp  --track-fds=all --leak-check=full --show-leak-kinds=all ./minishell || true
 
 re: fclean all
 
