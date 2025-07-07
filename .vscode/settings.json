@@ -4,6 +4,15 @@
         "minishell.h": "c",
         "libs.h": "c",
         "cstdlib": "c",
-        "libft.h": "c"
+        "libft.h": "c",
+        "initializer_list": "c",
+        "type_traits": "c",
+        "utility": "c",
+        "array": "c",
+        "string": "c",
+        "string_view": "c",
+        "span": "c",
+        "termios.h": "c",
+        "readline.h": "c"
     }
 }

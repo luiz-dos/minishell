@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luiz-dos <luiz-dos@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/04 17:57:49 by luiz-dos          #+#    #+#             */
+/*   Updated: 2025/07/04 18:14:37 by luiz-dos         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/libs.h"
 
-void	mini_env(t_var *lst)
+void	mini_env(char **args)
 {
 	t_var	*current;
 
-	if (count_args(shell()->commands->args) > 1)
+	if (count_args(args) > 1)
 	{
 		ft_putstr_fd("env: '", 2);
 		ft_putstr_fd(shell()->commands->args[1], 2);
@@ -12,7 +24,7 @@ void	mini_env(t_var *lst)
 		set_questionvar(shell(), 127);
 		return ;
 	}
-	current  = lst;
+	current = shell()->envvar;
 	while (current)
 	{
 		if (current->env == true && current->value != NULL)

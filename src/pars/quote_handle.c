@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   quote_handle.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luiz-dos <luiz-dos@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/04 17:58:38 by luiz-dos          #+#    #+#             */
+/*   Updated: 2025/07/04 18:26:31 by luiz-dos         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/libs.h"
 
 void	update_quote(char c, char *quote)
@@ -11,9 +23,9 @@ void	update_quote(char c, char *quote)
 	}
 }
 
-int mark_quotes(char *input, int *i)
+int	mark_quotes(char *input, int *i)
 {
-	char quote;
+	char	quote;
 
 	quote = input[(*i)];
 	input[(*i)] *= -1;

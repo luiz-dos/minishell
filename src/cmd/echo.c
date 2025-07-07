@@ -1,4 +1,32 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   echo.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luiz-dos <luiz-dos@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/04 17:57:24 by luiz-dos          #+#    #+#             */
+/*   Updated: 2025/07/06 17:21:35 by luiz-dos         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/libs.h"
+
+bool	is_n_flag(char *arg)
+{
+	int	i;
+
+	if (arg[0] != '-')
+		return (false);
+	i = 1;
+	while (arg[i])
+	{
+		if (arg[i] != 'n')
+			return (false);
+		i++;
+	}
+	return (true);
+}
 
 void	mini_echo(char	**args, int fd)
 {
@@ -9,7 +37,7 @@ void	mini_echo(char	**args, int fd)
 		return ;
 	flag_nl = false;
 	i = 1;
-	if (args[i] && ft_strcmp(args[i], "-n") == 0)
+	while (args[i] && is_n_flag(args[i]))
 	{
 		flag_nl = true;
 		i++;
@@ -23,4 +51,5 @@ void	mini_echo(char	**args, int fd)
 	}
 	if (!flag_nl)
 		ft_putchar_fd('\n', fd);
+	set_questionvar(shell(), 0);
 }

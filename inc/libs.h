@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   libs.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luiz-dos <luiz-dos@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/04 18:01:27 by luiz-dos          #+#    #+#             */
+/*   Updated: 2025/07/04 19:05:54 by luiz-dos         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef LIBS_H
 # define LIBS_H
 
@@ -24,7 +36,7 @@
 
 # define CYAN "\033[1;36m"
 # define RESET "\033[0m"
-
-extern int	global_sig;
+# define WARNING_EOF "-minishell: Warning: here-document delimited by \
+end-of-file\n"
 
 #endif /* LIBS_H */

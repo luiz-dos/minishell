@@ -1,76 +1,106 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exe.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luiz-dos <luiz-dos@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/04 17:57:59 by luiz-dos          #+#    #+#             */
+/*   Updated: 2025/07/06 16:12:48 by luiz-dos         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/libs.h"
 
-void save_std_fileno(int code)
+void	cleanup_bkp(int stdin_bkp, int stdout_bkp)
 {
-	t_shell *data;
-
-	data = shell();
-	if (code == 0)
+	if (stdin_bkp != -1)
 	{
-		if (data->std_fileno[0] != -1) // Fecha antigos descritores
-			close(data->std_fileno[0]);
-		if (data->std_fileno[1] != -1)
-			close(data->std_fileno[1]);
-
-		data->std_fileno[0] = dup(STDIN_FILENO);
-		data->std_fileno[1] = dup(STDOUT_FILENO);
+		dup2(stdin_bkp, STDIN_FILENO);
+		close(stdin_bkp);
+		stdin_bkp = -1;
 	}
-	else if (code == 1 && data->std_fileno[0] != -1 && data->std_fileno[1] != -1)
+	if (stdout_bkp != -1)
 	{
-		dup2(data->std_fileno[0], STDIN_FILENO);
-		dup2(data->std_fileno[1], STDOUT_FILENO);
-		close(data->std_fileno[0]);
-		close(data->std_fileno[1]);
-		data->std_fileno[0] = -1;
-		data->std_fileno[1] = -1;
+		dup2(stdout_bkp, STDOUT_FILENO);
+		close(stdout_bkp);
+		stdout_bkp = -1;
 	}
 }
 
-void	exe(t_shell *data)
+int	has_redir(t_command *cmd, int *stdin_bkp, int *stdout_bkp)
 {
-	t_command	*cmd;
-	pid_t		pid;
-	int			status;
-	
-	cmd = data->commands;
-	// Primeiro, processa todos os heredocs antes de executar os comandos
-	while (cmd)
+	if (has_in_redir(cmd) || has_heredoc_redir(cmd) || has_out_redir(cmd))
 	{
-		if (cmd->has_heredoc)
-			create_heredoc(cmd);
-		cmd = cmd->next;
+		*stdin_bkp = dup(STDIN_FILENO);
+		*stdout_bkp = dup(STDOUT_FILENO);
+		if (*stdin_bkp == -1 || *stdout_bkp == -1)
+		{
+			perror("dup failed");
+			if (*stdin_bkp != -1)
+				close(*stdin_bkp);
+			if (*stdout_bkp != -1)
+				close(*stdout_bkp);
+			*stdin_bkp = -1;
+			*stdout_bkp = -1;
+			return (-1);
+		}
+		if (handle_all_redirects(cmd) == -1)
+		{
+			cleanup_bkp(*stdin_bkp, *stdout_bkp);
+			return (-1);
+		}
+		return (1);
 	}
-	cmd = data->commands;
-	if (cmd->has_pipe)
-		handle_pipeline(data, cmd);
+	return (0);
+}
+
+void	external_command(t_command *cmd, int *stdin_bkp, int *stdout_bkp,
+	int redir_result)
+{
+	pid_t	pid;
+	int		status;
+
+	set_sig_ignore();
+	pid = create_fork();
+	if (pid == 0)
+	{
+		set_sig_child();
+		analize_ext_cmd(cmd->args);
+	}
 	else
 	{
-		save_std_fileno(0);
-		if (handle_redirects(cmd) == -1)
+		waitpid(pid, &status, 0);
+		if (redir_result == 1)
+			cleanup_bkp(*stdin_bkp, *stdout_bkp);
+		set_sig_main();
+		if (WIFSIGNALED(status))
 		{
-			save_std_fileno(1);
-			return ;
+			printf("\n");
+			set_questionvar(shell(), (128 + WTERMSIG(status)));
 		}
-		if (is_builtin(cmd->cmd))
-			execute_builtin(data, cmd);
 		else
-		{
-			pid = create_fork();
-			if (pid == 0)
-				exec_external_cmd(cmd->args);
-			else
-			{
-				waitpid(pid, &status, 0);
-				set_questionvar(data, WEXITSTATUS(status));
-			}
-		}
+			set_questionvar(shell(), WEXITSTATUS(status));
 	}
-	save_std_fileno(1);
 }
 
-/* TODO: lidar com os redirects quando nao tiver pipes (else) ✅
- * TODO: arrumar: segundo heredoc do pipe nao escreve no arquivo, apenas cria ✅
- * TODO: arrumar o redirect quando o arquivo no existir ✅
- * TODO: "cat << e > a.txt | ls -l"   
- * ⬆️ se der CTRL+C no heredoc deve cancelar tudo e nao esta cancelando
-*/
+void	single_command(t_command *cmd)
+{
+	int			stdin_bkp;
+	int			stdout_bkp;
+	int			redir_result;
+
+	stdin_bkp = -1;
+	stdout_bkp = -1;
+	redir_result = has_redir(cmd, &stdin_bkp, &stdout_bkp);
+	if (redir_result == -1)
+		return ;
+	if (is_builtin(cmd->cmd))
+	{
+		execute_builtin(shell(), cmd);
+		if (redir_result == 1)
+			cleanup_bkp(stdin_bkp, stdout_bkp);
+	}
+	else
+		external_command(cmd, &stdin_bkp, &stdout_bkp, redir_result);
+}

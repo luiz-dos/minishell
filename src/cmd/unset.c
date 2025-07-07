@@ -1,40 +1,51 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   unset.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luiz-dos <luiz-dos@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/04 17:57:40 by luiz-dos          #+#    #+#             */
+/*   Updated: 2025/07/04 18:10:25 by luiz-dos         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/libs.h"
 
 bool	check_options(char *option)
 {
 	if (option[0] == '-')
 	{
-	   printf("-minishell: %s : invalid option\n", option);
-	   return (true);
+		printf("-minishell: %s : invalid option\n", option);
+		return (true);
 	}
 	return (false);
 }
 
-void	remove_envvar(t_var **lst, t_var *envvar)
+void	remove_envvar(t_var **lst, char *var_name)
 {
 	t_var	*temp;
 
-	temp = find_envvar(*lst, envvar->name);
+	if (!lst || !*lst || !var_name)
+		return ;
+	temp = find_envvar(*lst, var_name);
 	if (!temp)
 		return ;
-	if (temp == envvar)
-	{
-		if (!temp->prev)
-			*lst = envvar->next;
-		else
-			envvar->prev->next = envvar->next;
-		free(envvar->content);
-		free(envvar->name);
-		free(envvar->value);
-		free(envvar);
-		return ;
-	}
+	if (temp->prev)
+		temp->prev->next = temp->next;
+	else
+		*lst = temp->next;
+	if (temp->next)
+		temp->next->prev = temp->prev;
+	free(temp->content);
+	free(temp->name);
+	free(temp->value);
+	free(temp);
 }
 
 void	unset(t_shell *data, char **args)
 {
-	t_var	*envvar;
-	int		i;
+	int	i;
 
 	if (!args || !*args || !args[1])
 		return ;
@@ -43,12 +54,10 @@ void	unset(t_shell *data, char **args)
 	i = 1;
 	while (args[i])
 	{
-		envvar = find_envvar(data->envvar, args[i]);
-		if (envvar && ft_strcmp(envvar->name, "_") != 0)
+		if (ft_strcmp(args[i], "_") != 0)
 		{
-			remove_envvar(&data->envvar, envvar);
-			envvar = find_envvar(data->envvar_export, args[i]);
-			remove_envvar(&data->envvar_export, envvar);
+			remove_envvar(&data->envvar, args[i]);
+			remove_envvar(&data->envvar_export, args[i]);
 		}
 		i++;
 	}

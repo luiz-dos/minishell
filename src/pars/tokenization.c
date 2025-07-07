@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenization.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luiz-dos <luiz-dos@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/04 17:58:40 by luiz-dos          #+#    #+#             */
+/*   Updated: 2025/07/04 18:26:39 by luiz-dos         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/libs.h"
 
 t_tokens	*ft_tokenlast(t_tokens *lst)
@@ -51,7 +63,7 @@ void	init_tokens(char **tokens)
 
 void	create_tokens(char **tokens)
 {
-	t_tokens *temp;
+	t_tokens	*temp;
 
 	init_tokens(tokens);
 	temp = shell()->tokens;

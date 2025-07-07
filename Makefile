@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gufreire <gufreire@student.42.fr>          +#+  +:+       +#+         #
+#    By: luiz-dos <luiz-dos@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/22 19:44:06 by gufreire          #+#    #+#              #
-#    Updated: 2025/05/28 17:31:54 by gufreire         ###   ########.fr        #
+#    Updated: 2025/07/06 20:11:51 by luiz-dos         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ LIBS		= -lreadline -lncurses -ltermcap
 
 # cmd functions directory
 CMD_DIR = src/cmd
-CMD_FILES = cd.c create_cmd_list.c echo.c export.c export_args.c external_commands.c pwd.c unset.c
+CMD_FILES = cd.c create_cmd_list_two.c create_cmd_list.c echo.c exit.c export.c export_args.c external_commands.c pwd.c unset.c
 SRC_CMD = $(addprefix $(CMD_DIR)/, $(CMD_FILES))
 
 # env functions directory
@@ -43,12 +43,12 @@ SRC_EXC = $(addprefix $(EXC_DIR)/, $(EXC_FILES))
 
 # handle functions directory
 HDL_DIR = src/hdl
-HDL_FILES = dolar.c handle_heredoc.c pipeline.c redirection.c
+HDL_FILES = dolar.c handle_heredoc.c pipeline_two.c pipeline.c redirection.c
 SRC_HDL = $(addprefix $(HDL_DIR)/, $(HDL_FILES))
 
 # main functions directory
 MAIN_DIR = src/main
-MAIN_FILES = main.c signal.c
+MAIN_FILES = main.c signal_two.c signal.c
 SRC_MAIN = $(addprefix $(MAIN_DIR)/, $(MAIN_FILES))
 
 # parsing functions directory
@@ -56,17 +56,12 @@ PARS_DIR = src/pars
 PARS_FILES = check_tokens.c input_analizes.c normalize_input.c quote_checker.c quote_handle.c tokenization.c type_tokens.c
 SRC_PARS = $(addprefix $(PARS_DIR)/, $(PARS_FILES))
 
-# struct functions directory
-STRC_DIR = src/strc
-STRC_FILES = structs.c
-SRC_STRC = $(addprefix $(STRC_DIR)/, $(STRC_FILES))
-
 # Utils functions directory
 UTILS_DIR = src/utils
-UTILS_FILES = finders.c ft_free.c ft_isspace.c ft_strcat.c ft_strcmp.c ft_strcpy.c ft_strdup_two.c ft_strjoin_free.c ft_strndup.c print_lst.c utils.c
+UTILS_FILES = finders.c ft_free_two.c ft_free.c ft_strcat.c ft_strcmp.c ft_strcpy.c ft_strdup_two.c ft_strjoin_free.c ft_strndup.c utils_two.c utils.c
 SRC_UTILS = $(addprefix $(UTILS_DIR)/, $(UTILS_FILES))
 
-SRC = $(SRC_CMD) $(SRC_ENV) $(SRC_EXC) $(SRC_HDL) $(SRC_MAIN) $(SRC_PARS) $(SRC_STRC) $(SRC_UTILS)
+SRC = $(SRC_CMD) $(SRC_ENV) $(SRC_EXC) $(SRC_HDL) $(SRC_MAIN) $(SRC_PARS) $(SRC_UTILS)
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(notdir $(SRC:.c=.o)))
 	
@@ -100,9 +95,6 @@ $(OBJ_DIR)/%.o: $(MAIN_DIR)/%.c | $(OBJ_DIR)
 $(OBJ_DIR)/%.o: $(PARS_DIR)/%.c | $(OBJ_DIR)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
-$(OBJ_DIR)/%.o: $(STRC_DIR)/%.c | $(OBJ_DIR)
-	@$(CC) $(CFLAGS) -c $< -o $@
-
 $(OBJ_DIR)/%.o: $(UTILS_DIR)/%.c | $(OBJ_DIR)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
@@ -115,7 +107,7 @@ fclean: clean
 	@$(RM) $(LIBFT)
 
 valgrind:
-	valgrind --suppressions=readline.supp  --track-fds=all --leak-check=full --show-leak-kinds=all ./minishell || true
+	valgrind --suppressions=.readline.supp  --track-fds=all --leak-check=full --show-leak-kinds=all ./minishell || true
 
 re: fclean all
 

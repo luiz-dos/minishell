@@ -1,33 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcmp.c                                        :+:      :+:    :+:   */
+/*   signal_two.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: luiz-dos <luiz-dos@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/04 17:59:12 by luiz-dos          #+#    #+#             */
-/*   Updated: 2025/07/04 17:59:13 by luiz-dos         ###   ########.fr       */
+/*   Created: 2025/07/04 17:58:20 by luiz-dos          #+#    #+#             */
+/*   Updated: 2025/07/04 18:24:28 by luiz-dos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/libs.h"
 
-int	ft_strcmp(const char *s1, const char *s2)
+void	set_sig_ignore(void)
 {
-	unsigned char	p1;
-	unsigned char	p2;
-	size_t			i;
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+}
 
-	i = 0;
-	if (!*s1 || !*s2)
-		return (-1);
-	while (s1[i] || s2[i])
-	{
-		p1 = (unsigned char)s1[i];
-		p2 = (unsigned char)s2[i];
-		if (p1 != p2)
-			return (p1 - p2);
-		i++;
-	}
-	return (0);
+void	set_sig_child(void)
+{
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_IGN);
 }

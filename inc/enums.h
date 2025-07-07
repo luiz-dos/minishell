@@ -1,33 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcmp.c                                        :+:      :+:    :+:   */
+/*   enums.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: luiz-dos <luiz-dos@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/04 17:59:12 by luiz-dos          #+#    #+#             */
-/*   Updated: 2025/07/04 17:59:13 by luiz-dos         ###   ########.fr       */
+/*   Created: 2025/07/04 18:55:32 by luiz-dos          #+#    #+#             */
+/*   Updated: 2025/07/04 18:56:01 by luiz-dos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/libs.h"
+#ifndef ENUMS_H
+# define ENUMS_H
 
-int	ft_strcmp(const char *s1, const char *s2)
+enum e_types
 {
-	unsigned char	p1;
-	unsigned char	p2;
-	size_t			i;
+	CMD,
+	ARG,
+	FILENAME,
+	DELIM,
+	PIPE,
+	HEREDOC,
+	APPEND_OUT,
+	REDIR_OUT,
+	REDIR_IN
+};
+enum e_markers
+{
+	N_SPACE = -32,
+	N_DQUOTE = -34,
+	N_SQUOTE = -39,
+};
 
-	i = 0;
-	if (!*s1 || !*s2)
-		return (-1);
-	while (s1[i] || s2[i])
-	{
-		p1 = (unsigned char)s1[i];
-		p2 = (unsigned char)s2[i];
-		if (p1 != p2)
-			return (p1 - p2);
-		i++;
-	}
-	return (0);
-}
+#endif /* ENUMS_H */

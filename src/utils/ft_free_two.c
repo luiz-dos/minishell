@@ -1,33 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcmp.c                                        :+:      :+:    :+:   */
+/*   ft_free_two.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: luiz-dos <luiz-dos@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/04 17:59:12 by luiz-dos          #+#    #+#             */
-/*   Updated: 2025/07/04 17:59:13 by luiz-dos         ###   ########.fr       */
+/*   Created: 2025/07/04 17:58:59 by luiz-dos          #+#    #+#             */
+/*   Updated: 2025/07/04 18:29:38 by luiz-dos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/libs.h"
 
-int	ft_strcmp(const char *s1, const char *s2)
+void	close_remaining_fds(void)
 {
-	unsigned char	p1;
-	unsigned char	p2;
-	size_t			i;
+	int	fd;
 
-	i = 0;
-	if (!*s1 || !*s2)
-		return (-1);
-	while (s1[i] || s2[i])
+	fd = 3;
+	while (fd < 1024)
 	{
-		p1 = (unsigned char)s1[i];
-		p2 = (unsigned char)s2[i];
-		if (p1 != p2)
-			return (p1 - p2);
-		i++;
+		close(fd);
+		fd++;
 	}
-	return (0);
+}
+
+void	free_array(char **array)
+{
+	int	i;
+
+	if (!array)
+		return ;
+	i = 0;
+	while (array[i])
+		free(array[i++]);
+	free(array);
+}
+
+void	free_str(char *var_name, char *var_value)
+{
+	if (var_name)
+		free(var_name);
+	if (var_value)
+		free(var_value);
 }
